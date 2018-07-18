@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using WebApi_v1.Models;
 
@@ -10,9 +7,9 @@ namespace WebApi_v1.Controllers
 {
     public class PeopleController : ApiController
     {
-        List<Person> people = new List<Person>();
+        private List<Person> people = new List<Person>();
 
-        PeopleController()
+        private PeopleController()
         {
             people.Add(new Person { FirstName = "Blaine", LastName = "Harris", Id = 1 });
             people.Add(new Person { FirstName = "JK", LastName = "Rowling", Id = 2 });

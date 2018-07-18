@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace WebApi_v1.Models
 {
     #region Abstract Classes
+
     public abstract class SpacecraftInfo
     {
         public List<Info> Parameters = new List<Info>();
@@ -27,9 +25,11 @@ namespace WebApi_v1.Models
     public abstract class Info
     {
     }
-    #endregion
+
+    #endregion Abstract Classes
 
     #region Inherited "Info" Classes
+
     public class RequiredInfo : Info
     {
         public string Name { get; set; }           // required
@@ -53,7 +53,7 @@ namespace WebApi_v1.Models
     {
         public int[] Size { get; set; }             // required for array parameters NOT others
     }
-    
+
     public abstract class Bins
     {
         public string Name { get; set; }            // required
@@ -66,9 +66,11 @@ namespace WebApi_v1.Models
     {
         public string Description { get; set; }     // optional
     }
-    #endregion
+
+    #endregion Inherited "Info" Classes
 
     #region Inherited "SpacecraftInfo" Classes
+
     public class RBSpiceA : SpacecraftInfo
     {
         public RBSpiceA()
@@ -104,5 +106,6 @@ namespace WebApi_v1.Models
             AddInfo("SpinDuration", "isotime", null, "24");
         }
     }
-    #endregion
+
+    #endregion Inherited "SpacecraftInfo" Classes
 }

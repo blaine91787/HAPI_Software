@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Web;
 using WebApi_v1.DataProducts.Utilities;
 
 namespace WebApi_v1.DataProducts.RBSpiceA
@@ -12,8 +11,10 @@ namespace WebApi_v1.DataProducts.RBSpiceA
     public class RBSpiceAProduct : IProduct, IConfigurable
     {
         private readonly string _basepath = @"C:\Users\FTECS Account\Documents\GitHub\FTECS\HapiApi\WebApi_v1\WebApi_v1\obj\Debug\";
+
         //private string path = @"C:\Users\blaine.harris\Documents\BlainesProjects\WebApi_v1\WebApi_v1\obj\Debug\rbsp-a-rbspice_lev-0_Auxil_20121028_v1.1.1-00.csv";
         public string[] Header { get; set; }
+
         public List<DataRecord> Records { get; set; }
         public List<Dictionary<string, string>> ParameterSpecificRecords { get; set; }
         public List<FileInfo> Files { get; set; }
@@ -53,6 +54,7 @@ namespace WebApi_v1.DataProducts.RBSpiceA
                     case ("l0"):
                         basepath += @"Level_0\";
                         break;
+
                     default:
                         break;
                 }
@@ -64,6 +66,7 @@ namespace WebApi_v1.DataProducts.RBSpiceA
                         basepath += mindate.ToString("yyyy") + @"\";
                         basepath += String.Format("rbsp-a-rbspice_lev-0_Auxil_{0}_v1.1.1-00.csv", mindate.ToString("yyyyMMdd"));//.Replace("/", String.Empty));
                         break;
+
                     default:
                         break;
                 }
@@ -81,7 +84,6 @@ namespace WebApi_v1.DataProducts.RBSpiceA
 
         public void GetProduct()
         {
-
             foreach (string path in Paths)
             {
                 if (File.Exists(path))
@@ -99,7 +101,7 @@ namespace WebApi_v1.DataProducts.RBSpiceA
                         // If parameters exist read csv row by row and extract specific fields
                         // else convert all rows to records and save to this.Records
                         // HACK: Figure out a way to save a record with only the requested fields
-                        if(HapiProperties.Parameters != null)
+                        if (HapiProperties.Parameters != null)
                         {
                             Records = new List<DataRecord>();
                             string[] headers = Header;
@@ -107,7 +109,7 @@ namespace WebApi_v1.DataProducts.RBSpiceA
                             for (int i = 0; i < headers.Length; i++)
                                 headers[i] = headers[i].ToLower();
 
-                            while(csv.Read())
+                            while (csv.Read())
                             {
                                 // HACK: This is pretty hacky stuff.
                                 //Auxiliary aux = new Auxiliary();
@@ -160,7 +162,6 @@ namespace WebApi_v1.DataProducts.RBSpiceA
                 using (FileStream fs = File.OpenRead(path))
                 using (TextReader textReader = new StreamReader(fs))
                 {
-
                     CsvReader csv = new CsvReader(textReader);
                     csv.Configuration.RegisterClassMap<AuxiliaryMap>();
                     csv.Read();
@@ -182,8 +183,6 @@ namespace WebApi_v1.DataProducts.RBSpiceA
             {
                 Debug.WriteLine("FAAAAAAIIIIIIILLLLLL");
             }
-
-
         }
     }
 }

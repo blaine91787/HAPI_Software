@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace WebApi_v1.DataProducts
 {
@@ -11,8 +6,10 @@ namespace WebApi_v1.DataProducts
     {
         string[] Header { get; set; }
         List<DataRecord> Records { get; set; }
-        List<Dictionary<string,string>> ParameterSpecificRecords { get; set; }
+        List<Dictionary<string, string>> ParameterSpecificRecords { get; set; }
+
         void GetProduct();
+
         void GetProductWithTimeRange();
     }
 }

@@ -1,23 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WebApi_v1.Models;
 using WebApi_v1.DataProducts;
-using Newtonsoft.Json;
-using System.Diagnostics;
-using WebApi_v1.DataProducts.Utilities;
-using System.ComponentModel;
 using WebApi_v1.DataProducts.RBSpiceA;
-using System.IO;
 
 namespace WebApi_v1.Controllers
 {
     public class HapiController : ApiController
     {
-
         [Route("api/Hapi/Info")]
         [HttpGet]
         public IProduct GetInfo()
@@ -29,12 +20,11 @@ namespace WebApi_v1.Controllers
             return prod;
         }
 
-
         [Route("api/Hapi/Data")]
         [HttpGet]
         public HttpResponseMessage GetData()//, [FromUri] string id=null,[FromUri] DateTime? starttime=null, [FromUri] DateTime? endtime=null, [FromUri] string subseconds=null)
         {
-            // TODO: Check if this should be multithreaded 
+            // TODO: Check if this should be multithreaded
             if (!Hapi.Configure(Request))
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
 
@@ -48,15 +38,12 @@ namespace WebApi_v1.Controllers
         [HttpGet]
         public IProduct GetCatalog()//, [FromUri] string id=null,[FromUri] DateTime? starttime=null, [FromUri] DateTime? endtime=null, [FromUri] string subseconds=null)
         {
-
             Hapi.Configure(Request);
             Debug.WriteLine(Hapi.ToString);
-
 
             IProduct prod = new RBSpiceAProduct(Hapi.Properties);
             return prod;
         }
-
 
         [Route("api/Hapi/Capabilities")]
         [HttpGet]
@@ -66,7 +53,6 @@ namespace WebApi_v1.Controllers
                 Debug.WriteLine(Hapi.ToString);
             else
                 Debug.WriteLine(Hapi.Properties.Error.Message);
-
 
             IProduct prod = new RBSpiceAProduct(Hapi.Properties);
             return prod;

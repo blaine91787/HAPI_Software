@@ -2,9 +2,6 @@
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using WebApi_v1.DataProducts.Utilities;
 
 namespace WebApi_v1.DataProducts.CSVHelperUtilities
@@ -22,7 +19,6 @@ namespace WebApi_v1.DataProducts.CSVHelperUtilities
             {
                 return Converters.ConvertDatetoUTCDate((DateTime)value);
             }
-
         }
     }
 }

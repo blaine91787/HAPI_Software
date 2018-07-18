@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace WebApi_v1.Areas.HelpPage.ModelDescriptions

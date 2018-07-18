@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Web;
 using WebApi_v1.DataProducts.RBSpiceA;
 
 namespace WebApi_v1.DataProducts
@@ -12,14 +10,16 @@ namespace WebApi_v1.DataProducts
     public static class Hapi
     {
         #region Properties
+
         private static readonly char[] _delimiters = new char[] { '?', '&', '=' };
+
         private static readonly string[] _requesttypes = new string[] {
             "data",
             "info",
             "capabilities",
             "catalog"
         };
-        private static bool _initialized = false;
+
         public static bool Initialized { get; private set; }
         private static Dictionary<string, string> QueryDict { get; set; }
         public static HttpRequestMessage Request { get; set; }
@@ -29,9 +29,11 @@ namespace WebApi_v1.DataProducts
         public static IProperties Properties { get; set; }
         public static List<Exception> Errors { get; private set; }
         public static IProduct Product { get; private set; }
-        #endregion
+
+        #endregion Properties
 
         #region Methods
+
         public static void Initialize()
         {
             QueryDict = new Dictionary<string, string>();
@@ -64,8 +66,6 @@ namespace WebApi_v1.DataProducts
                 case "data":
                     Properties = new DataProperties();
                     break;
-                default:
-                    break;
             }
 
             // Try to assign query arguments to properties object.
@@ -81,15 +81,16 @@ namespace WebApi_v1.DataProducts
             }
 
             return true; // TODO: Should I return booleans or throw errors?
-        } 
+        }
 
-        public static bool CreateResponse ()
+        public static bool CreateResponse()
         {
             switch (RequestType.ToLower())
             {
                 case ("data"):
                     GetDataProduct();
                     break;
+
                 default:
                     Response = Request.CreateResponse(HttpStatusCode.InternalServerError, "Unable to create " + RequestType.ToLower() + " product due to internal error.");
                     throw new ArgumentOutOfRangeException(RequestType, "Not a valid request type.");
@@ -100,7 +101,7 @@ namespace WebApi_v1.DataProducts
 
             return true;
         }
-        
+
         private static void GetDataProduct()
         {
             switch (Properties.SC)
@@ -109,6 +110,7 @@ namespace WebApi_v1.DataProducts
                     Product = new RBSpiceAProduct(Properties);
                     Product.GetProduct();
                     return;
+
                 default:
                     throw new ArgumentOutOfRangeException(Properties.Id, "Not a valid spacecraft ID.");
             }
@@ -127,7 +129,7 @@ namespace WebApi_v1.DataProducts
             return true;
         }
 
-        public static Dictionary<string,string> GetDictionaryFromQuery(string query)
+        public static Dictionary<string, string> GetDictionaryFromQuery(string query)
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
 
@@ -161,7 +163,8 @@ namespace WebApi_v1.DataProducts
                 return str;
             }
         }
-        #endregion
+
+        #endregion Methods
     }
 
     //public abstract class Properties : IProperties
@@ -184,6 +187,7 @@ namespace WebApi_v1.DataProducts
     public class DataProperties : IProperties//Properties, IProperties
     {
         #region Properties
+
         public string RequestType { get; set; }
         public string Id { get; set; }
         public string SC { get; set; }
@@ -194,9 +198,11 @@ namespace WebApi_v1.DataProducts
         public List<string> Parameters { get; set; }
         public bool IncludeHeader { get; set; }
         public Exception Error { get; set; }
-        #endregion
+
+        #endregion Properties
 
         #region Methods
+
         public void Assign(Dictionary<string, string> dict)
         {
             string key = String.Empty;
@@ -219,27 +225,32 @@ namespace WebApi_v1.DataProducts
                             RecordType = valQueryable.ElementAtOrDefault(2);
                         }
                         break;
+
                     case ("time.min"):
                         // TODO: Verify DateTime is being calculated correctly.
                         dt = Convert.ToDateTime(val);
                         if (dt != default(DateTime))
                             TimeMin = dt;
                         break;
+
                     case ("time.max"):
                         // TODO: Verify DateTime is being calculated correctly.
                         dt = Convert.ToDateTime(val);
                         if (dt != default(DateTime))
                             TimeMax = dt;
                         break;
+
                     case ("parameters"):
                         Parameters = new List<string>();
                         Parameters = val.Split(new char[] { ',' }).ToList();
                         break;
+
                     default:
                         throw new ArgumentOutOfRangeException(key, String.Format("The url parameter '{0}={1}' is not valid.", key, val));
                 }
             }
         }
+
         public override string ToString()
         {
             string str = String.Empty;
@@ -266,6 +277,7 @@ namespace WebApi_v1.DataProducts
 
             return str;
         }
-        #endregion
+
+        #endregion Methods
     }
 }

@@ -1,9 +1,6 @@
-﻿using System;
+﻿using CsvHelper.Configuration;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using CsvHelper.Configuration;
-using Newtonsoft.Json;
 using WebApi_v1.DataProducts.Utilities;
 using static WebApi_v1.DataProducts.CSVHelperUtilities.TypeConverters;
 
@@ -12,7 +9,8 @@ namespace WebApi_v1.DataProducts
     public class Auxiliary : DataRecord
     {
         // TODO: Figure out what to do with this UTC and the abstract UTC
-        public string UTC { get; set; }
+        public DateTime UTC { get; set; }
+
         public string SCLOCK_Full { get; set; }
         public string ET { get; set; }
         public string OrbitNumber { get; set; }
@@ -58,7 +56,7 @@ namespace WebApi_v1.DataProducts
             foreach (System.Reflection.PropertyInfo prop in this.GetType().GetProperties())
             {
                 var type = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
-                if (prop.Name.ToLower() == parameterName.ToLower())
+                if (string.Equals(prop.Name, parameterName, StringComparison.OrdinalIgnoreCase))
                 {
                     Converters.ConvertParameterToProperty(parameterValue, prop, this);
                     return;
@@ -108,10 +106,9 @@ namespace WebApi_v1.DataProducts
         }
     }
 
-
     public class AuxiliaryByParameters : DataRecord
     {
-        public Dictionary<string,string> Record { get; set; }
+        public Dictionary<string, string> Record { get; set; }
 
         public AuxiliaryByParameters()
         {
@@ -128,7 +125,7 @@ namespace WebApi_v1.DataProducts
         public AuxiliaryMap()
         {
             AutoMap();
-            Map(m => m.UTC).Name( "UTC" ).TypeConverter<ConvertUTCtoDateTime>();
+            Map(m => m.UTC).Name("UTC").TypeConverter<ConvertUTCtoDateTime>();
         }
     }
 }
