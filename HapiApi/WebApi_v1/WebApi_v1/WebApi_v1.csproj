@@ -188,7 +188,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PeopleController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
-    <Compile Include="DataProducts\HapiConfiguration.cs" />
+    <Compile Include="DataProducts\Hapi.cs" />
     <Compile Include="DataProducts\CSVHelperUtilities\TypeConverters.cs" />
     <Compile Include="DataProducts\DataRecord.cs" />
     <Compile Include="DataProducts\HapiInfo.cs" />

@@ -15,6 +15,9 @@ namespace WebApi_v1.DataProducts
     {
         string RequestType { get; set; }
         string Id { get; set; }
+        string SC { get; set; }
+        string Level { get; set; }
+        string RecordType { get; set; }
         DateTime TimeMin { get; set; }
         DateTime TimeMax { get; set; }
         List<string> Parameters { get; set; }

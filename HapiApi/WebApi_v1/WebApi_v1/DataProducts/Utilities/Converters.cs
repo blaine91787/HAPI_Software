@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using CsvHelper;
 using CsvHelper.Configuration;
@@ -198,6 +199,36 @@ namespace WebApi_v1.DataProducts.Utilities
             // have to load everything and create the string from scratch since MS doesn't support the kinds of string I need to get out
             return (date.Year.ToString("D4") + "-" + date.DayOfYear.ToString("D3") +
                       "T" + date.Hour.ToString("D2") + ":" + date.Minute.ToString("D2") + ":" + date.Second.ToString("D2") + "." + date.Millisecond.ToString("D3"));
+        }
+
+        public static void ConvertParameterToProperty(string parameter, PropertyInfo prop, DataRecord obj)
+        {
+            TypeCode tc = Type.GetTypeCode(prop.PropertyType);//Convert.GetTypeCode(prop.PropertyType);
+
+            switch (tc)
+            {
+                case TypeCode.DateTime:
+                    prop.SetValue(obj, ConvertUTCtoDate(parameter), null);
+                    return;
+                case TypeCode.String:
+                    prop.SetValue(obj, parameter, null);
+                    return;
+                case TypeCode.Int64:
+                    prop.SetValue(obj, Convert.ToInt64(parameter), null);
+                    return;
+                case TypeCode.Int32:
+                    prop.SetValue(obj, Convert.ToInt32(parameter), null);
+                    return;
+                case TypeCode.Int16:
+                    prop.SetValue(obj, Convert.ToInt16(parameter), null);
+                    return;
+                case TypeCode.Byte:
+                    prop.SetValue(obj, (byte)(Convert.ToInt16(parameter)), null);
+                    return;
+                case TypeCode.Boolean:
+                    prop.SetValue(obj, Convert.ToBoolean(parameter), null);
+                    return;
+            }
         }
     }
 }

@@ -88,17 +88,10 @@ namespace WebApi_v1.DataProducts
             switch (RequestType.ToLower())
             {
                 case ("data"):
-                    try
-                    {
-                        GetData();
-                    }
-                    catch (ArgumentOutOfRangeException e)
-                    {
-                        Errors.Add(e);
-                        return false;
-                    }
+                    GetDataProduct();
                     break;
                 default:
+                    Response = Request.CreateResponse(HttpStatusCode.InternalServerError, "Unable to create " + RequestType.ToLower() + " product due to internal error.");
                     throw new ArgumentOutOfRangeException(RequestType, "Not a valid request type.");
             }
 
@@ -108,13 +101,12 @@ namespace WebApi_v1.DataProducts
             return true;
         }
         
-        private static void GetData()
+        private static void GetDataProduct()
         {
-            string id = Properties.Id;
-            switch (id)
+            switch (Properties.SC)
             {
-                case ("rbspicea_l0_aux"):
-                    Product = new RBSpiceAProduct();
+                case ("rbspicea"):
+                    Product = new RBSpiceAProduct(Properties);
                     Product.GetProduct();
                     return;
                 default:
@@ -194,6 +186,9 @@ namespace WebApi_v1.DataProducts
         #region Properties
         public string RequestType { get; set; }
         public string Id { get; set; }
+        public string SC { get; set; }
+        public string Level { get; set; }
+        public string RecordType { get; set; }
         public DateTime TimeMin { get; set; }
         public DateTime TimeMax { get; set; }
         public List<string> Parameters { get; set; }
@@ -202,7 +197,7 @@ namespace WebApi_v1.DataProducts
         #endregion
 
         #region Methods
-        public void Assign(Dictionary<string,string> dict)
+        public void Assign(Dictionary<string, string> dict)
         {
             string key = String.Empty;
             string val = String.Empty;
@@ -215,6 +210,13 @@ namespace WebApi_v1.DataProducts
                 {
                     case ("id"):
                         Id = val;
+                        if (val.Contains('_'))
+                        {
+                            IQueryable<string> valQueryable = val.Split('_').AsQueryable();
+                            SC = valQueryable.ElementAtOrDefault(0);
+                            Level = valQueryable.ElementAtOrDefault(1);
+                            RecordType = valQueryable.ElementAtOrDefault(2);
+                        }
                         break;
                     case ("time.min"):
                         dt = Convert.ToDateTime(val);
@@ -231,7 +233,7 @@ namespace WebApi_v1.DataProducts
                         Parameters = val.Split(new char[] { ',' }).ToList();
                         break;
                     default:
-                        throw new ArgumentOutOfRangeException(key, String.Format("The url parameter '{0}={1}' is not valid.",key,val));
+                        throw new ArgumentOutOfRangeException(key, String.Format("The url parameter '{0}={1}' is not valid.", key, val));
                 }
             }
         }

@@ -11,6 +11,7 @@ namespace WebApi_v1.DataProducts
 {
     public class Auxiliary : DataRecord
     {
+        new public string UTC { get; set; }
         public string SCLOCK_Full { get; set; }
         public string ET { get; set; }
         public string OrbitNumber { get; set; }
@@ -39,6 +40,65 @@ namespace WebApi_v1.DataProducts
         public Int16 Subsector2 { get; set; }
         public Int16 Subsector3 { get; set; }
         public Int32 SpinDuration { get; set; }
+
+        public Auxiliary()
+        {
+
+        }
+
+        public void AddField(string parameterName, string parameterValue)
+        {
+            foreach (System.Reflection.PropertyInfo prop in this.GetType().GetProperties())
+            {
+                var type = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
+                if (prop.Name.ToLower() == parameterName.ToLower())
+                {
+                    Converters.ConvertParameterToProperty(parameterValue, prop, this);
+                    return;
+                }
+                //prop =  parameter;
+                //str += prop.GetValue(this, null).ToString() + ", ";
+            }
+            throw new ArgumentOutOfRangeException(parameterName);
+            //switch (parameter.ToLower())
+            //{
+            //    case ("sclock_full"):
+            //        SCLOCK_Full = parameter;
+            //        return;
+            //    case ("et"):
+            //        ET = parameter;
+            //        return;
+            //    case ("orbitnumber"):
+            //        OrbitNumber = parameter;
+            //        return;
+            //    case ("seconds"):
+            //        Seconds = parameter;
+            //        return;
+            //Subseconds
+            //Spin
+            //SpinTime
+            //SpinPeriod
+            //SpinPhase
+            //MagPhase
+            //Mag0Second1
+            //Mag0Subsecond1
+            //Mag0Second2
+            //Mag0Subsecond2
+            //IntegrationSectors
+            //IntegrationMultiplier1
+            //IntegrationMultiplier2
+            //IntegrationSpins
+            //MagPhaseValid
+            //MagDataValid
+            //SpinDataValid
+            //ElectronPixel
+            //IonEnergyPixel
+            //IonSpeciesPixel
+            //Subsector1
+            //Subsector2
+            //Subsector3
+            //SpinDuration
+        }
     }
 
     public sealed class AuxiliaryMap : ClassMap<Auxiliary>

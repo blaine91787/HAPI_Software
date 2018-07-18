@@ -25,7 +25,7 @@ namespace WebApi_v1.Controllers
             Hapi.Configure(Request);
             Debug.WriteLine(Hapi.ToString);
 
-            IProduct prod = new RBSpiceAProduct();
+            IProduct prod = new RBSpiceAProduct(Hapi.Properties);
             return prod;
         }
 
@@ -54,7 +54,7 @@ namespace WebApi_v1.Controllers
             Debug.WriteLine(Hapi.ToString);
 
 
-            IProduct prod = new RBSpiceAProduct();
+            IProduct prod = new RBSpiceAProduct(Hapi.Properties);
             return prod;
         }
 
@@ -69,7 +69,7 @@ namespace WebApi_v1.Controllers
                 Debug.WriteLine(Hapi.Properties.Error.Message);
 
 
-            IProduct prod = new RBSpiceAProduct();
+            IProduct prod = new RBSpiceAProduct(Hapi.Properties);
             return prod;
         }
     }
