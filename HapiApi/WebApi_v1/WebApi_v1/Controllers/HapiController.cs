@@ -34,15 +34,14 @@ namespace WebApi_v1.Controllers
         [HttpGet]
         public HttpResponseMessage GetData()//, [FromUri] string id=null,[FromUri] DateTime? starttime=null, [FromUri] DateTime? endtime=null, [FromUri] string subseconds=null)
         {
-            if (Hapi.Configure(Request))
-                Debug.WriteLine(Hapi.ToString);
+            // TODO: Check if this should be multithreaded 
+            if (!Hapi.Configure(Request))
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
 
-            if (Hapi.CreateResponse())
-                return Hapi.Response;
-            else
-            {
-                return new HttpResponseMessage((HttpStatusCode)500);
-            }
+            if (!Hapi.CreateResponse())
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+
+            return Hapi.Response;
         }
 
         [Route("api/Hapi/Catalog")]

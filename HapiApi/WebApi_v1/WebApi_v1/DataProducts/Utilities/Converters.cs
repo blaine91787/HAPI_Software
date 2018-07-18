@@ -230,5 +230,36 @@ namespace WebApi_v1.DataProducts.Utilities
                     return;
             }
         }
+
+        public static void ConvertPropertyToDefault(PropertyInfo prop, DataRecord obj)
+        {
+            TypeCode tc = Type.GetTypeCode(prop.PropertyType);//Convert.GetTypeCode(prop.PropertyType);
+
+            switch (tc)
+            {
+                case TypeCode.DateTime:
+                    prop.SetValue(obj, default(DateTime), null);
+                    return;
+                case TypeCode.String:
+                    prop.SetValue(obj, default(string), null);
+                    return;
+                case TypeCode.Int64:
+                    prop.SetValue(obj, default(Int64), null);
+                    return;
+                case TypeCode.Int32:
+                    prop.SetValue(obj, default(Int32), null);
+                    return;
+                case TypeCode.Int16:
+                    prop.SetValue(obj, default(Int16), null);
+                    return;
+                case TypeCode.Byte:
+                    prop.SetValue(obj, default(byte), null);
+                    return;
+                case TypeCode.Boolean:
+                    prop.SetValue(obj, default(bool), null);
+                    return;
+            }
+        }
+
     }
 }

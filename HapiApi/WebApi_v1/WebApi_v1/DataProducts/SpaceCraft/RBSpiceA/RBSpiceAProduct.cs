@@ -15,6 +15,7 @@ namespace WebApi_v1.DataProducts.RBSpiceA
         //private string path = @"C:\Users\blaine.harris\Documents\BlainesProjects\WebApi_v1\WebApi_v1\obj\Debug\rbsp-a-rbspice_lev-0_Auxil_20121028_v1.1.1-00.csv";
         public string[] Header { get; set; }
         public List<DataRecord> Records { get; set; }
+        public List<Dictionary<string, string>> ParameterSpecificRecords { get; set; }
         public List<FileInfo> Files { get; set; }
         public IProperties HapiProperties { get; set; }
         public List<string> Paths { get; set; }
@@ -22,6 +23,7 @@ namespace WebApi_v1.DataProducts.RBSpiceA
         public void Initialize()
         {
             Records = new List<DataRecord>();
+            ParameterSpecificRecords = new List<Dictionary<string, string>>();
         }
 
         public RBSpiceAProduct(IProperties hapiProperties)
@@ -31,6 +33,7 @@ namespace WebApi_v1.DataProducts.RBSpiceA
             else
                 HapiProperties = hapiProperties;
 
+            // HACK: Jerry may have a library for this.
             GetPaths();
         }
 
@@ -79,8 +82,6 @@ namespace WebApi_v1.DataProducts.RBSpiceA
         public void GetProduct()
         {
 
-            Records = new List<DataRecord>();
-
             foreach (string path in Paths)
             {
                 if (File.Exists(path))
@@ -88,14 +89,19 @@ namespace WebApi_v1.DataProducts.RBSpiceA
                     using (FileStream fs = File.OpenRead(path))
                     using (TextReader textReader = new StreamReader(fs))
                     {
+                        // TODO: Try and make this less dependant on Auxiliary type.
                         CsvReader csv = new CsvReader(textReader);
                         csv.Configuration.RegisterClassMap<AuxiliaryMap>();
                         csv.Read();
                         csv.ReadHeader();
                         this.Header = csv.Context.HeaderRecord;
 
+                        // If parameters exist read csv row by row and extract specific fields
+                        // else convert all rows to records and save to this.Records
+                        // HACK: Figure out a way to save a record with only the requested fields
                         if(HapiProperties.Parameters != null)
                         {
+                            Records = new List<DataRecord>();
                             string[] headers = Header;
 
                             for (int i = 0; i < headers.Length; i++)
@@ -103,19 +109,34 @@ namespace WebApi_v1.DataProducts.RBSpiceA
 
                             while(csv.Read())
                             {
-                                Auxiliary aux = new Auxiliary();
+                                // HACK: This is pretty hacky stuff.
+                                //Auxiliary aux = new Auxiliary();
+                                AuxiliaryByParameters aux = new AuxiliaryByParameters();
+                                //Dictionary<string, string> dict = new Dictionary<string, string>();
                                 foreach (string param in HapiProperties.Parameters)
                                 {
                                     string parameterName = param;
                                     int indexOfParameterName = Array.IndexOf(headers, parameterName);
                                     string parameterValue = csv[indexOfParameterName];
-                                    aux.AddField(parameterName, parameterValue);
+                                    aux.Record.Add(parameterName, parameterValue);
+                                    //aux.AddField(parameterName, parameterValue);
                                 }
-                                this.Records.Add(aux);
+
+                                //if(Hapi.Properties.Parameters != null)
+                                //{
+                                //    foreach (System.Reflection.PropertyInfo prop in this.GetType().GetProperties())
+                                //    {
+                                //        var type = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
+                                //        Converters.ConvertPropertyToDefault(prop, this);
+                                //    }
+                                //}
+                                //this.Records.Add(aux);
+                                Records.Add(aux);
                             }
                         }
                         else
                         {
+                            Records = new List<DataRecord>();
                             this.Records.AddRange(csv.GetRecords<Auxiliary>().ToList<DataRecord>());
                         }
                     }

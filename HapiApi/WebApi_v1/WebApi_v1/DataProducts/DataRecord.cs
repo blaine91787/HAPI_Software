@@ -8,7 +8,7 @@ namespace WebApi_v1.DataProducts
 
     public abstract class DataRecord : IDataRecord
     {
-        public DateTime UTC;
+        //public DateTime UTC;
         public override string ToString()
         {
             string str = "";

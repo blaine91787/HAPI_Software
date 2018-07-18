@@ -76,11 +76,11 @@ namespace WebApi_v1.DataProducts
             }
             catch (ArgumentOutOfRangeException e)
             {
-                Errors.Add(e); // Ask about whether I should actually be saving the errors.
+                Errors.Add(e); // TODO: Ask about whether I should actually be saving the errors.
                 return false;
             }
 
-            return true;
+            return true; // TODO: Should I return booleans or throw errors?
         } 
 
         public static bool CreateResponse ()
@@ -95,8 +95,8 @@ namespace WebApi_v1.DataProducts
                     throw new ArgumentOutOfRangeException(RequestType, "Not a valid request type.");
             }
 
-            //Response = new HapiResponse();
-            Response = Request.CreateResponse(HttpStatusCode.Accepted, Product);
+            // TODO: Make the response's product more HAPI-like
+            Response = Request.CreateResponse(HttpStatusCode.Accepted, Product.Records);
 
             return true;
         }
@@ -212,6 +212,7 @@ namespace WebApi_v1.DataProducts
                         Id = val;
                         if (val.Contains('_'))
                         {
+                            // HACK: May fail given more spacecraft options.
                             IQueryable<string> valQueryable = val.Split('_').AsQueryable();
                             SC = valQueryable.ElementAtOrDefault(0);
                             Level = valQueryable.ElementAtOrDefault(1);
@@ -219,11 +220,13 @@ namespace WebApi_v1.DataProducts
                         }
                         break;
                     case ("time.min"):
+                        // TODO: Verify DateTime is being calculated correctly.
                         dt = Convert.ToDateTime(val);
                         if (dt != default(DateTime))
                             TimeMin = dt;
                         break;
                     case ("time.max"):
+                        // TODO: Verify DateTime is being calculated correctly.
                         dt = Convert.ToDateTime(val);
                         if (dt != default(DateTime))
                             TimeMax = dt;

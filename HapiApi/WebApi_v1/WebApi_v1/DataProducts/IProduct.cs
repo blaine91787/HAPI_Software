@@ -11,6 +11,7 @@ namespace WebApi_v1.DataProducts
     {
         string[] Header { get; set; }
         List<DataRecord> Records { get; set; }
+        List<Dictionary<string,string>> ParameterSpecificRecords { get; set; }
         void GetProduct();
         void GetProductWithTimeRange();
     }

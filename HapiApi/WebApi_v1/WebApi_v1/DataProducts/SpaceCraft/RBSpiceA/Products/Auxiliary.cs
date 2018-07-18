@@ -11,7 +11,8 @@ namespace WebApi_v1.DataProducts
 {
     public class Auxiliary : DataRecord
     {
-        new public string UTC { get; set; }
+        // TODO: Figure out what to do with this UTC and the abstract UTC
+        public string UTC { get; set; }
         public string SCLOCK_Full { get; set; }
         public string ET { get; set; }
         public string OrbitNumber { get; set; }
@@ -43,7 +44,13 @@ namespace WebApi_v1.DataProducts
 
         public Auxiliary()
         {
+            // HACK: Using defaults to determine which properties are set may be bad practice???
 
+            foreach (System.Reflection.PropertyInfo prop in this.GetType().GetProperties())
+            {
+                var type = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
+                Converters.ConvertPropertyToDefault(prop, this);
+            }
         }
 
         public void AddField(string parameterName, string parameterValue)
@@ -101,6 +108,21 @@ namespace WebApi_v1.DataProducts
         }
     }
 
+
+    public class AuxiliaryByParameters : DataRecord
+    {
+        public Dictionary<string,string> Record { get; set; }
+
+        public AuxiliaryByParameters()
+        {
+            Record = new Dictionary<string, string>();
+        }
+    }
+
+    /// <summary>
+    /// A mapping used by CSVHelper library to convert the CSV version of time to DateTime
+    /// so it can be compared when searching for time.min and time.max parameters.
+    /// </summary>
     public sealed class AuxiliaryMap : ClassMap<Auxiliary>
     {
         public AuxiliaryMap()
