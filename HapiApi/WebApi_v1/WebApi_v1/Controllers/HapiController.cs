@@ -22,7 +22,7 @@ namespace WebApi_v1.Controllers
 
         [Route("api/Hapi/Data")]
         [HttpGet]
-        public HttpResponseMessage GetData()//, [FromUri] string id=null,[FromUri] DateTime? starttime=null, [FromUri] DateTime? endtime=null, [FromUri] string subseconds=null)
+        public HttpResponseMessage GetData()
         {
             // TODO: Check if this should be multithreaded
             if (!Hapi.Configure(Request))
@@ -36,7 +36,7 @@ namespace WebApi_v1.Controllers
 
         [Route("api/Hapi/Catalog")]
         [HttpGet]
-        public IProduct GetCatalog()//, [FromUri] string id=null,[FromUri] DateTime? starttime=null, [FromUri] DateTime? endtime=null, [FromUri] string subseconds=null)
+        public IProduct GetCatalog()
         {
             Hapi.Configure(Request);
             Debug.WriteLine(Hapi.ToString);
@@ -47,7 +47,7 @@ namespace WebApi_v1.Controllers
 
         [Route("api/Hapi/Capabilities")]
         [HttpGet]
-        public IProduct GetCapabilities()//, [FromUri] string id=null,[FromUri] DateTime? starttime=null, [FromUri] DateTime? endtime=null, [FromUri] string subseconds=null)
+        public IProduct GetCapabilities()
         {
             if (Hapi.Configure(Request))
                 Debug.WriteLine(Hapi.ToString);

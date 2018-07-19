@@ -107,7 +107,7 @@ namespace WebApi_v1.DataProducts
             switch (Properties.SC)
             {
                 case ("rbspicea"):
-                    Product = new RBSpiceAProduct(Properties);
+                    Product = new RBSpiceAProduct();
                     Product.GetProduct();
                     return;
 
@@ -123,10 +123,7 @@ namespace WebApi_v1.DataProducts
             Query = Request.RequestUri.Query;
 
             // RequestType can only be equal to info, capability, catalog, or data
-            if (!_requesttypes.Contains(RequestType))
-                return false;
-
-            return true;
+            return _requesttypes.Contains(RequestType);
         }
 
         public static Dictionary<string, string> GetDictionaryFromQuery(string query)
@@ -156,8 +153,8 @@ namespace WebApi_v1.DataProducts
                     "Query: {2}\n" +
                     "\nProperties: \n{3}\n\n\n",
                     Request.ToString(),
-                    RequestType.ToString(),
-                    Query.ToString(),
+                    RequestType,
+                    Query,
                     props
                 );
                 return str;
@@ -167,26 +164,16 @@ namespace WebApi_v1.DataProducts
         #endregion Methods
     }
 
-    //public abstract class Properties : IProperties
-    //{
-    //    #region Properties
-    //    public string RequestType { get; set; }
-    //    public string Id { get; set; }
-    //    public DateTime TimeMin { get; set; }
-    //    public DateTime TimeMax { get; set; }
-    //    public List<string> Parameters { get; set; }
-    //    public bool IncludeHeader { get; set; }
-    //    public Exception Error { get; set; }
-    //    #endregion
-
-    //    #region Methods
-    //    public abstract void Assign(Dictionary<string, string> dict);
-    //    #endregion
-    //}
-
-    public class DataProperties : IProperties//Properties, IProperties
+    public class DataProperties : IProperties
     {
         #region Properties
+
+        public enum IndexOf
+        {
+            SC = 0,
+            Level = 1,
+            RecordType = 2
+        }
 
         public string RequestType { get; set; }
         public string Id { get; set; }
@@ -216,13 +203,13 @@ namespace WebApi_v1.DataProducts
                 {
                     case ("id"):
                         Id = val;
-                        if (val.Contains('_'))
+                        if (val.Contains('_')) // ex: id=rbspicea_l0_aux
                         {
                             // HACK: May fail given more spacecraft options.
-                            IQueryable<string> valQueryable = val.Split('_').AsQueryable();
-                            SC = valQueryable.ElementAtOrDefault(0);
-                            Level = valQueryable.ElementAtOrDefault(1);
-                            RecordType = valQueryable.ElementAtOrDefault(2);
+                            string[] valArr = val.Split('_');
+                            SC = valArr[(int)IndexOf.SC];
+                            Level = valArr[(int)IndexOf.Level];
+                            RecordType = valArr[(int)IndexOf.RecordType];
                         }
                         break;
 
@@ -253,16 +240,18 @@ namespace WebApi_v1.DataProducts
 
         public override string ToString()
         {
-            string str = String.Empty;
-
             string pars = "";
             if (Parameters != null)
+            {
                 foreach (string par in Parameters)
                     pars += par + ", ";
+            }
             else
+            {
                 pars += "No parameters provided.";
+            }
 
-            str = String.Format(
+            return String.Format(
                 "ID: {0}\n" +
                 "TimeMin: {1}\n" +
                 "TimeMax: {2}\n" +
@@ -274,8 +263,6 @@ namespace WebApi_v1.DataProducts
                 pars,
                 IncludeHeader
             );
-
-            return str;
         }
 
         #endregion Methods

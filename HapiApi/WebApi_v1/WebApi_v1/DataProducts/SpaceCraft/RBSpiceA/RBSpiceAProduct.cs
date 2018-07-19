@@ -27,12 +27,27 @@ namespace WebApi_v1.DataProducts.RBSpiceA
             ParameterSpecificRecords = new List<Dictionary<string, string>>();
         }
 
+        public RBSpiceAProduct()
+        {
+            Initialize();
+
+            if (Hapi.Properties != null)
+                HapiProperties = Hapi.Properties;
+            else
+                throw new ArgumentNullException(nameof(Hapi.Properties));
+
+            // HACK: Jerry may have a library for this.
+            GetPaths();
+        }
+
         public RBSpiceAProduct(IProperties hapiProperties)
         {
-            if (Hapi.Properties == null)
-                throw new ArgumentNullException("Hapi Properties must be set before attempting to create RBSpice Product.");
-            else
+            Initialize();
+
+            if (hapiProperties != null)
                 HapiProperties = hapiProperties;
+            else
+                throw new ArgumentNullException(nameof(hapiProperties));
 
             // HACK: Jerry may have a library for this.
             GetPaths();
@@ -64,7 +79,11 @@ namespace WebApi_v1.DataProducts.RBSpiceA
                     case ("aux"):
                         basepath += @"Auxil\";
                         basepath += mindate.ToString("yyyy") + @"\";
-                        basepath += String.Format("rbsp-a-rbspice_lev-0_Auxil_{0}_v1.1.1-00.csv", mindate.ToString("yyyyMMdd"));//.Replace("/", String.Empty));
+                        // TODO: implement gzip
+                        basepath += String.Format(
+                            "rbsp-a-rbspice_lev-0_Auxil_{0}_v1.1.1-00.csv",
+                            mindate.ToString("yyyyMMdd")
+                        );
                         break;
 
                     default:
@@ -82,7 +101,7 @@ namespace WebApi_v1.DataProducts.RBSpiceA
             return true;
         }
 
-        public void GetProduct()
+        public void GetProduct() // TODO: change name to getRecords? Might be confusing with csvhelper though.
         {
             foreach (string path in Paths)
             {
@@ -103,7 +122,6 @@ namespace WebApi_v1.DataProducts.RBSpiceA
                         // HACK: Figure out a way to save a record with only the requested fields
                         if (HapiProperties.Parameters != null)
                         {
-                            Records = new List<DataRecord>();
                             string[] headers = Header;
 
                             for (int i = 0; i < headers.Length; i++)
@@ -120,32 +138,17 @@ namespace WebApi_v1.DataProducts.RBSpiceA
                                     string parameterName = param;
                                     int indexOfParameterName = Array.IndexOf(headers, parameterName);
                                     string parameterValue = csv[indexOfParameterName];
-                                    aux.Record.Add(parameterName, parameterValue);
-                                    //aux.AddField(parameterName, parameterValue);
+                                    aux.Record.Add(parameterName, parameterValue); // HACK: maybe get actual values, not just strings.
                                 }
 
-                                //if(Hapi.Properties.Parameters != null)
-                                //{
-                                //    foreach (System.Reflection.PropertyInfo prop in this.GetType().GetProperties())
-                                //    {
-                                //        var type = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
-                                //        Converters.ConvertPropertyToDefault(prop, this);
-                                //    }
-                                //}
-                                //this.Records.Add(aux);
                                 Records.Add(aux);
                             }
                         }
                         else
                         {
-                            Records = new List<DataRecord>();
-                            this.Records.AddRange(csv.GetRecords<Auxiliary>().ToList<DataRecord>());
+                            Records.AddRange(csv.GetRecords<Auxiliary>().ToList<DataRecord>());
                         }
                     }
-                }
-                else
-                {
-                    Debug.WriteLine(String.Format("Error: {0}", path));
                 }
             }
         }
