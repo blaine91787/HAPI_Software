@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using WebApi_v1.DataProducts.RBSpiceA;
+using WebApi_v1.DataProducts.Utilities;
 
 namespace WebApi_v1.DataProducts
 {
@@ -80,7 +81,10 @@ namespace WebApi_v1.DataProducts
                 return false;
             }
 
-            return true; // TODO: Should I return booleans or throw errors?
+            if (Properties != null)
+                return true; // TODO: Should I return booleans or throw errors?
+            else
+                return false;
         }
 
         public static bool CreateResponse()
@@ -97,7 +101,11 @@ namespace WebApi_v1.DataProducts
             }
 
             // TODO: Make the response's product more HAPI-like
-            Response = Request.CreateResponse(HttpStatusCode.Accepted, Product.Records);
+            HapiResponse hapiresp = new HapiResponse(Product.Records);
+            hapiresp.parameters = Hapi.Properties.Parameters;
+            hapiresp.startDate = Hapi.Properties.TimeMin.ToString();
+            hapiresp.stopDate = Hapi.Properties.TimeMax.ToString();
+            Response = Request.CreateResponse(HttpStatusCode.Accepted, hapiresp);
 
             return true;
         }
@@ -215,14 +223,21 @@ namespace WebApi_v1.DataProducts
 
                     case ("time.min"):
                         // TODO: Verify DateTime is being calculated correctly.
+                        if (val.Last() != 'z')
+                            val += "z";
+
                         dt = Convert.ToDateTime(val);
                         if (dt != default(DateTime))
                             TimeMin = dt;
                         break;
 
                     case ("time.max"):
-                        // TODO: Verify DateTime is being calculated correctly.
+                        // TODO: Verify DateTime is being calculated correctly (TRAILING Z IS WONKY).
+                        if (val.Last() != 'z')
+                            val += "z";
+
                         dt = Convert.ToDateTime(val);
+
                         if (dt != default(DateTime))
                             TimeMax = dt;
                         break;

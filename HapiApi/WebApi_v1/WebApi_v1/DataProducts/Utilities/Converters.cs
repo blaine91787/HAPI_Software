@@ -195,7 +195,7 @@ namespace WebApi_v1.DataProducts.Utilities
                       "T" + date.Hour.ToString("D2") + ":" + date.Minute.ToString("D2") + ":" + date.Second.ToString("D2") + "." + date.Millisecond.ToString("D3"));
         }
 
-        public static void ConvertParameterToProperty(string parameter, PropertyInfo prop, DataRecord obj)
+        public static void ConvertParameterToProperty(string parameter, PropertyInfo prop, IRecord obj)
         {
             TypeCode tc = Type.GetTypeCode(prop.PropertyType);//Convert.GetTypeCode(prop.PropertyType);
 
@@ -231,7 +231,7 @@ namespace WebApi_v1.DataProducts.Utilities
             }
         }
 
-        public static void ConvertPropertyToDefault(PropertyInfo prop, DataRecord obj)
+        public static void ConvertPropertyToDefault(PropertyInfo prop, IRecord obj)
         {
             TypeCode tc = Type.GetTypeCode(prop.PropertyType);//Convert.GetTypeCode(prop.PropertyType);
 

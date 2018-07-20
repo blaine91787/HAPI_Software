@@ -189,12 +189,13 @@
     <Compile Include="Controllers\PeopleController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="DataProducts\Hapi.cs" />
-    <Compile Include="DataProducts\CSVHelperUtilities\TypeConverters.cs" />
-    <Compile Include="DataProducts\DataRecord.cs" />
+    <Compile Include="DataProducts\Utilities\CSVHelperUtilities\Mappings.cs" />
+    <Compile Include="DataProducts\Utilities\CSVHelperUtilities\TypeConverters.cs" />
+    <Compile Include="DataProducts\Record.cs" />
     <Compile Include="DataProducts\HapiInfo.cs" />
     <Compile Include="DataProducts\HapiResponse.cs" />
     <Compile Include="DataProducts\IConfigurable.cs" />
-    <Compile Include="DataProducts\IDataRecord.cs" />
+    <Compile Include="DataProducts\IRecord.cs" />
     <Compile Include="DataProducts\IProduct.cs" />
     <Compile Include="DataProducts\SpaceCraft\RBSpiceA\Products\Auxiliary.cs" />
     <Compile Include="DataProducts\Product.cs" />

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using WebApi_v1.DataProducts.Utilities;
+using static WebApi_v1.DataProducts.Utilities.CSVHelperUtilities.Mappings;
 
 namespace WebApi_v1.DataProducts.RBSpiceA
 {
@@ -15,7 +16,7 @@ namespace WebApi_v1.DataProducts.RBSpiceA
         //private string path = @"C:\Users\blaine.harris\Documents\BlainesProjects\WebApi_v1\WebApi_v1\obj\Debug\rbsp-a-rbspice_lev-0_Auxil_20121028_v1.1.1-00.csv";
         public string[] Header { get; set; }
 
-        public List<DataRecord> Records { get; set; }
+        public IEnumerable<Dictionary<string, string>> Records { get; set; }
         public List<Dictionary<string, string>> ParameterSpecificRecords { get; set; }
         public List<FileInfo> Files { get; set; }
         public IProperties HapiProperties { get; set; }
@@ -23,8 +24,8 @@ namespace WebApi_v1.DataProducts.RBSpiceA
 
         public void Initialize()
         {
-            Records = new List<DataRecord>();
-            ParameterSpecificRecords = new List<Dictionary<string, string>>();
+            //Records = new List<IRecord>();
+            //ParameterSpecificRecords = new List<Dictionary<string, string>>();
         }
 
         public RBSpiceAProduct()
@@ -56,11 +57,13 @@ namespace WebApi_v1.DataProducts.RBSpiceA
         private void GetPaths()
         {
             Paths = new List<string>();
-            DateTime mindate = HapiProperties.TimeMin.Date;
-            DateTime maxdate = HapiProperties.TimeMax.Date;
+            DateTime mintime = HapiProperties.TimeMin;
+            DateTime maxtime = HapiProperties.TimeMax;
+            DateTime mindate = mintime.Date;
+            DateTime maxdate = maxtime.Date;
             string basepath = String.Empty;
 
-            while (mindate <= maxdate)
+            while (mintime <= maxtime)
             {
                 basepath = _basepath;
 
@@ -92,7 +95,8 @@ namespace WebApi_v1.DataProducts.RBSpiceA
 
                 Paths.Add(basepath);
 
-                mindate = mindate.AddDays(1.0);
+                mintime = mintime.AddDays(1.0);
+                mindate = mintime.Date;
             }
         }
 
@@ -103,54 +107,8 @@ namespace WebApi_v1.DataProducts.RBSpiceA
 
         public void GetProduct() // TODO: change name to getRecords? Might be confusing with csvhelper though.
         {
-            foreach (string path in Paths)
-            {
-                if (File.Exists(path))
-                {
-                    using (FileStream fs = File.OpenRead(path))
-                    using (TextReader textReader = new StreamReader(fs))
-                    {
-                        // TODO: Try and make this less dependant on Auxiliary type.
-                        CsvReader csv = new CsvReader(textReader);
-                        csv.Configuration.RegisterClassMap<AuxiliaryMap>();
-                        csv.Read();
-                        csv.ReadHeader();
-                        this.Header = csv.Context.HeaderRecord;
-
-                        // If parameters exist read csv row by row and extract specific fields
-                        // else convert all rows to records and save to this.Records
-                        // HACK: Figure out a way to save a record with only the requested fields
-                        if (HapiProperties.Parameters != null)
-                        {
-                            string[] headers = Header;
-
-                            for (int i = 0; i < headers.Length; i++)
-                                headers[i] = headers[i].ToLower();
-
-                            while (csv.Read())
-                            {
-                                // HACK: This is pretty hacky stuff.
-                                //Auxiliary aux = new Auxiliary();
-                                AuxiliaryByParameters aux = new AuxiliaryByParameters();
-                                //Dictionary<string, string> dict = new Dictionary<string, string>();
-                                foreach (string param in HapiProperties.Parameters)
-                                {
-                                    string parameterName = param;
-                                    int indexOfParameterName = Array.IndexOf(headers, parameterName);
-                                    string parameterValue = csv[indexOfParameterName];
-                                    aux.Record.Add(parameterName, parameterValue); // HACK: maybe get actual values, not just strings.
-                                }
-
-                                Records.Add(aux);
-                            }
-                        }
-                        else
-                        {
-                            Records.AddRange(csv.GetRecords<Auxiliary>().ToList<DataRecord>());
-                        }
-                    }
-                }
-            }
+            Auxiliary aux = new Auxiliary();
+            Records = aux.GetRecords(Paths);
         }
 
         public void GetProductWithTimeRange()
@@ -159,14 +117,14 @@ namespace WebApi_v1.DataProducts.RBSpiceA
             Type recordtype;
             if ("Auxiliary" == nameof(Auxiliary))
                 recordtype = typeof(Auxiliary);
-            Records = new List<DataRecord>();
+            Records = new List<Dictionary<string, string>>();
             if (File.Exists(path))
             {
                 using (FileStream fs = File.OpenRead(path))
                 using (TextReader textReader = new StreamReader(fs))
                 {
                     CsvReader csv = new CsvReader(textReader);
-                    csv.Configuration.RegisterClassMap<AuxiliaryMap>();
+                    csv.Configuration.RegisterClassMap<Aux_Map>();
                     csv.Read();
                     csv.ReadHeader();
                     this.Header = csv.Context.HeaderRecord;
@@ -176,8 +134,8 @@ namespace WebApi_v1.DataProducts.RBSpiceA
                         if (Converters.ConvertUTCtoDate(csv["UTC"]) >= TimeRange.Start
                             && Converters.ConvertUTCtoDate(csv["UTC"]) <= TimeRange.End)
                         {
-                            if ("Auxiliary" == nameof(Auxiliary))
-                                Records.Add(csv.GetRecord<Auxiliary>());
+                            //if ("Auxiliary" == nameof(Auxiliary))
+                            //Records.Add(csv.GetRecord<IRecord>());
                         }
                     }
                 };

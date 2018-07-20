@@ -1,0 +1,103 @@
+{
+    "Hapi": "2.0",
+    "status": {
+        "code": 1200,
+        "Message": "OK"
+    },
+    "startDate": "10/28/2012 7:01:00 AM",
+    "stopDate": "10/28/2012 7:02:00 AM",
+    "parameters": [
+        "utc",
+        "sclock_full",
+        "et",
+        "orbitnumber",
+        "seconds",
+        "subseconds",
+        "spin",
+        "spintime",
+        "spinperiod",
+        "spinphase",
+        "magphase"
+    ],
+    "format": "json",
+    "data": [
+        {
+            "utc": "2012-302T07:01:05.368",
+            "sclock_full": "1/89103666:20649",
+            "et": "404679732.55061",
+            "orbitnumber": "158",
+            "seconds": "89103666",
+            "subseconds": "27066",
+            "spin": "56835",
+            "spintime": "89103667",
+            "spinperiod": "34124",
+            "spinphase": "3517",
+            "magphase": "48914"
+        },
+        {
+            "utc": "2012-302T07:01:16.288",
+            "sclock_full": "1/89103677:16649",
+            "et": "404679743.470608",
+            "orbitnumber": "158",
+            "seconds": "89103677",
+            "subseconds": "21823",
+            "spin": "56836",
+            "spintime": "89103678",
+            "spinperiod": "34124",
+            "spinphase": "4000",
+            "magphase": "48935"
+        },
+        {
+            "utc": "2012-302T07:01:27.207",
+            "sclock_full": "1/89103688:12599",
+            "et": "404679754.389607",
+            "orbitnumber": "158",
+            "seconds": "89103688",
+            "subseconds": "16515",
+            "spin": "56837",
+            "spintime": "89103689",
+            "spinperiod": "34123",
+            "spinphase": "4413",
+            "magphase": "48962"
+        },
+        {
+            "utc": "2012-302T07:01:38.139",
+            "sclock_full": "1/89103699:9199",
+            "et": "404679765.321605",
+            "orbitnumber": "158",
+            "seconds": "89103699",
+            "subseconds": "12058",
+            "spin": "56838",
+            "spintime": "89103700",
+            "spinperiod": "34122",
+            "spinphase": "4899",
+            "magphase": "48911"
+        },
+        {
+            "utc": "2012-302T07:01:49.058",
+            "sclock_full": "1/89103710:5149",
+            "et": "404679776.240603",
+            "orbitnumber": "158",
+            "seconds": "89103710",
+            "subseconds": "6750",
+            "spin": "56839",
+            "spintime": "89103711",
+            "spinperiod": "34122",
+            "spinphase": "5385",
+            "magphase": "48824"
+        },
+        {
+            "utc": "2012-302T07:01:59.976",
+            "sclock_full": "1/89103721:1049",
+            "et": "404679787.158602",
+            "orbitnumber": "158",
+            "seconds": "89103721",
+            "subseconds": "1376",
+            "spin": "56840",
+            "spintime": "89103722",
+            "spinperiod": "34121",
+            "spinphase": "5873",
+            "magphase": "48742"
+        }
+    ]
+}
