@@ -2,7 +2,6 @@
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
 using System;
-using WebApi_v1.DataProducts.Utilities;
 
 namespace WebApi_v1.DataProducts.Utilities.CSVHelperUtilities
 {

@@ -1,10 +1,8 @@
 ﻿using CsvHelper;
-using CsvHelper.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using WebApi_v1.DataProducts.RBSpiceA;
 using WebApi_v1.DataProducts.Utilities;
 using static WebApi_v1.DataProducts.Utilities.CSVHelperUtilities.Mappings;
 
@@ -97,9 +95,7 @@ namespace WebApi_v1.DataProducts
                                 bool ltmin = Converters.ConvertUTCtoDate(csv["UTC"]) <= HapiProperties.TimeMin;
                                 bool gtmax = Converters.ConvertUTCtoDate(csv["UTC"]) >= HapiProperties.TimeMax;
                                 if (ltmin || gtmax)
-                                {
                                     continue;
-                                }
 
                                 AuxRecord aux = new AuxRecord();
                                 //Dictionary<string, string> dict = new Dictionary<string, string>();
