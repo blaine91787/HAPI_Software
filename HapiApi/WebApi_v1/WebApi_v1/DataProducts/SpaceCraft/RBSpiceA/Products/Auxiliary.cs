@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using WebApi_v1.DataProducts.Utilities;
 using static WebApi_v1.DataProducts.Utilities.CSVHelperUtilities.Mappings;
 
@@ -163,15 +164,15 @@ namespace WebApi_v1.DataProducts
 
         public new string ToString()
         {
-            string str = "";
+            StringBuilder sb = new StringBuilder();
 
             foreach (System.Reflection.PropertyInfo prop in this.GetType().GetProperties())
             {
                 var type = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
-                str += prop.GetValue(this, null) + ", ";
+                sb.Append(prop.GetValue(this, null) + ", ");
             }
 
-            return str;
+            return sb.ToString();
         }
 
         public class AuxRecord : IRecord
@@ -187,6 +188,23 @@ namespace WebApi_v1.DataProducts
             public void Add(string key, string val)
             {
                 Data.Add(key, val);
+            }
+
+            public override string ToString()
+            {
+                StringBuilder sb = new StringBuilder();
+
+                KeyValuePair<string, string>[] dataArr = Data.ToArray();
+
+                for (int i = 0; i < dataArr.Length; i++)
+                {
+                    sb.Append("\"" + dataArr[i].Value + "\"");
+                    if (i != dataArr.Length - 1)
+                        sb.Append(",\n");
+                }
+
+                sb.Append("]\n");
+                return sb.ToString();
             }
         }
     }

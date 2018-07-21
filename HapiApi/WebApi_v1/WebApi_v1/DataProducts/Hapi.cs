@@ -7,7 +7,7 @@ using WebApi_v1.DataProducts.RBSpiceA;
 
 namespace WebApi_v1.DataProducts
 {
-    public static class Hapi
+    public static partial class Hapi
     {
         #region Properties
 
@@ -92,6 +92,11 @@ namespace WebApi_v1.DataProducts
             {
                 case ("data"):
                     GetDataProduct();
+                    Hapi.DataResponse resp;
+                    try { resp = new Hapi.DataResponse(); }
+                    catch (Exception e) { Errors.Add(e); return false; }
+                    Response = Request.CreateResponse(HttpStatusCode.Accepted);
+                    Response.Content = new StringContent(resp.ToJson());
                     break;
 
                 default:
@@ -99,12 +104,7 @@ namespace WebApi_v1.DataProducts
                     throw new ArgumentOutOfRangeException(RequestType, "Not a valid request type.");
             }
 
-            // TODO: Make the response's product more HAPI-like
-            HapiResponse hapiresp = new HapiResponse(Product.Records);
-            hapiresp.parameters = Hapi.Properties.Parameters;
-            hapiresp.startDate = Hapi.Properties.TimeMin.ToString();
-            hapiresp.stopDate = Hapi.Properties.TimeMax.ToString();
-            Response = Request.CreateResponse(HttpStatusCode.Accepted, hapiresp);
+;
 
             return true;
         }
@@ -244,6 +244,13 @@ namespace WebApi_v1.DataProducts
                     case ("parameters"):
                         Parameters = new List<string>();
                         Parameters = val.Split(new char[] { ',' }).ToList();
+                        break;
+
+                    case ("include"):
+                        if (val == "header")
+                            IncludeHeader = true;
+                        else
+                            throw new ArgumentOutOfRangeException(key, "Include only has one possible value \"include=header\"");
                         break;
 
                     default:

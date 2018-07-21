@@ -47,15 +47,11 @@ namespace WebApi_v1.Controllers
 
         [Route("api/Hapi/Capabilities")]
         [HttpGet]
-        public IProduct GetCapabilities()
+        public HttpResponseMessage GetCapabilities()
         {
-            if (Hapi.Configure(Request))
-                Debug.WriteLine(Hapi.ToString);
-            else
-                Debug.WriteLine(Hapi.Properties.Error.Message);
-
-            IProduct prod = new RBSpiceAProduct(Hapi.Properties);
-            return prod;
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Accepted);
+            response.Content = new StringContent(new Hapi.CapabilitiesResponse().ToString());
+            return response;
         }
     }
 }
