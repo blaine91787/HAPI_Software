@@ -10,7 +10,8 @@ namespace WebApi_v1.DataProducts.RBSpiceA
 {
     public class RBSpiceAProduct : IProduct, IConfigurable
     {
-        private readonly string _basepath = @"C:\Users\FTECS Account\Documents\GitHub\FTECS\HapiApi\WebApi_v1\WebApi_v1\obj\Debug\";
+        //private readonly string _basepath = @"C:\Users\FTECS Account\Documents\GitHub\FTECS\HapiApi\WebApi_v1\WebApi_v1\obj\Debug\";
+        private readonly string _basepath = @"C:\Users\blaine.harris\Documents\GitHub\FTECS\HapiApi\WebApi_v1\WebApi_v1\SCRecords\RBSPA\";
 
         //private string path = @"C:\Users\blaine.harris\Documents\BlainesProjects\WebApi_v1\WebApi_v1\obj\Debug\rbsp-a-rbspice_lev-0_Auxil_20121028_v1.1.1-00.csv";
         public string[] Header { get; set; }
