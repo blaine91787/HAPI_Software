@@ -73,6 +73,13 @@ namespace WebApi_v1.DataProducts
                 case "data":
                     Properties = new DataProperties();
                     break;
+
+                case "info":
+                    Properties = new DataProperties();
+                    break;
+
+                case "catalog":
+                    return true;
             }
 
             // Try to assign query arguments to properties object.
@@ -95,16 +102,29 @@ namespace WebApi_v1.DataProducts
 
         public static bool CreateResponse()
         {
+            IResponse resp;
             switch (RequestType.ToLower())
             {
                 case ("data"):
                     GetDataProduct();
-                    Hapi.DataResponse resp;
                     try { resp = new Hapi.DataResponse(); }
                     catch (Exception e) { Errors.Add(e); return false; }
                     Response = Request.CreateResponse(HttpStatusCode.Accepted);
-                    string form = Hapi.Properties.Format;
-                    Response.Content = new StringContent(resp.GetResponse(form == "" ? "csv" : form));
+                    string format = Hapi.Properties.Format != null ? Hapi.Properties.Format : "csv";
+                    string strcontent = resp.GetResponse(format);
+                    Response.Content = new StringContent(strcontent);
+                    break;
+
+                case ("catalog"):
+                    resp = new Hapi.CatalogResponse();
+                    Response = Request.CreateResponse(HttpStatusCode.Accepted);
+                    Response.Content = new StringContent(resp.GetResponse());
+                    break;
+
+                case ("info"):
+                    resp = new Hapi.InfoResponse();
+                    Response = Request.CreateResponse(HttpStatusCode.Accepted);
+                    Response.Content = new StringContent(resp.GetResponse());
                     break;
 
                 default:
@@ -224,7 +244,7 @@ namespace WebApi_v1.DataProducts
             TimeMax = default(DateTime);
             Parameters = null;
             IncludeHeader = false;
-            Format = "";
+            Format = null;
             Error = null;
         }
 

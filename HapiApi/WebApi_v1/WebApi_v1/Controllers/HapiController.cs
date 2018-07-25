@@ -12,16 +12,16 @@ namespace WebApi_v1.Controllers
     {
         [Route("api/Hapi/Info")]
         [HttpGet]
-        public IProduct GetInfo()
+        public HttpResponseMessage GetInfo()
         {
             Hapi.Configure(Request);
-            Debug.WriteLine(Hapi.ToString);
+            Hapi.CreateResponse();
 
-            IProduct prod = new RBSpiceAProduct(Hapi.Properties);
-            return prod;
+            return Hapi.Response;
         }
 
-        [Route("api/Hapi/Data")]
+        [Route("api/Hapi/" +
+            "Data")]
         [HttpGet]
         public HttpResponseMessage GetData()
         {
@@ -45,13 +45,13 @@ namespace WebApi_v1.Controllers
 
         [Route("api/Hapi/Catalog")]
         [HttpGet]
-        public IProduct GetCatalog()
+        public HttpResponseMessage GetCatalog()
         {
             Hapi.Configure(Request);
-            Debug.WriteLine(Hapi.ToString);
 
-            IProduct prod = new RBSpiceAProduct(Hapi.Properties);
-            return prod;
+            Hapi.CreateResponse();
+
+            return Hapi.Response;
         }
 
         [Route("api/Hapi/Capabilities")]

@@ -6,6 +6,13 @@ using System.Text;
 
 namespace WebApi_v1.DataProducts
 {
+    internal interface IResponse
+    {
+        string GetResponse();
+
+        string GetResponse(string format);
+    }
+
     public static partial class Hapi
     {
         private static readonly string _version = "2.0";
@@ -23,7 +30,7 @@ namespace WebApi_v1.DataProducts
             }
         }
 
-        public class DataResponse
+        public class DataResponse : IResponse
         {
             public string HapiVersion = _version;
             public Status Status = null;
@@ -35,7 +42,6 @@ namespace WebApi_v1.DataProducts
 
             public DataResponse()
             {
-                ResponseHeader();
                 IProperties props = Hapi.Properties;
                 if (props == null)
                     throw new MissingFieldException(nameof(Hapi.Properties));
@@ -56,11 +62,9 @@ namespace WebApi_v1.DataProducts
                 Data = Hapi.Product.Records;
             }
 
-            private string ResponseHeader()
+            public string GetResponse()
             {
-                string str = "";
-
-                return str;
+                return "";
             }
 
             public string GetResponse(string format)
@@ -313,8 +317,152 @@ namespace WebApi_v1.DataProducts
             }
         }
 
-        public class InfoResponse
+        public class InfoResponse : IResponse
         {
+            private string HapiVersion { get; set; }
+            private Status Status { get; set; }
+            private string Format { get; set; }
+            private DateTime StartDate { get; set; }
+            private DateTime StopDate { get; set; }
+            private List<string> Parameters { get; set; }
+
+            public InfoResponse()
+            {
+                HapiVersion = _version;
+                Status = new Status(1200, "OK"); // HACK: don't use a literal value for code
+                Format = Hapi.Properties.Format == null ? "csv" : Hapi.Properties.Format;
+                StartDate = Hapi.Properties.TimeMin;
+                StopDate = Hapi.Properties.TimeMax;
+                Parameters = Hapi.Properties.Parameters;
+            }
+
+            public string GetResponse(string format)
+            {
+                return "";
+            }
+
+            public string GetResponse()
+            {
+                return GetInfoHeader();
+            }
+
+            private string GetInfoHeader()
+            {
+                bool multiLineParameters = false;
+                StringBuilder sb = new StringBuilder();
+                sb.Append(String.Format(
+                    "{{\n" +
+                    "\t\"HAPI\" : \"{0}\",\n" +
+                    "\t\"status\" : {{ \"code\" : {1}, \"message\" : \"{2}\" }},\n" +
+                    "\t\"startDate\" : \"{3}\",\n" +
+                    "\t\"stopDate\" : \"{4}\",\n" +
+                    "\t\"parameters\" : [\n",
+                    HapiVersion,
+                    Status.Code,
+                    Status.Message,
+                    StartDate,
+                    StopDate
+                ));
+
+                if (Hapi.Properties.Parameters != null)
+                {
+                    foreach (string param in Hapi.Properties.Parameters)
+                    {
+                        if (multiLineParameters)
+                        {
+                            sb.Append(String.Format(
+                                "\t\t{{\n " +
+                                "\t\t   \"name\" : \"{0}\",\n" +
+                                "\t\t   \"type\" : \"{1}\",\n" +
+                                "\t\t   \"units\" : \"{2}\",\n" +
+                                "\t\t   \"fill\" : \"{3}\",\n" +
+                                "\t\t   \"length\" : {4},\n" +
+                                "\t\t}},\n",
+                                param.ToLower(),
+                                "null",
+                                "null",
+                                "null",
+                                "null"
+                            ));
+                        }
+                        else
+                        {
+                            sb.Append(String.Format(
+                                "\t\t{{ \"name\" : \"{0}\", \"type\" : \"{1}\", \"units\" : \"{2}\", \"fill\" : \"{3}\", \"length\" : {4} }},\n",
+                                param.ToLower(),
+                                "null",
+                                "null",
+                                "null",
+                                "null"
+                            ));
+                        }
+                    }
+                }
+
+                sb.Append("\t],\n}\n");
+
+                return sb.ToString();
+            }
+        }
+
+        public class CatalogResponse : IResponse
+        {
+            private string HapiVersion { get; set; }
+            private Status Status { get; set; }
+            private List<KeyValuePair<string, string>> Catalog { get; set; }
+
+            public CatalogResponse()
+            {
+                HapiVersion = _version;
+                Status = new Status(1200, "OK"); // HACK: don't use a literal value for code
+                Catalog = new List<KeyValuePair<string, string>>()
+                {
+                    GetKeyValPair("RBSPICEA_L0_AUX", "RBSPA Level 0 Auxiliary Data"),
+                };
+            }
+
+            private KeyValuePair<string, string> GetKeyValPair(string id, string title)
+            {
+                return new KeyValuePair<string, string>(id, title);
+            }
+
+            public string GetResponse()
+            {
+                StringBuilder sb = new StringBuilder();
+
+                sb.Append(
+                    String.Format(
+                        "{{\n" +
+                        "\t\"HAPI\" : \"{0}\",\n" +
+                        "\t\"status\" : {{ \"code\" : {1}, \"message\" : \"{2}\" }},\n" +
+                        "\t\"catalog\" :\n" +
+                        "\t[\n",
+                        HapiVersion,
+                        Status.Code,
+                        Status.Message
+                    )
+                );
+
+                foreach (var dict in Catalog)
+                {
+                    sb.Append(
+                        String.Format(
+                            "\t\t{{ \"id\" : \"{0}\", \"title\" : \"{1}\" }},\n",
+                            dict.Key,
+                            dict.Value
+                        )
+                    );
+                }
+
+                sb.Append("\t]\n}}");
+
+                return sb.ToString();
+            }
+
+            public string GetResponse(string format)
+            {
+                return "";
+            }
         }
     }
 }
