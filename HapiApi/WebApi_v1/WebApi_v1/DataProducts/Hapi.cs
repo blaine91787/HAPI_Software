@@ -20,6 +20,13 @@ namespace WebApi_v1.DataProducts
             "catalog"
         };
 
+        public static readonly string[] _formats = new string[]
+        {
+            "csv",
+            "json",
+            //"binary"
+        };
+
         public static bool Initialized { get; private set; }
         private static Dictionary<string, string> QueryDict { get; set; }
         public static HttpRequestMessage Request { get; set; }
@@ -36,7 +43,7 @@ namespace WebApi_v1.DataProducts
 
         public static void Initialize()
         {
-            QueryDict = new Dictionary<string, string>();
+            QueryDict = null;
             Request = null;
             Response = null;
             RequestType = String.Empty;
@@ -51,14 +58,14 @@ namespace WebApi_v1.DataProducts
         {
             Initialize();
             Request = request;
-            RequestType = Request.RequestUri.LocalPath.Split('/').Last().ToLower();
 
             if (!RequestTypeValid())
                 return false;
 
             //Request type is valid.
 
-            QueryDict = GetDictionaryFromQuery(Query);
+            if (!TryDictionaryFromQuery())
+                return false;
 
             // Choose the correct Properties type based on RequestType
             switch (RequestType)
@@ -96,7 +103,8 @@ namespace WebApi_v1.DataProducts
                     try { resp = new Hapi.DataResponse(); }
                     catch (Exception e) { Errors.Add(e); return false; }
                     Response = Request.CreateResponse(HttpStatusCode.Accepted);
-                    Response.Content = new StringContent(resp.ToJson());
+                    string form = Hapi.Properties.Format;
+                    Response.Content = new StringContent(resp.GetResponse(form == "" ? "csv" : form));
                     break;
 
                 default:
@@ -133,9 +141,10 @@ namespace WebApi_v1.DataProducts
             return _requesttypes.Contains(RequestType);
         }
 
-        public static Dictionary<string, string> GetDictionaryFromQuery(string query)
+        public static bool TryDictionaryFromQuery()
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
+            string query = Request.RequestUri.Query;
 
             string[] arr = query.ToLower().TrimStart(_delimiters).Split(_delimiters);
 
@@ -144,8 +153,14 @@ namespace WebApi_v1.DataProducts
                 for (int i = 0; i < arr.Length; i += 2)
                     dict.Add(arr[i], arr[i + 1]);
             }
+            else
+            {
+                return false;
+            }
 
-            return dict;
+            QueryDict = dict;
+
+            return true;
         }
 
         new public static string ToString
@@ -175,7 +190,7 @@ namespace WebApi_v1.DataProducts
     {
         #region Properties
 
-        public enum IndexOf
+        private enum IndexOf
         {
             SC = 0,
             Level = 1,
@@ -191,19 +206,37 @@ namespace WebApi_v1.DataProducts
         public DateTime TimeMax { get; set; }
         public List<string> Parameters { get; set; }
         public bool IncludeHeader { get; set; }
+        public string Format { get; set; }
         public Exception Error { get; set; }
 
         #endregion Properties
 
         #region Methods
 
+        public void Initialize()
+        {
+            RequestType = "";
+            Id = "";
+            SC = "";
+            Level = "";
+            RecordType = "";
+            TimeMin = default(DateTime);
+            TimeMax = default(DateTime);
+            Parameters = null;
+            IncludeHeader = false;
+            Format = "";
+            Error = null;
+        }
+
         public void Assign(Dictionary<string, string> dict)
         {
+            Initialize();
             string key = String.Empty;
             string val = String.Empty;
             DateTime dt = default(DateTime);
             foreach (KeyValuePair<string, string> pair in dict)
             {
+                // TODO: Find a better way to check for 'HapiResponse.ToJson>string last' error where time.min and time.max are not valid. Should be able to catch it here.
                 key = pair.Key.ToLower();
                 val = pair.Value.ToLower();
                 switch (key)
@@ -222,7 +255,7 @@ namespace WebApi_v1.DataProducts
 
                     case ("time.min"):
                         // TODO: Verify DateTime is being calculated correctly.
-                        if (val.Last() != 'z')
+                        if ((val.Contains('t') && val.Last() != 't') && val.Last() != 'z')
                             val += "z";
 
                         dt = Convert.ToDateTime(val);
@@ -232,7 +265,7 @@ namespace WebApi_v1.DataProducts
 
                     case ("time.max"):
                         // TODO: Verify DateTime is being calculated correctly (TRAILING Z IS WONKY).
-                        if (val.Last() != 'z')
+                        if ((val.Contains('T') && val.Last() != 'T') && val.Last() != 'z')
                             val += "z";
 
                         dt = Convert.ToDateTime(val);
@@ -249,6 +282,13 @@ namespace WebApi_v1.DataProducts
                     case ("include"):
                         if (val == "header")
                             IncludeHeader = true;
+                        else
+                            throw new ArgumentOutOfRangeException(key, "Include only has one possible value \"include=header\"");
+                        break;
+
+                    case ("format"):
+                        if (Hapi._formats.Contains(val))
+                            Format = val;
                         else
                             throw new ArgumentOutOfRangeException(key, "Include only has one possible value \"include=header\"");
                         break;

@@ -55,7 +55,8 @@ namespace WebApi_v1.DataProducts
                 Converters.ConvertPropertyToDefault(prop, this);
             }
 
-            HapiProperties = Hapi.Properties;
+            if (Hapi.Properties != null)
+                HapiProperties = Hapi.Properties;
         }
 
         public IEnumerable<Dictionary<string, string>> GetRecords(IEnumerable<string> paths)
@@ -96,6 +97,7 @@ namespace WebApi_v1.DataProducts
                                 bool ltmin = Converters.ConvertUTCtoDate(csv["UTC"]) <= HapiProperties.TimeMin;
                                 bool gtmax = Converters.ConvertUTCtoDate(csv["UTC"]) >= HapiProperties.TimeMax;
                                 if (ltmin || gtmax)
+
                                     continue;
 
                                 AuxRecord aux = new AuxRecord();
@@ -103,7 +105,8 @@ namespace WebApi_v1.DataProducts
                                 foreach (string param in HapiProperties.Parameters)
                                 {
                                     string parameterName = param;
-                                    int indexOfParameterName = Array.IndexOf(headers, parameterName);
+                                    int indexOfParameterName = Array.IndexOf(headers, parameterName.ToLower());
+                                    // TODO: This fails on receiving a bad parameter name in query.
                                     string parameterValue = csv[indexOfParameterName];
                                     aux.Add(parameterName, parameterValue); // HACK: maybe get actual values, not just strings.
                                 }
@@ -114,9 +117,13 @@ namespace WebApi_v1.DataProducts
                         else
                         {
                             string[] headers = csv.Context.HeaderRecord;
+                            Hapi.Properties.Parameters = new List<string>();
 
                             for (int i = 0; i < headers.Length; i++)
+                            {
                                 headers[i] = headers[i].ToLower();
+                                Hapi.Properties.Parameters.Add(headers[i]);
+                            }
 
                             while (csv.Read())
                             {
@@ -125,8 +132,8 @@ namespace WebApi_v1.DataProducts
 
                                 // If csvrecord time is less than time.min or
                                 // csvrecord time is greater than time.max then break while loop.
-                                bool ltmin = Converters.ConvertUTCtoDate(csv["UTC"]) <= HapiProperties.TimeMin;
-                                bool gtmax = Converters.ConvertUTCtoDate(csv["UTC"]) >= HapiProperties.TimeMax;
+                                bool ltmin = Converters.ConvertUTCtoDate(csv["UTC"]) < HapiProperties.TimeMin;
+                                bool gtmax = Converters.ConvertUTCtoDate(csv["UTC"]) > HapiProperties.TimeMax;
                                 if (ltmin || gtmax)
                                     continue;
 
@@ -166,10 +173,22 @@ namespace WebApi_v1.DataProducts
         {
             StringBuilder sb = new StringBuilder();
 
-            foreach (System.Reflection.PropertyInfo prop in this.GetType().GetProperties())
+            if (HapiProperties.Parameters != null)
             {
-                var type = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
-                sb.Append(prop.GetValue(this, null) + ", ");
+                foreach (System.Reflection.PropertyInfo prop in this.GetType().GetProperties())
+                {
+                    var type = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
+                    if (HapiProperties.Parameters.Contains(prop.Name))
+                        sb.Append(prop.GetValue(this, null) + ", ");
+                }
+            }
+            else
+            {
+                foreach (System.Reflection.PropertyInfo prop in this.GetType().GetProperties())
+                {
+                    var type = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
+                    sb.Append(prop.GetValue(this, null) + ", ");
+                }
             }
 
             return sb.ToString();

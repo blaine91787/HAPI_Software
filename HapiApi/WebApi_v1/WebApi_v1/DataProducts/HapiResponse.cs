@@ -35,6 +35,7 @@ namespace WebApi_v1.DataProducts
 
             public DataResponse()
             {
+                ResponseHeader();
                 IProperties props = Hapi.Properties;
                 if (props == null)
                     throw new MissingFieldException(nameof(Hapi.Properties));
@@ -55,10 +56,129 @@ namespace WebApi_v1.DataProducts
                 Data = Hapi.Product.Records;
             }
 
+            private string ResponseHeader()
+            {
+                string str = "";
+
+                return str;
+            }
+
+            public string GetResponse(string format)
+            {
+                string resp = "";
+                switch (format.ToLower())
+                {
+                    case ("csv"):
+                        resp = ToCSV();
+                        return resp;
+
+                    case ("json"):
+                        resp = ToJson();
+                        return resp;
+
+                    default:
+                        return resp;
+                }
+            }
+
+            private string GetInfoHeader()
+            {
+                bool multiLineParameters = false;
+                StringBuilder sb = new StringBuilder();
+                sb.Append(String.Format(
+                    "#{{\n" +
+                    "#\t\"HAPI\" : \"{0}\",\n" +
+                    "#\t\"status\" : {{ \"code\" : {1}, \"message\" : \"{2}\" }},\n" +
+                    "#\t\"startDate\" : \"{3}\",\n" +
+                    "#\t\"stopDate\" : \"{4}\",\n" +
+                    "#\t\"parameters\" : [\n",
+                    HapiVersion,
+                    Status.Code,
+                    Status.Message,
+                    Hapi.Properties.TimeMin,
+                    Hapi.Properties.TimeMax
+                ));
+
+                if (Hapi.Properties.Parameters != null)
+                {
+                    foreach (string param in Hapi.Properties.Parameters)
+                    {
+                        if (multiLineParameters)
+                        {
+                            sb.Append(String.Format(
+                                "#\t\t{{\n " +
+                                "#\t\t   \"name\" : \"{0}\",\n" +
+                                "#\t\t   \"type\" : \"{1}\",\n" +
+                                "#\t\t   \"units\" : \"{2}\",\n" +
+                                "#\t\t   \"fill\" : \"{3}\",\n" +
+                                "#\t\t   \"length\" : {4},\n" +
+                                "#\t\t}},\n",
+                                param.ToLower(),
+                                "null",
+                                "null",
+                                "null",
+                                "null"
+                            ));
+                        }
+                        else
+                        {
+                            sb.Append(String.Format(
+                                "#\t\t{{ \"name\" : \"{0}\", \"type\" : \"{1}\", \"units\" : \"{2}\", \"fill\" : \"{3}\", \"length\" : {4} }},\n",
+                                param.ToLower(),
+                                "null",
+                                "null",
+                                "null",
+                                "null"
+                            ));
+                        }
+                    }
+                }
+
+                sb.Append("#\t],\n#}\n");
+
+                return sb.ToString();
+            }
+
+            public string ToCSV()
+            {
+                bool header = Hapi.Properties.IncludeHeader;
+                StringBuilder sb = new StringBuilder();
+
+                if (header)
+                {
+                    sb.Append(GetInfoHeader());
+                }
+
+                string last;
+                try
+                {
+                    last = Hapi.Product.Records.ToList().First().ToList().Last().Key;
+                }
+                catch
+                {
+                    throw new InvalidOperationException("\"HapiResponse.ToJson()>string last\" is empty. Possibly missing time.min or time.max or invalid request.");
+                }
+
+                foreach (Dictionary<string, string> rec in Hapi.Product.Records)
+                {
+                    //KeyValuePair<string, string>[] dataArr = rec.ToArray(); ;
+
+                    foreach (KeyValuePair<string, string> pair in rec)
+                    {
+                        sb.Append(pair.Value);
+                        if (pair.Key != last)
+                            sb.Append(",");
+                        else
+                            sb.Append("\n");
+                    }
+                }
+                return sb.ToString();
+            }
+
             public string ToJson()
             {
-                bool cool = false;
-                bool header = Hapi.Properties.IncludeHeader;
+                bool multiLineParameters = false;
+                bool header = true;//Hapi.Properties.IncludeHeader;
                 StringBuilder sb = new StringBuilder();
 
                 if (header)
@@ -81,7 +201,7 @@ namespace WebApi_v1.DataProducts
                     {
                         foreach (string param in Hapi.Properties.Parameters)
                         {
-                            if (cool)
+                            if (multiLineParameters)
                             {
                                 sb.Append(String.Format(
                                     "\t\t{{\n " +
@@ -116,13 +236,21 @@ namespace WebApi_v1.DataProducts
 
                     sb.Append(String.Format(
                         "\t\"format\" : \"{0}\",\n",
-                        "json or csv or binary"
+                        "json"
                     ));
 
                     sb.Append("\t\"data\" : [\n");
                 }
 
-                string last = Hapi.Product.Records.ToList().First().ToList().Last().Key;
+                string last;
+                try
+                {
+                    last = Hapi.Product.Records.ToList().First().ToList().Last().Key;
+                }
+                catch
+                {
+                    throw new InvalidOperationException("\"HapiResponse.ToJson()>string last\" is empty. Possibly missing time.min or time.max or invalid request.");
+                }
 
                 foreach (Dictionary<string, string> rec in Hapi.Product.Records)
                 {
@@ -133,7 +261,7 @@ namespace WebApi_v1.DataProducts
 
                     foreach (KeyValuePair<string, string> pair in rec)
                     {
-                        sb.Append("\"" + pair.Value + "\"");
+                        sb.Append(pair.Value);
                         if (pair.Key != last)
                             sb.Append(",");
                     }
@@ -144,8 +272,7 @@ namespace WebApi_v1.DataProducts
                         sb.Append("\n");
                 }
 
-                if (Hapi.Properties.IncludeHeader)
-                    sb.Append("\t]\n}");
+                sb.Append("\t]\n}");
 
                 return sb.ToString();
             }

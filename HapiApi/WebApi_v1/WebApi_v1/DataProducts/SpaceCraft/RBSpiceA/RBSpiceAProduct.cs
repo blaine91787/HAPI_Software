@@ -60,7 +60,7 @@ namespace WebApi_v1.DataProducts.RBSpiceA
             DateTime maxtime = HapiProperties.TimeMax;
             DateTime mindate = mintime.Date;
             DateTime maxdate = maxtime.Date;
-            string basepath = String.Empty;
+            string basepath = "";
 
             while (mintime <= maxtime)
             {

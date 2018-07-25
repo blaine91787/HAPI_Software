@@ -19,6 +19,7 @@ namespace WebApi_v1.DataProducts
         DateTime TimeMax { get; set; }
         List<string> Parameters { get; set; }
         bool IncludeHeader { get; set; }
+        string Format { get; set; }
         Exception Error { get; set; }
 
         void Assign(Dictionary<string, string> dict);

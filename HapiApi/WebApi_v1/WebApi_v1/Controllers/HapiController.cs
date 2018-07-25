@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -26,10 +27,18 @@ namespace WebApi_v1.Controllers
         {
             // TODO: Check if this should be multithreaded
             if (!Hapi.Configure(Request))
+            {
+                foreach (Exception e in Hapi.Errors)
+                    Debug.WriteLine(e.Message);
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
 
             if (!Hapi.CreateResponse())
+            {
+                foreach (Exception e in Hapi.Errors)
+                    Debug.WriteLine(e.Message);
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
 
             return Hapi.Response;
         }
