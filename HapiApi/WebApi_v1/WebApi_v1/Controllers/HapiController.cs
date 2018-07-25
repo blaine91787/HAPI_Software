@@ -20,8 +20,7 @@ namespace WebApi_v1.Controllers
             return Hapi.Response;
         }
 
-        [Route("api/Hapi/" +
-            "Data")]
+        [Route("api/Hapi/Data")]
         [HttpGet]
         public HttpResponseMessage GetData()
         {
