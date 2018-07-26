@@ -14,52 +14,56 @@ namespace WebApi_v1.Controllers
         [HttpGet]
         public HttpResponseMessage GetInfo()
         {
-            Hapi.Configure(Request);
-            Hapi.CreateResponse();
+            HapiConfiguration hapi = new HapiConfiguration();
+            hapi.Configure(Request);
+            hapi.CreateResponse();
 
-            return Hapi.Response;
+            return hapi.Response;
         }
 
         [Route("api/Hapi/Data")]
         [HttpGet]
         public HttpResponseMessage GetData()
         {
+            HapiConfiguration hapi = new HapiConfiguration();
             // TODO: Check if this should be multithreaded
-            if (!Hapi.Configure(Request))
+            if (!hapi.Configure(Request))
             {
-                foreach (Exception e in Hapi.Errors)
+                foreach (Exception e in hapi.Errors)
                     Debug.WriteLine(e.Message);
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
             }
 
-            if (!Hapi.CreateResponse())
+            if (!hapi.CreateResponse())
             {
-                foreach (Exception e in Hapi.Errors)
+                foreach (Exception e in hapi.Errors)
                     Debug.WriteLine(e.Message);
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
             }
 
-            return Hapi.Response;
+            return hapi.Response;
         }
 
         [Route("api/Hapi/Catalog")]
         [HttpGet]
         public HttpResponseMessage GetCatalog()
         {
-            Hapi.Configure(Request);
+            HapiConfiguration hapi = new HapiConfiguration();
+            hapi.Configure(Request);
 
-            Hapi.CreateResponse();
+            hapi.CreateResponse();
 
-            return Hapi.Response;
+            return hapi.Response;
         }
 
         [Route("api/Hapi/Capabilities")]
         [HttpGet]
         public HttpResponseMessage GetCapabilities()
         {
-            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Accepted);
-            response.Content = new StringContent(new Hapi.CapabilitiesResponse().ToString());
-            return response;
+            HapiConfiguration hapi = new HapiConfiguration();
+            hapi.Configure(Request);
+            hapi.CreateResponse();
+            return hapi.Response;
         }
     }
 }

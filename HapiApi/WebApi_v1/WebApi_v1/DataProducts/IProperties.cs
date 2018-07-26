@@ -3,11 +3,6 @@ using System.Collections.Generic;
 
 namespace WebApi_v1.DataProducts
 {
-    public interface IConfigurable
-    {
-        bool Configure();
-    }
-
     public interface IProperties
     {
         string RequestType { get; set; }
@@ -22,7 +17,7 @@ namespace WebApi_v1.DataProducts
         string Format { get; set; }
         Exception Error { get; set; }
 
-        void Assign(Dictionary<string, string> dict);
+        void Assign(string[] formats, Dictionary<string, string> dict);
 
         string ToString();
     }

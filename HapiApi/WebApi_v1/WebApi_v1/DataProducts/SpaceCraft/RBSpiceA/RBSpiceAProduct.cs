@@ -8,7 +8,7 @@ using static WebApi_v1.DataProducts.Utilities.CSVHelperUtilities.Mappings;
 
 namespace WebApi_v1.DataProducts.RBSpiceA
 {
-    public class RBSpiceAProduct : IProduct, IConfigurable
+    public class RBSpiceAProduct : IProduct
     {
         private string _basepath;
 
@@ -33,27 +33,14 @@ namespace WebApi_v1.DataProducts.RBSpiceA
                 throw new DirectoryNotFoundException("RBSPiceAProduct._basepath could not resolve to a valid path.");
         }
 
-        public RBSpiceAProduct()
+        public RBSpiceAProduct(IProperties properties)
         {
             Initialize();
 
-            if (Hapi.Properties != null)
-                HapiProperties = Hapi.Properties;
+            if (properties != null)
+                HapiProperties = properties;
             else
-                throw new ArgumentNullException(nameof(Hapi.Properties));
-
-            // HACK: Jerry may have a library for this.
-            GetPaths();
-        }
-
-        public RBSpiceAProduct(IProperties hapiProperties)
-        {
-            Initialize();
-
-            if (hapiProperties != null)
-                HapiProperties = hapiProperties;
-            else
-                throw new ArgumentNullException(nameof(hapiProperties));
+                throw new ArgumentNullException(nameof(properties));
 
             // HACK: Jerry may have a library for this.
             GetPaths();
@@ -112,7 +99,7 @@ namespace WebApi_v1.DataProducts.RBSpiceA
 
         public void GetProduct() // TODO: change name to getRecords? Might be confusing with csvhelper though.
         {
-            Auxiliary aux = new Auxiliary();
+            Auxiliary aux = new Auxiliary(HapiProperties);
             Records = aux.GetRecords(Paths);
         }
 
