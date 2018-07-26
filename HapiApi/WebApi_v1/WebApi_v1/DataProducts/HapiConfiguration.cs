@@ -250,7 +250,7 @@ namespace WebApi_v1.DataProducts
                 TimeMax = default(DateTime);
                 Parameters = new List<string>();
                 IncludeHeader = false;
-                Format = null;
+                Format = "csv";
                 Error = null;
             }
 
@@ -286,18 +286,18 @@ namespace WebApi_v1.DataProducts
 
                             dt = Convert.ToDateTime(val);
                             if (dt != default(DateTime))
-                                TimeMin = dt;
+                                TimeMin = dt.ToUniversalTime();
                             break;
 
                         case ("time.max"):
                             // TODO IMMEDIATE: Verify DateTime is being calculated correctly (TRAILING Z IS WONKY).
-                            if ((val.Contains('T') && val.Last() != 'T') && val.Last() != 'z')
+                            if ((val.Contains('t') && val.Last() != 't') && val.Last() != 'z')
                                 val += "z";
 
                             dt = Convert.ToDateTime(val);
 
                             if (dt != default(DateTime))
-                                TimeMax = dt;
+                                TimeMax = dt.ToUniversalTime();
                             break;
 
                         case ("parameters"):
@@ -401,7 +401,7 @@ namespace WebApi_v1.DataProducts
             public string StartDate = String.Empty;
             public string StopDate = String.Empty;
             public List<string> Parameters = null;
-            public string Format = "json"; // TODO IMMEDIATE: Format should be set to whatever hapi's properties have set.
+            public string Format = null;
             public IEnumerable<Dictionary<string, string>> Data = null;
 
             public DataResponse(HapiConfiguration hapi)
@@ -424,6 +424,7 @@ namespace WebApi_v1.DataProducts
                 StartDate = props.TimeMin.ToString();
                 StopDate = props.TimeMax.ToString();
                 Parameters = props.Parameters;
+                Format = props.Format;
                 Status = new Status(1200, "OK");
                 Data = hapi.Product.Records;
             }
@@ -453,9 +454,12 @@ namespace WebApi_v1.DataProducts
 
             private string GetInfoHeader()
             {
+                // TODO: Make GetInfoHeader work for both csv and json versions. Possibly make it it's own helper class.
+                // This would allow it to be used for the other responses, not just DataResponse.
+                // Also, figure out what to do about multiline parameters.
                 bool multiLineParameters = false;
                 StringBuilder sb = new StringBuilder();
-                sb.Append(String.Format(
+                sb.AppendFormat(
                     "#{{\n" +
                     "#\t\"HAPI\" : \"{0}\",\n" +
                     "#\t\"status\" : {{ \"code\" : {1}, \"message\" : \"{2}\" }},\n" +
@@ -467,7 +471,7 @@ namespace WebApi_v1.DataProducts
                     Status.Message,
                     Hapi.Properties.TimeMin,
                     Hapi.Properties.TimeMax
-                ));
+                );
 
                 if (Hapi.Properties.Parameters != null)
                 {
@@ -475,7 +479,7 @@ namespace WebApi_v1.DataProducts
                     {
                         if (multiLineParameters)
                         {
-                            sb.Append(String.Format(
+                            sb.AppendFormat(
                                 "#\t\t{{\n " +
                                 "#\t\t   \"name\" : \"{0}\",\n" +
                                 "#\t\t   \"type\" : \"{1}\",\n" +
@@ -488,23 +492,26 @@ namespace WebApi_v1.DataProducts
                                 "null",
                                 "null",
                                 "null"
-                            ));
+                            );
                         }
                         else
                         {
-                            sb.Append(String.Format(
+                            sb.AppendFormat(
                                 "#\t\t{{ \"name\" : \"{0}\", \"type\" : \"{1}\", \"units\" : \"{2}\", \"fill\" : \"{3}\", \"length\" : {4} }},\n",
                                 param.ToLower(),
                                 "null",
                                 "null",
                                 "null",
                                 "null"
-                            ));
+                            );
                         }
                     }
                 }
 
-                sb.Append("#\t],\n#}\n");
+                sb.AppendFormat(
+                    "#\t],\n#\t\"format\" : \"{0}\",\n#}}\n",
+                    Format
+                );
 
                 return sb.ToString();
             }
@@ -552,7 +559,7 @@ namespace WebApi_v1.DataProducts
 
                 if (header)
                 {
-                    sb.Append(String.Format(
+                    sb.AppendFormat(
                         "{{\n" +
                         "\t\"HAPI\" : \"{0}\",\n" +
                         "\t\"status\" : {{ \"code\" : {1}, \"message\" : \"{2}\" }},\n" +
@@ -564,7 +571,7 @@ namespace WebApi_v1.DataProducts
                         Status.Message,
                         Hapi.Properties.TimeMin,
                         Hapi.Properties.TimeMax
-                    ));
+                    );
 
                     if (Hapi.Properties.Parameters != null)
                     {
@@ -572,7 +579,7 @@ namespace WebApi_v1.DataProducts
                         {
                             if (multiLineParameters)
                             {
-                                sb.Append(String.Format(
+                                sb.AppendFormat(
                                     "\t\t{{\n " +
                                     "\t\t   \"name\" : \"{0}\",\n" +
                                     "\t\t   \"type\" : \"{1}\",\n" +
@@ -585,28 +592,28 @@ namespace WebApi_v1.DataProducts
                                     "null",
                                     "null",
                                     "null"
-                                ));
+                                );
                             }
                             else
                             {
-                                sb.Append(String.Format(
+                                sb.AppendFormat(
                                     "\t\t{{ \"name\" : \"{0}\", \"type\" : \"{1}\", \"units\" : \"{2}\", \"fill\" : \"{3}\", \"length\" : {4} }},\n",
                                     param,
                                     "null",
                                     "null",
                                     "null",
                                     "null"
-                                ));
+                                );
                             }
                         }
                     }
 
                     sb.Append("\t],\n"); // trailing ']' for parameters
 
-                    sb.Append(String.Format(
+                    sb.AppendFormat(
                         "\t\"format\" : \"{0}\",\n",
-                        "json"
-                    ));
+                        Format
+                    );
 
                     sb.Append("\t\"data\" : [\n");
                 }
