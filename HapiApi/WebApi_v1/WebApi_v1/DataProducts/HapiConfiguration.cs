@@ -10,57 +10,20 @@ namespace WebApi_v1.DataProducts
 {
     public class HapiConfiguration
     {
-        #region Properties
+        #region ReadOnly Properties
 
         private readonly string _version = "2.0";
-
-        private readonly string[] _capabilities =
-        {
-            "csv",
-            "json",
-            //"binary"
-        };
-
+        private readonly string[] _capabilities = { "csv", "json" };
         private readonly char[] _delimiters = new char[] { '?', '&', '=' };
+        private readonly string[] _requesttypes = new string[] { "data", "info", "capabilities", "catalog" };
 
-        private readonly string[] _requesttypes = new string[] {
-            "data",
-            "info",
-            "capabilities",
-            "catalog"
-        };
+        #endregion ReadOnly Properties
 
-        private readonly string[] _formats = new string[]
-        {
-            "csv",
-            "json",
-            //"binary"
-        };
+        #region Public Properties
 
-        public string Version
-        {
-            get
-            {
-                return _version;
-            }
-        }
-
-        public string[] Capabilities
-        {
-            get
-            {
-                return _capabilities;
-            }
-        }
-
-        public string[] Formats
-        {
-            get
-            {
-                return _formats;
-            }
-        }
-
+        public string Version { get { return _version; } }
+        public string[] Capabilities { get { return _capabilities; } }
+        public string[] Formats { get { return _capabilities; } }
         public bool Initialized { get; private set; }
         public Dictionary<string, string> QueryDict { get; private set; }
         public HttpRequestMessage Request { get; set; }
@@ -71,7 +34,7 @@ namespace WebApi_v1.DataProducts
         public List<Exception> Errors { get; private set; }
         public IProduct Product { get; private set; }
 
-        #endregion Properties
+        #endregion Public Properties
 
         #region Methods
 
@@ -247,6 +210,8 @@ namespace WebApi_v1.DataProducts
 
         #endregion Methods
 
+        #region Helper Classes
+
         public class HapiProperties : IProperties
         {
             #region Properties
@@ -315,7 +280,7 @@ namespace WebApi_v1.DataProducts
                             break;
 
                         case ("time.min"):
-                            // TODO: Verify DateTime is being calculated correctly.
+                            // TODO IMMEDIATE: Verify DateTime is being calculated correctly.
                             if ((val.Contains('t') && val.Last() != 't') && val.Last() != 'z')
                                 val += "z";
 
@@ -325,7 +290,7 @@ namespace WebApi_v1.DataProducts
                             break;
 
                         case ("time.max"):
-                            // TODO: Verify DateTime is being calculated correctly (TRAILING Z IS WONKY).
+                            // TODO IMMEDIATE: Verify DateTime is being calculated correctly (TRAILING Z IS WONKY).
                             if ((val.Contains('T') && val.Last() != 'T') && val.Last() != 'z')
                                 val += "z";
 
@@ -436,7 +401,7 @@ namespace WebApi_v1.DataProducts
             public string StartDate = String.Empty;
             public string StopDate = String.Empty;
             public List<string> Parameters = null;
-            public string Format = "json";
+            public string Format = "json"; // TODO IMMEDIATE: Format should be set to whatever hapi's properties have set.
             public IEnumerable<Dictionary<string, string>> Data = null;
 
             public DataResponse(HapiConfiguration hapi)
@@ -564,14 +529,13 @@ namespace WebApi_v1.DataProducts
                     throw new InvalidOperationException("\"HapiResponse.ToJson()>string last\" is empty. Possibly missing time.min or time.max or invalid request.");
                 }
 
+                // TODO IMMEDIATE: With multiple dates this is printing UTC in two different formats
                 foreach (Dictionary<string, string> rec in Hapi.Product.Records)
                 {
-                    //KeyValuePair<string, string>[] dataArr = rec.ToArray(); ;
-
                     foreach (KeyValuePair<string, string> pair in rec)
                     {
                         sb.Append(pair.Value);
-                        if (pair.Key != last)
+                        if (!string.Equals(pair.Key, last, StringComparison.OrdinalIgnoreCase))
                             sb.Append(",");
                         else
                             sb.Append("\n");
@@ -834,24 +798,30 @@ namespace WebApi_v1.DataProducts
                 return "";
             }
         }
-    }
 
-    internal interface IResponse
-    {
-        string GetResponse();
+        #endregion Helper Classes
 
-        string GetResponse(string format);
-    }
+        #region Internal Classes
 
-    internal class Status
-    {
-        public int Code = -1;
-        public string Message = null;
-
-        public Status(int code, string message)
+        internal interface IResponse
         {
-            Code = code;
-            Message = message;
+            string GetResponse();
+
+            string GetResponse(string format);
         }
+
+        internal class Status
+        {
+            public int Code = -1;
+            public string Message = null;
+
+            public Status(int code, string message)
+            {
+                Code = code;
+                Message = message;
+            }
+        }
+
+        #endregion Internal Classes
     }
 }
