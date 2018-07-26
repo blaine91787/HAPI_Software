@@ -286,18 +286,18 @@ namespace WebApi_v1.DataProducts
 
                             dt = Convert.ToDateTime(val);
                             if (dt != default(DateTime))
-                                TimeMin = dt;
+                                TimeMin = dt.ToUniversalTime();
                             break;
 
                         case ("time.max"):
                             // TODO IMMEDIATE: Verify DateTime is being calculated correctly (TRAILING Z IS WONKY).
-                            if ((val.Contains('T') && val.Last() != 'T') && val.Last() != 'z')
+                            if ((val.Contains('t') && val.Last() != 't') && val.Last() != 'z')
                                 val += "z";
 
                             dt = Convert.ToDateTime(val);
 
                             if (dt != default(DateTime))
-                                TimeMax = dt;
+                                TimeMax = dt.ToUniversalTime();
                             break;
 
                         case ("parameters"):
