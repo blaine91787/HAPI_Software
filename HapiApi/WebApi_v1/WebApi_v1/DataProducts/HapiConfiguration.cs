@@ -250,7 +250,7 @@ namespace WebApi_v1.DataProducts
                 TimeMax = default(DateTime);
                 Parameters = new List<string>();
                 IncludeHeader = false;
-                Format = null;
+                Format = "csv";
                 Error = null;
             }
 
@@ -401,7 +401,7 @@ namespace WebApi_v1.DataProducts
             public string StartDate = String.Empty;
             public string StopDate = String.Empty;
             public List<string> Parameters = null;
-            public string Format = "json"; // TODO IMMEDIATE: Format should be set to whatever hapi's properties have set.
+            public string Format = null;
             public IEnumerable<Dictionary<string, string>> Data = null;
 
             public DataResponse(HapiConfiguration hapi)
@@ -424,6 +424,7 @@ namespace WebApi_v1.DataProducts
                 StartDate = props.TimeMin.ToString();
                 StopDate = props.TimeMax.ToString();
                 Parameters = props.Parameters;
+                Format = props.Format;
                 Status = new Status(1200, "OK");
                 Data = hapi.Product.Records;
             }
