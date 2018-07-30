@@ -104,14 +104,13 @@ namespace WebApi_v1.DataProducts
 
                                 // If csvrecord time is less than time.min or csvrecord
                                 // time is greater than time.max then continue while loop.
-                                bool ltmin = Converters.ConvertUTCtoDate(csv["UTC"]) <= HapiProperties.TimeMin;
+                                // Inclusive min and Exclusive max
+                                bool ltmin = Converters.ConvertUTCtoDate(csv["UTC"]) < HapiProperties.TimeMin;
                                 bool gtmax = Converters.ConvertUTCtoDate(csv["UTC"]) >= HapiProperties.TimeMax;
                                 if (ltmin || gtmax)
-
                                     continue;
 
                                 AuxRecord aux = new AuxRecord();
-                                //Dictionary<string, string> dict = new Dictionary<string, string>();
                                 foreach (string param in HapiProperties.Parameters)
                                 {
                                     string parameterName = param;
@@ -146,32 +145,26 @@ namespace WebApi_v1.DataProducts
                                 if (ltmin || gtmax)
                                     continue;
 
-                                //Dictionary<string, string> dict = new Dictionary<string, string>();
-                                //IEnumerable csvrec = csv.GetRecord();
-
                                 Auxiliary rec = csv.GetRecord<Auxiliary>();
                                 AuxRecord auxrec = new AuxRecord();
-
+                                string utcString;
+                                string propName;
                                 foreach (System.Reflection.PropertyInfo prop in rec.GetType().GetProperties())
                                 {
-                                    //type type = nullable.getunderlyingtype(prop.propertytype) ?? prop.propertytype;
-                                    //converters.convertpropertytodefault(prop, this);
-                                    if (headers.Contains(prop.Name.ToLower()))
+                                    propName = prop.Name.ToLower();
+                                    if (headers.Contains(propName))
+                                    {
+                                        if (propName == "utc")
+                                        {
+                                            utcString = Converters.ConvertDatetoUTCDate((DateTime)prop.GetValue(rec));
+                                            auxrec.Add(propName, utcString);
+                                            continue;
+                                        }
                                         auxrec.Add(prop.Name, prop.GetValue(rec).ToString());
+                                    }
                                 }
-
                                 Data.Add(auxrec.Data);
-                                //foreach (string param in Hapi.Properties.Parameters)
-                                //{
-                                //    string parameterName = param;
-                                //    int indexOfParameterName = Array.IndexOf(headers, parameterName);
-                                //    string parameterValue = csv[indexOfParameterName];
-                                //    aux.GetRecordUsingParameterInfo(parameterName, parameterValue); // HACK: maybe get actual values, not just strings.
-                                //}
-
-                                //Records.Add(aux);
                             }
-                            //csv.GetRecords<Auxiliary>().ToList<AuxRecord>();
                         }
                     };
                 }
