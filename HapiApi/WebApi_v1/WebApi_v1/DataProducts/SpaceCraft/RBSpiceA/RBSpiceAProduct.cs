@@ -112,8 +112,7 @@ namespace WebApi_v1.DataProducts.RBSpiceA
             Records = new List<Dictionary<string, string>>();
             if (File.Exists(path))
             {
-                using (FileStream fs = File.OpenRead(path))
-                using (TextReader textReader = new StreamReader(fs))
+                using (TextReader textReader = new StreamReader(File.OpenRead(path)))
                 {
                     CsvReader csv = new CsvReader(textReader);
                     csv.Configuration.RegisterClassMap<Aux_Map>();

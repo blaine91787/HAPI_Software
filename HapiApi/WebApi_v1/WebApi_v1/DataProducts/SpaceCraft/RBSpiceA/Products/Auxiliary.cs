@@ -76,8 +76,7 @@ namespace WebApi_v1.DataProducts
             {
                 if (File.Exists(path))
                 {
-                    using (FileStream fs = File.OpenRead(path))
-                    using (TextReader textReader = new StreamReader(fs))
+                    using (TextReader textReader = new StreamReader(File.OpenRead(path)))
                     {
                         // TODO: Try and make this less dependant on Auxiliary type.
                         CsvReader csv = new CsvReader(textReader);
@@ -174,7 +173,7 @@ namespace WebApi_v1.DataProducts
                             }
                             //csv.GetRecords<Auxiliary>().ToList<AuxRecord>();
                         }
-                    }
+                    };
                 }
             }
             return Data;
