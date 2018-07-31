@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WebApi_v1.DataProducts;
-using WebApi_v1.DataProducts.RBSpiceA;
 
 namespace WebApi_v1.Controllers
 {
