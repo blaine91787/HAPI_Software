@@ -7,6 +7,96 @@ namespace WebApi_v1.DataProducts.Utilities
 {
     public static class Converters
     {
+        #region DateTime Conversions
+
+        public static DateTime ConvertHapiYMDToDateTime(String utc)
+        {
+            char[] seps = new char[] { '-', 'T', 't', ':', '.', 'Z', 'z' };
+            string[] parts = utc.Split(seps, StringSplitOptions.RemoveEmptyEntries);
+            DateTime dt = new DateTime();
+            Regex r;
+
+            Int32 yr = 0;
+            Int32 month = 0;
+            Int32 day = 0;
+            Int32 hour = 0;
+            Int32 min = 0;
+            Int32 sec = 0;
+            Int32 milli = 0;
+
+            r = new Regex(@"[0-9]{4}");
+            if (parts.Length > 0 && r.Match(parts[0]).Success)
+            {
+                yr = Convert.ToInt32(parts[0]);
+
+                r = new Regex(@"[0-1][0-9]");
+                if (parts.Length > 1 && r.Match(parts[1]).Success)
+                {
+                    month = Convert.ToInt32(parts[1]);
+
+                    r = new Regex(@"[0-3][0-9]");
+                    if (parts.Length > 2 && r.Match(parts[2]).Success)
+                    {
+                        day = Convert.ToInt32(parts[2]);
+
+                        r = new Regex(@"[0-2][0-9]");
+                        if (parts.Length > 3 && r.Match(parts[3]).Success)
+                        {
+                            hour = Convert.ToInt32(parts[3]);
+
+                            r = new Regex(@"[0-6][0-9]");
+                            if (parts.Length > 4 && r.Match(parts[4]).Success)
+                            {
+                                min = Convert.ToInt32(parts[4]);
+
+                                r = new Regex(@"[0-6][0-9]");
+                                if (parts.Length > 5 && r.Match(parts[5]).Success)
+                                {
+                                    sec = Convert.ToInt32(parts[5]);
+
+                                    r = new Regex(@"[0-9]{3}");
+                                    if (parts.Length > 6 && r.Match(parts[6]).Success)
+                                    {
+                                        milli = Convert.ToInt32(parts[6]);
+                                    }
+                                    else if (parts.Length > 6)
+                                    {
+                                        Debug.WriteLine("Millisecond is invalid.");
+                                    };
+                                }
+                                else if (parts.Length > 5)
+                                {
+                                    Debug.WriteLine("Second is invalid.");
+                                };
+                            }
+                            else if (parts.Length > 4)
+                            {
+                                Debug.WriteLine("Minute is invalid.");
+                            };
+                        }
+                        else if (parts.Length > 3)
+                        {
+                            Debug.WriteLine("Hour is invalid.");
+                        };
+                    }
+                    else if (parts.Length > 2)
+                    {
+                        Debug.WriteLine("Day is invalid.");
+                    };
+                }
+                else if (parts.Length > 1)
+                {
+                    Debug.WriteLine("Month is invalid.");
+                };
+            }
+            else if (parts.Length > 0)
+            {
+                Debug.WriteLine("Year is invalid.");
+            };
+
+            return new DateTime(yr, month, day, hour, min, sec, milli, DateTimeKind.Utc);
+        }
+
         public static DateTime ConvertUTCtoDate(String utc)
         {
             String[] seps = new String[4] { "-", ":", "T", "." };
@@ -197,6 +287,10 @@ namespace WebApi_v1.DataProducts.Utilities
                       "T" + date.Hour.ToString("D2") + ":" + date.Minute.ToString("D2") + ":" + date.Second.ToString("D2") + "." + date.Millisecond.ToString("D3"));
         }
 
+        #endregion DateTime Conversions
+
+        #region Property Conversions
+
         public static void ConvertParameterToProperty(string parameter, PropertyInfo prop, IRecord obj)
         {
             TypeCode tc = Type.GetTypeCode(prop.PropertyType);//Convert.GetTypeCode(prop.PropertyType);
@@ -269,92 +363,6 @@ namespace WebApi_v1.DataProducts.Utilities
             }
         }
 
-        public static DateTime ConvertHapiYMDToDateTime(String utc)
-        {
-            char[] seps = new char[] { '-', 'T', 't', ':', '.', 'Z', 'z' };
-            string[] parts = utc.Split(seps, StringSplitOptions.RemoveEmptyEntries);
-            DateTime dt = new DateTime();
-            Regex r;
-
-            Int32 yr = 0;
-            Int32 month = 0;
-            Int32 day = 0;
-            Int32 hour = 0;
-            Int32 min = 0;
-            Int32 sec = 0;
-            Int32 milli = 0;
-
-            r = new Regex(@"[0-9]{4}");
-            if (parts.Length > 0 && r.Match(parts[0]).Success)
-            {
-                yr = Convert.ToInt32(parts[0]);
-
-                r = new Regex(@"[0-1][0-9]");
-                if (parts.Length > 1 && r.Match(parts[1]).Success)
-                {
-                    month = Convert.ToInt32(parts[1]);
-
-                    r = new Regex(@"[0-3][0-9]");
-                    if (parts.Length > 2 && r.Match(parts[2]).Success)
-                    {
-                        day = Convert.ToInt32(parts[2]);
-
-                        r = new Regex(@"[0-2][0-9]");
-                        if (parts.Length > 3 && r.Match(parts[3]).Success)
-                        {
-                            hour = Convert.ToInt32(parts[3]);
-
-                            r = new Regex(@"[0-6][0-9]");
-                            if (parts.Length > 4 && r.Match(parts[4]).Success)
-                            {
-                                min = Convert.ToInt32(parts[4]);
-
-                                r = new Regex(@"[0-6][0-9]");
-                                if (parts.Length > 5 && r.Match(parts[5]).Success)
-                                {
-                                    sec = Convert.ToInt32(parts[5]);
-
-                                    r = new Regex(@"[0-9]{3}");
-                                    if (parts.Length > 6 && r.Match(parts[6]).Success)
-                                    {
-                                        milli = Convert.ToInt32(parts[6]);
-                                    }
-                                    else if (parts.Length > 6)
-                                    {
-                                        Debug.WriteLine("Millisecond is invalid.");
-                                    };
-                                }
-                                else if (parts.Length > 5)
-                                {
-                                    Debug.WriteLine("Second is invalid.");
-                                };
-                            }
-                            else if (parts.Length > 4)
-                            {
-                                Debug.WriteLine("Minute is invalid.");
-                            };
-                        }
-                        else if (parts.Length > 3)
-                        {
-                            Debug.WriteLine("Hour is invalid.");
-                        };
-                    }
-                    else if (parts.Length > 2)
-                    {
-                        Debug.WriteLine("Day is invalid.");
-                    };
-                }
-                else if (parts.Length > 1)
-                {
-                    Debug.WriteLine("Month is invalid.");
-                };
-            }
-            else if (parts.Length > 0)
-            {
-                Debug.WriteLine("Year is invalid.");
-            };
-
-            return new DateTime(yr, month, day, hour, min, sec, milli, DateTimeKind.Utc);
-        }
+        #endregion Property Conversions
     }
 }
