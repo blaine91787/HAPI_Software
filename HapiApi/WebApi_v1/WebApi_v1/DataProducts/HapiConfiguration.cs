@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using WebApi_v1.DataProducts.RBSpiceA;
+using WebApi_v1.DataProducts.Utilities;
 
 namespace WebApi_v1.DataProducts
 {
@@ -135,10 +136,7 @@ namespace WebApi_v1.DataProducts
                 default:
                     Response = Request.CreateResponse(HttpStatusCode.InternalServerError, "Unable to create " + RequestType.ToLower() + " product due to internal error.");
                     throw new ArgumentOutOfRangeException(RequestType, "Not a valid request type.");
-            }
-
-;
-
+            };
             return true;
         }
 
@@ -280,22 +278,13 @@ namespace WebApi_v1.DataProducts
                             break;
 
                         case ("time.min"):
-                            // TODO IMMEDIATE: Verify DateTime is being calculated correctly.
-                            if ((val.Contains('t') && val.Last() != 't') && val.Last() != 'z')
-                                val += "z";
-
-                            dt = Convert.ToDateTime(val);
+                            dt = Converters.ConvertHapiYMDToDateTime(val);
                             if (dt != default(DateTime))
                                 TimeMin = dt.ToUniversalTime();
                             break;
 
                         case ("time.max"):
-                            // TODO IMMEDIATE: Verify DateTime is being calculated correctly (TRAILING Z IS WONKY).
-                            if ((val.Contains('t') && val.Last() != 't') && val.Last() != 'z')
-                                val += "z";
-
-                            dt = Convert.ToDateTime(val);
-
+                            dt = Converters.ConvertHapiYMDToDateTime(val);
                             if (dt != default(DateTime))
                                 TimeMax = dt.ToUniversalTime();
                             break;
@@ -527,13 +516,13 @@ namespace WebApi_v1.DataProducts
                 }
 
                 string last;
-                try
+                if (Hapi.Product.Records.Count() > 0)
                 {
                     last = Hapi.Product.Records.ToList().First().ToList().Last().Key;
                 }
-                catch
+                else
                 {
-                    throw new InvalidOperationException("\"HapiResponse.ToJson()>string last\" is empty. Possibly missing time.min or time.max or invalid request.");
+                    return ("No records were found. If this is an error, make sure query is valid.");
                 }
 
                 // TODO IMMEDIATE: With multiple dates this is printing UTC in two different formats
