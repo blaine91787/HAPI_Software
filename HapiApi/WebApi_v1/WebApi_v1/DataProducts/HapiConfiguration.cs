@@ -23,6 +23,8 @@ namespace WebApi_v1.DataProducts
         #region Public Properties
 
         public string Version { get { return _version; } }
+        public string RequestType { get; set; }
+        public string Query { get; set; }
         public string[] Capabilities { get { return _capabilities; } }
         public string[] Formats { get { return _capabilities; } }
         public bool Initialized { get; private set; }
@@ -30,8 +32,6 @@ namespace WebApi_v1.DataProducts
         public HttpRequestMessage Request { get; set; }
         public HttpResponseMessage Response { get; private set; }
         public IProperties Properties { get; set; }
-        public string RequestType { get; set; }
-        public string Query { get; set; }
         public List<Exception> Errors { get; private set; }
         public IProduct Product { get; private set; }
 
@@ -60,40 +60,12 @@ namespace WebApi_v1.DataProducts
             if (!RequestTypeValid())
                 return false;
 
-            //Request type is valid.
-
-            if (!TryDictionaryFromQuery())
+            if (!TryToCreateQueryDict())
                 return false;
-
 
             Properties = new HapiProperties();
-            // Choose the correct Properties type based on RequestType
-            //switch (RequestType)
-            //{
-            //    case "data":
-            //        Properties = new HapiProperties();
-            //        break;
 
-            //    case "info":
-            //        Properties = new HapiProperties();
-            //        break;
-
-            //    case "catalog":
-            //        Properties = new HapiProperties();
-            //        return true;
-            //}
-
-            // Try to assign query arguments to properties object.
-            // Invalid arguments will cause exception.
-            try
-            {
-                Properties.Assign(Formats, QueryDict);
-            }
-            catch (ArgumentOutOfRangeException e)
-            {
-                Errors.Add(e); // TODO: Ask about whether I should actually be saving the errors.
-                return false;
-            }
+            Properties.Assign(Formats, QueryDict);
 
             if (Properties != null)
                 return true; // TODO: Should I return booleans or throw errors?
@@ -159,18 +131,17 @@ namespace WebApi_v1.DataProducts
         private bool RequestTypeValid()
         {
             RequestType = Request.RequestUri.LocalPath.Split('/').Last().ToLower();
-            Query = Request.RequestUri.Query;
 
             // RequestType can only be equal to info, capability, catalog, or data
             return _requesttypes.Contains(RequestType);
         }
 
-        public bool TryDictionaryFromQuery()
+        public bool TryToCreateQueryDict()
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
-            string query = Request.RequestUri.Query;
+            Query = Request.RequestUri.Query;
 
-            string[] arr = query.ToLower().TrimStart(_delimiters).Split(_delimiters);
+            string[] arr = Query.ToLower().TrimStart(_delimiters).Split(_delimiters);
 
             if (arr.Length >= 2 && arr.Length % 2 == 0)
             {
