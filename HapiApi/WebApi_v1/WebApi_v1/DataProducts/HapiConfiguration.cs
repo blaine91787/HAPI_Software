@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using WebApi_v1.DataProducts.RBSpiceA;
+using WebApi_v1.DataProducts.Utilities;
 
 namespace WebApi_v1.DataProducts
 {
@@ -22,6 +23,8 @@ namespace WebApi_v1.DataProducts
         #region Public Properties
 
         public string Version { get { return _version; } }
+        public string RequestType { get; set; }
+        public string Query { get; set; }
         public string[] Capabilities { get { return _capabilities; } }
         public string[] Formats { get { return _capabilities; } }
         public bool Initialized { get; private set; }
@@ -29,8 +32,6 @@ namespace WebApi_v1.DataProducts
         public HttpRequestMessage Request { get; set; }
         public HttpResponseMessage Response { get; private set; }
         public IProperties Properties { get; set; }
-        public string RequestType { get; set; }
-        public string Query { get; set; }
         public List<Exception> Errors { get; private set; }
         public IProduct Product { get; private set; }
 
@@ -59,39 +60,12 @@ namespace WebApi_v1.DataProducts
             if (!RequestTypeValid())
                 return false;
 
-            //Request type is valid.
-
-            if (!TryDictionaryFromQuery())
+            if (!TryToCreateQueryDict())
                 return false;
 
-            // Choose the correct Properties type based on RequestType
-            switch (RequestType)
-            {
-                //TODO: Might not need all of these hapi properties
-                case "data":
-                    Properties = new HapiProperties();
-                    break;
+            Properties = new HapiProperties();
 
-                case "info":
-                    Properties = new HapiProperties();
-                    break;
-
-                case "catalog":
-                    Properties = new HapiProperties();
-                    return true;
-            }
-
-            // Try to assign query arguments to properties object.
-            // Invalid arguments will cause exception.
-            try
-            {
-                Properties.Assign(Formats, QueryDict);
-            }
-            catch (ArgumentOutOfRangeException e)
-            {
-                Errors.Add(e); // TODO: Ask about whether I should actually be saving the errors.
-                return false;
-            }
+            Properties.Assign(Formats, QueryDict);
 
             if (Properties != null)
                 return true; // TODO: Should I return booleans or throw errors?
@@ -135,10 +109,7 @@ namespace WebApi_v1.DataProducts
                 default:
                     Response = Request.CreateResponse(HttpStatusCode.InternalServerError, "Unable to create " + RequestType.ToLower() + " product due to internal error.");
                     throw new ArgumentOutOfRangeException(RequestType, "Not a valid request type.");
-            }
-
-;
-
+            };
             return true;
         }
 
@@ -160,18 +131,17 @@ namespace WebApi_v1.DataProducts
         private bool RequestTypeValid()
         {
             RequestType = Request.RequestUri.LocalPath.Split('/').Last().ToLower();
-            Query = Request.RequestUri.Query;
 
             // RequestType can only be equal to info, capability, catalog, or data
             return _requesttypes.Contains(RequestType);
         }
 
-        public bool TryDictionaryFromQuery()
+        public bool TryToCreateQueryDict()
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
-            string query = Request.RequestUri.Query;
+            Query = Request.RequestUri.Query;
 
-            string[] arr = query.ToLower().TrimStart(_delimiters).Split(_delimiters);
+            string[] arr = Query.ToLower().TrimStart(_delimiters).Split(_delimiters);
 
             if (arr.Length >= 2 && arr.Length % 2 == 0)
             {
@@ -280,22 +250,13 @@ namespace WebApi_v1.DataProducts
                             break;
 
                         case ("time.min"):
-                            // TODO IMMEDIATE: Verify DateTime is being calculated correctly.
-                            if ((val.Contains('t') && val.Last() != 't') && val.Last() != 'z')
-                                val += "z";
-
-                            dt = Convert.ToDateTime(val);
+                            dt = Converters.ConvertHapiYMDToDateTime(val);
                             if (dt != default(DateTime))
                                 TimeMin = dt.ToUniversalTime();
                             break;
 
                         case ("time.max"):
-                            // TODO IMMEDIATE: Verify DateTime is being calculated correctly (TRAILING Z IS WONKY).
-                            if ((val.Contains('t') && val.Last() != 't') && val.Last() != 'z')
-                                val += "z";
-
-                            dt = Convert.ToDateTime(val);
-
+                            dt = Converters.ConvertHapiYMDToDateTime(val);
                             if (dt != default(DateTime))
                                 TimeMax = dt.ToUniversalTime();
                             break;
@@ -527,16 +488,15 @@ namespace WebApi_v1.DataProducts
                 }
 
                 string last;
-                try
+                if (Hapi.Product.Records.Count() > 0)
                 {
                     last = Hapi.Product.Records.ToList().First().ToList().Last().Key;
                 }
-                catch
+                else
                 {
-                    throw new InvalidOperationException("\"HapiResponse.ToJson()>string last\" is empty. Possibly missing time.min or time.max or invalid request.");
+                    return ("No records were found. If this is an error, make sure query is valid.");
                 }
 
-                // TODO IMMEDIATE: With multiple dates this is printing UTC in two different formats
                 foreach (Dictionary<string, string> rec in Hapi.Product.Records)
                 {
                     foreach (KeyValuePair<string, string> pair in rec)
@@ -795,7 +755,7 @@ namespace WebApi_v1.DataProducts
                     );
                 }
 
-                sb.Append("\t]\n}}");
+                sb.Append("\t]\n}");
 
                 return sb.ToString();
             }
