@@ -755,7 +755,7 @@ namespace WebApi_v1.DataProducts
                     );
                 }
 
-                sb.Append("\t]\n}}");
+                sb.Append("\t]\n}");
 
                 return sb.ToString();
             }
