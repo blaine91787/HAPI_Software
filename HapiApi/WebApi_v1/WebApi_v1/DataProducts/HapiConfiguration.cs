@@ -65,22 +65,23 @@ namespace WebApi_v1.DataProducts
             if (!TryDictionaryFromQuery())
                 return false;
 
+
+            Properties = new HapiProperties();
             // Choose the correct Properties type based on RequestType
-            switch (RequestType)
-            {
-                //TODO: Might not need all of these hapi properties
-                case "data":
-                    Properties = new HapiProperties();
-                    break;
+            //switch (RequestType)
+            //{
+            //    case "data":
+            //        Properties = new HapiProperties();
+            //        break;
 
-                case "info":
-                    Properties = new HapiProperties();
-                    break;
+            //    case "info":
+            //        Properties = new HapiProperties();
+            //        break;
 
-                case "catalog":
-                    Properties = new HapiProperties();
-                    return true;
-            }
+            //    case "catalog":
+            //        Properties = new HapiProperties();
+            //        return true;
+            //}
 
             // Try to assign query arguments to properties object.
             // Invalid arguments will cause exception.
@@ -525,7 +526,6 @@ namespace WebApi_v1.DataProducts
                     return ("No records were found. If this is an error, make sure query is valid.");
                 }
 
-                // TODO IMMEDIATE: With multiple dates this is printing UTC in two different formats
                 foreach (Dictionary<string, string> rec in Hapi.Product.Records)
                 {
                     foreach (KeyValuePair<string, string> pair in rec)

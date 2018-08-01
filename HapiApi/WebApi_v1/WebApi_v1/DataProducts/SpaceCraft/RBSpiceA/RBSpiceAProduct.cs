@@ -22,6 +22,7 @@ namespace WebApi_v1.DataProducts.RBSpiceA
 
         public void Initialize()
         {
+            string unicornpukepath = @"C:\Users\unicornpuke\\Documents\GitHub\FTECS\HapiApi\WebApi_v1\WebApi_v1\SCRecords\RBSPA\";
             string thinkpadpath = @"C:\Users\FTECS Account\\Documents\GitHub\FTECS\HapiApi\WebApi_v1\WebApi_v1\SCRecords\RBSPA\";
             string gazellepath = @"C:\Users\blaine.harris\Documents\Github\FTECS\HapiApi\WebApi_v1\WebApi_v1\SCRecords\RBSPA\";
 
@@ -29,6 +30,8 @@ namespace WebApi_v1.DataProducts.RBSpiceA
                 _basepath = thinkpadpath;
             else if (Directory.Exists(gazellepath))
                 _basepath = gazellepath;
+            else if (Directory.Exists(unicornpukepath))
+                _basepath = unicornpukepath;
             else
                 throw new DirectoryNotFoundException("RBSPiceAProduct._basepath could not resolve to a valid path.");
         }

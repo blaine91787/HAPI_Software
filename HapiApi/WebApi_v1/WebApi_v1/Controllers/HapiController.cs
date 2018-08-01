@@ -25,7 +25,6 @@ namespace WebApi_v1.Controllers
         public HttpResponseMessage GetData()
         {
             HapiConfiguration hapi = new HapiConfiguration();
-            // TODO: Check if this should be multithreaded
             if (!hapi.Configure(Request))
             {
                 foreach (Exception e in hapi.Errors)
