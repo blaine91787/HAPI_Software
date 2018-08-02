@@ -10,7 +10,5 @@ namespace WebApi_v1.DataProducts
         public string[] Header { get; set; }
 
         public abstract void GetProduct();
-
-        public abstract void GetProductWithTimeRange();
     }
 }

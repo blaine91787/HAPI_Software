@@ -56,7 +56,7 @@ namespace WebApi_v1.DataProducts.RBSpiceA
             DateTime maxtime = HapiProperties.TimeMax;
             DateTime mindate = mintime.Date;
             DateTime maxdate = maxtime.Date;
-            string basepath = "";
+            string basepath = String.Empty;
 
             while (mintime <= maxtime)
             {
@@ -104,40 +104,6 @@ namespace WebApi_v1.DataProducts.RBSpiceA
         {
             Auxiliary aux = new Auxiliary(HapiProperties);
             Records = aux.GetRecords(Paths);
-        }
-
-        public void GetProductWithTimeRange()
-        {
-            string path = @"C:\Users\blaine.harris\Documents\BlainesProjects\WebApi_v1\WebApi_v1\obj\Debug\rbsp-a-rbspice_lev-0_Auxil_20121028_v1.1.1-00.csv";
-            Type recordtype;
-            if ("Auxiliary" == nameof(Auxiliary))
-                recordtype = typeof(Auxiliary);
-            Records = new List<Dictionary<string, string>>();
-            if (File.Exists(path))
-            {
-                using (TextReader textReader = new StreamReader(File.OpenRead(path)))
-                {
-                    CsvReader csv = new CsvReader(textReader);
-                    csv.Configuration.RegisterClassMap<Aux_Map>();
-                    csv.Read();
-                    csv.ReadHeader();
-                    this.Header = csv.Context.HeaderRecord;
-                    //this.Records = csv.GetRecords<T>().ToList<T>();
-                    while (csv.Read())
-                    {
-                        if (Converters.ConvertUTCtoDate(csv["UTC"]) >= TimeRange.Start
-                            && Converters.ConvertUTCtoDate(csv["UTC"]) <= TimeRange.End)
-                        {
-                            //if ("Auxiliary" == nameof(Auxiliary))
-                            //Records.Add(csv.GetRecord<IRecord>());
-                        }
-                    }
-                };
-            }
-            else
-            {
-                Debug.WriteLine("FAAAAAAIIIIIIILLLLLL");
-            }
         }
     }
 }

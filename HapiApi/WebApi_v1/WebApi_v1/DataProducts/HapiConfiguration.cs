@@ -84,25 +84,29 @@ namespace WebApi_v1.DataProducts
                     catch (Exception e) { Errors.Add(e); return false; }
                     Response = Request.CreateResponse(HttpStatusCode.Accepted);
                     string format = Properties.Format != null ? Properties.Format : "csv";
-                    string strcontent = resp.GetResponse(format);
+                    resp.SetStatusCode(1200);
+                    string strcontent = resp.GetResponse();
                     Response.Content = new StringContent(strcontent);
                     break;
 
                 case ("catalog"):
                     resp = new CatalogResponse(this);
                     Response = Request.CreateResponse(HttpStatusCode.Accepted);
+                    resp.SetStatusCode(1200);
                     Response.Content = new StringContent(resp.GetResponse());
                     break;
 
                 case ("info"):
                     resp = new InfoResponse(this);
                     Response = Request.CreateResponse(HttpStatusCode.Accepted);
+                    resp.SetStatusCode(1200);
                     Response.Content = new StringContent(resp.GetResponse());
                     break;
 
                 case ("capabilities"):
                     resp = new CapabilitiesResponse(this);
                     Response = Request.CreateResponse(HttpStatusCode.Accepted);
+                    resp.SetStatusCode(1200);
                     Response.Content = new StringContent(resp.GetResponse());
                     break;
 
@@ -211,11 +215,11 @@ namespace WebApi_v1.DataProducts
 
             public void Initialize()
             {
-                RequestType = "";
-                Id = "";
-                SC = "";
-                Level = "";
-                RecordType = "";
+                RequestType = String.Empty;
+                Id = String.Empty;
+                SC = String.Empty;
+                Level = String.Empty;
+                RecordType = String.Empty;
                 TimeMin = default(DateTime);
                 TimeMax = default(DateTime);
                 Parameters = new List<string>();
@@ -287,7 +291,7 @@ namespace WebApi_v1.DataProducts
 
             public override string ToString()
             {
-                string pars = "";
+                string pars = String.Empty;
                 if (Parameters != null)
                 {
                     foreach (string par in Parameters)
@@ -324,13 +328,13 @@ namespace WebApi_v1.DataProducts
             public CapabilitiesResponse(HapiConfiguration hapi)
             {
                 HapiVersion = hapi.Version;
-                Status = new Status(1200, "OK");
+                Status = new Status();
                 OutputFormats = hapi.Capabilities;
             }
 
             public string GetResponse(string format)
             {
-                return "";
+                return String.Empty;
             }
 
             public string GetResponse()
@@ -352,17 +356,22 @@ namespace WebApi_v1.DataProducts
                     OutputFormats[1]
                 )).ToString();
             }
+
+            public void SetStatusCode(int statusCode)
+            {
+                Status.Code = statusCode;
+            }
         }
 
         private class DataResponse : IResponse
         {
             private HapiConfiguration Hapi;
             public string HapiVersion;
-            public Status Status = null;
             public string StartDate = String.Empty;
             public string StopDate = String.Empty;
-            public List<string> Parameters = null;
             public string Format = null;
+            public Status Status = null;
+            public List<string> Parameters = null;
             public IEnumerable<Dictionary<string, string>> Data = null;
 
             public DataResponse(HapiConfiguration hapi)
@@ -386,19 +395,14 @@ namespace WebApi_v1.DataProducts
                 StopDate = props.TimeMax.ToString();
                 Parameters = props.Parameters;
                 Format = props.Format;
-                Status = new Status(1200, "OK");
+                Status = new Status();
                 Data = hapi.Product.Records;
             }
 
             public string GetResponse()
             {
-                return "";
-            }
-
-            public string GetResponse(string format)
-            {
-                string resp = "";
-                switch (format.ToLower())
+                string resp = String.Empty;
+                switch (Format.ToLower())
                 {
                     case ("csv"):
                         resp = ToCSV();
@@ -612,6 +616,11 @@ namespace WebApi_v1.DataProducts
 
                 return sb.ToString();
             }
+
+            public void SetStatusCode(int statusCode)
+            {
+                Status.Code = statusCode;
+            }
         }
 
         public class InfoResponse : IResponse
@@ -628,16 +637,11 @@ namespace WebApi_v1.DataProducts
             {
                 Hapi = hapi;
                 HapiVersion = hapi.Version;
-                Status = new Status(1200, "OK"); // HACK: don't use a literal value for code
+                Status = new Status(); // HACK: don't use a literal value for code
                 Format = Hapi.Properties.Format == null ? "csv" : Hapi.Properties.Format;
                 StartDate = Hapi.Properties.TimeMin;
                 StopDate = Hapi.Properties.TimeMax;
                 Parameters = Hapi.Properties.Parameters;
-            }
-
-            public string GetResponse(string format)
-            {
-                return "";
             }
 
             public string GetResponse()
@@ -702,6 +706,11 @@ namespace WebApi_v1.DataProducts
 
                 return sb.ToString();
             }
+
+            public void SetStatusCode(int statusCode)
+            {
+                Status.Code = statusCode;
+            }
         }
 
         public class CatalogResponse : IResponse
@@ -715,7 +724,7 @@ namespace WebApi_v1.DataProducts
             {
                 Hapi = hapi;
                 HapiVersion = Hapi.Version;
-                Status = new Status(1200, "OK"); // HACK: don't use a literal value for code
+                Status = new Status();
                 Catalog = new List<KeyValuePair<string, string>>()
                 {
                     GetKeyValPair("RBSPICEA_L0_AUX", "RBSPA Level 0 Auxiliary Data"),
@@ -760,9 +769,9 @@ namespace WebApi_v1.DataProducts
                 return sb.ToString();
             }
 
-            public string GetResponse(string format)
+            public void SetStatusCode(int statusCode)
             {
-                return "";
+                Status.Code = statusCode;
             }
         }
 
@@ -773,20 +782,32 @@ namespace WebApi_v1.DataProducts
         internal interface IResponse
         {
             string GetResponse();
-
-            string GetResponse(string format);
+            void SetStatusCode(int statusCode);
         }
 
         internal class Status
         {
-            public int Code = -1;
-            public string Message = null;
-
-            public Status(int code, string message)
+            private Dictionary<int, string> _messages = new Dictionary<int, string>
             {
-                Code = code;
-                Message = message;
-            }
+                { 1200, "OK" },
+                { 1201, "OK - no data for time range" },
+                { 1400, "Bad request - user input error" },
+                { 1401, "Bad request - unknown API parameter name" },
+                { 1402, "Bad request - error in start time" },
+                { 1403, "Bad request - error in stop time" },
+                { 1404, "Bad request - start time equal to or after stop time" },
+                { 1405, "Bad request - time outside valid range" },
+                { 1406, "Bad request - unknown dataset id" },
+                { 1407, "Bad request - unknown dataset parameter" },
+                { 1408, "Bad request - too much time or data requested" },
+                { 1409, "Bad request - unsupported output format" },
+                { 1410, "Bad request - unsupported include value" },
+                { 1500, "Internal server error" },
+                { 1501, "Internal server error - upstream request error" },
+            };
+            private int _code;
+            public int Code { get { return _code; } set { Message = _messages[value]; _code = value; } }
+            public string Message { get; private set; }
         }
 
         #endregion Internal Classes
