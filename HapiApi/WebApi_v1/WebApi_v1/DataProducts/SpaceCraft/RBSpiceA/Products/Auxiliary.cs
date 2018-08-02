@@ -58,11 +58,11 @@ namespace WebApi_v1.DataProducts
         public Auxiliary(IProperties properties)
         {
             // HACK: Using defaults to determine which properties are set may be bad practice???
-
+            Converters cons = new Converters();
             foreach (System.Reflection.PropertyInfo prop in this.GetType().GetProperties())
             {
                 Type type = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
-                Converters.ConvertPropertyToDefault(prop, this);
+                cons.ConvertPropertyToDefault(prop, this);
             }
 
             if (properties != null)
@@ -91,13 +91,13 @@ namespace WebApi_v1.DataProducts
                         // If parameters exist read csv row by row and extract specific fields
                         // else convert all rows to records and save to this.Records
                         // HACK: Figure out a way to save a record with only the requested fields
+                        Converters cons = new Converters();
                         if (HapiProperties.Parameters.Count > 0)
                         {
                             string[] headers = csv.Context.HeaderRecord;
 
                             for (int i = 0; i < headers.Length; i++)
                                 headers[i] = headers[i].ToLower();
-
                             while (csv.Read())
                             {
                                 // HACK: This is pretty hacky stuff.
@@ -105,8 +105,8 @@ namespace WebApi_v1.DataProducts
                                 // If csvrecord time is less than time.min or csvrecord
                                 // time is greater than time.max then continue while loop.
                                 // Inclusive min and Exclusive max
-                                bool ltmin = Converters.ConvertUTCtoDate(csv["UTC"]) < HapiProperties.TimeMin;
-                                bool gtmax = Converters.ConvertUTCtoDate(csv["UTC"]) >= HapiProperties.TimeMax;
+                                bool ltmin = cons.ConvertUTCtoDate(csv["UTC"]) < HapiProperties.TimeMin;
+                                bool gtmax = cons.ConvertUTCtoDate(csv["UTC"]) >= HapiProperties.TimeMax;
                                 if (ltmin || gtmax)
                                     continue;
 
@@ -140,8 +140,8 @@ namespace WebApi_v1.DataProducts
 
                                 // If csvrecord time is less than time.min or
                                 // csvrecord time is greater than time.max then break while loop.
-                                bool ltmin = Converters.ConvertUTCtoDate(csv["UTC"]) < HapiProperties.TimeMin;
-                                bool gtmax = Converters.ConvertUTCtoDate(csv["UTC"]) > HapiProperties.TimeMax;
+                                bool ltmin = cons.ConvertUTCtoDate(csv["UTC"]) < HapiProperties.TimeMin;
+                                bool gtmax = cons.ConvertUTCtoDate(csv["UTC"]) > HapiProperties.TimeMax;
                                 if (ltmin || gtmax)
                                     continue;
 
@@ -156,7 +156,7 @@ namespace WebApi_v1.DataProducts
                                     {
                                         if (propName == "utc")
                                         {
-                                            utcString = Converters.ConvertDatetoUTCDate((DateTime)prop.GetValue(rec));
+                                            utcString = cons.ConvertDatetoUTCDate((DateTime)prop.GetValue(rec));
                                             auxrec.Add(propName, utcString);
                                             continue;
                                         }
