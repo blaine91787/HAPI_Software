@@ -234,6 +234,7 @@ namespace WebApi_v1.DataProducts
                 string key = String.Empty;
                 string val = String.Empty;
                 DateTime dt = default(DateTime);
+                Converters cons = new Converters();
                 foreach (KeyValuePair<string, string> pair in dict)
                 {
                     // TODO: Find a better way to check for 'HapiResponse.ToJson>string last' error where time.min and time.max are not valid. Should be able to catch it here.
@@ -254,13 +255,13 @@ namespace WebApi_v1.DataProducts
                             break;
 
                         case ("time.min"):
-                            dt = Converters.ConvertHapiYMDToDateTime(val);
+                            dt = cons.ConvertHapiYMDToDateTime(val);
                             if (dt != default(DateTime))
                                 TimeMin = dt.ToUniversalTime();
                             break;
 
                         case ("time.max"):
-                            dt = Converters.ConvertHapiYMDToDateTime(val);
+                            dt = cons.ConvertHapiYMDToDateTime(val);
                             if (dt != default(DateTime))
                                 TimeMax = dt.ToUniversalTime();
                             break;

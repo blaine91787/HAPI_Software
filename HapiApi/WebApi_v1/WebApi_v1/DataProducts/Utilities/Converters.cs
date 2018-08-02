@@ -5,11 +5,11 @@ using System.Text.RegularExpressions;
 
 namespace WebApi_v1.DataProducts.Utilities
 {
-    public static class Converters
+    public class Converters
     {
         #region DateTime Conversions
 
-        public static DateTime ConvertHapiYMDToDateTime(String utc)
+        public DateTime ConvertHapiYMDToDateTime(String utc)
         {
             char[] seps = new char[] { '-', 't', ':', '.', 'z' };
             string[] parts = utc.ToLower().Split(seps, StringSplitOptions.RemoveEmptyEntries);
@@ -96,7 +96,7 @@ namespace WebApi_v1.DataProducts.Utilities
             return new DateTime(yr, month, day, hour, min, sec, milli, DateTimeKind.Utc);
         }
 
-        public static DateTime ConvertUTCtoDate(String utc)
+        public DateTime ConvertUTCtoDate(String utc)
         {
             String[] seps = new String[4] { "-", ":", "T", "." };
             String[] parts = utc.Split(seps, StringSplitOptions.None);
@@ -151,7 +151,7 @@ namespace WebApi_v1.DataProducts.Utilities
             else return new DateTime();
         }
 
-        public static void ConvertDOYtoMD(Int32 year, Int32 doy, out Int32 month, out Int32 day)
+        public void ConvertDOYtoMD(Int32 year, Int32 doy, out Int32 month, out Int32 day)
         {
             Int32[] nlyDays = new Int32[13] { 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 };
             Int32[] lyDays = new Int32[13] { 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366 };
@@ -179,7 +179,7 @@ namespace WebApi_v1.DataProducts.Utilities
             return;
         }
 
-        public static void FixDateValues(ref Int32 yr, ref Int32 month, ref Int32 day, ref Int32 hour, ref Int32 min, ref Int32 sec, ref Int32 mill)
+        public void FixDateValues(ref Int32 yr, ref Int32 month, ref Int32 day, ref Int32 hour, ref Int32 min, ref Int32 sec, ref Int32 mill)
         {
             // purpose of this is to fix date and time values that are anomalous but still numbers and otherwise assumed correct it is just their form isn't copacetic with the Windows DateTime function, e.g. sec=60
             if ((mill < 0) || (mill > 999))
@@ -235,13 +235,13 @@ namespace WebApi_v1.DataProducts.Utilities
             ConvertDOYtoMD(yr, doy, out month, out day);
         }
 
-        public static Int32 EndingDOY(Int32 year)
+        public Int32 EndingDOY(Int32 year)
         {
             if ((year % 4) == 0) return 366;
             return 365;
         }
 
-        public static Int32 GetDOYfromMD(Int32 yr, Int32 month, Int32 day)
+        public Int32 GetDOYfromMD(Int32 yr, Int32 month, Int32 day)
         {
             // could do this via datetime but what if there is an error in the month/day values that are untenable
             Int32[] nlyDays = new Int32[13] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, 31 };
@@ -279,7 +279,7 @@ namespace WebApi_v1.DataProducts.Utilities
             return date.DayOfYear;
         }
 
-        public static String ConvertDatetoUTCDate(DateTime date)
+        public String ConvertDatetoUTCDate(DateTime date)
         {
             // have to load everything and create the string from scratch since MS doesn't support the kinds of string I need to get out
             return (date.Year.ToString("D4") + "-" + date.DayOfYear.ToString("D3") +
@@ -290,7 +290,7 @@ namespace WebApi_v1.DataProducts.Utilities
 
         #region Property Conversions
 
-        public static void ConvertParameterToProperty(string parameter, PropertyInfo prop, IRecord obj)
+        public void ConvertParameterToProperty(string parameter, PropertyInfo prop, IRecord obj)
         {
             TypeCode tc = Type.GetTypeCode(prop.PropertyType);//Convert.GetTypeCode(prop.PropertyType);
 
@@ -326,7 +326,7 @@ namespace WebApi_v1.DataProducts.Utilities
             }
         }
 
-        public static void ConvertPropertyToDefault(PropertyInfo prop, IRecord obj)
+        public void ConvertPropertyToDefault(PropertyInfo prop, IRecord obj)
         {
             TypeCode tc = Type.GetTypeCode(prop.PropertyType);//Convert.GetTypeCode(prop.PropertyType);
 
