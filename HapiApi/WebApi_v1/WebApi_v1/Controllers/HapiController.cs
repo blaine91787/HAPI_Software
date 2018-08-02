@@ -38,7 +38,6 @@ namespace WebApi_v1.Controllers
                     Debug.WriteLine(e.Message);
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
             }
-
             return hapi.Response;
         }
 

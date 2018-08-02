@@ -11,9 +11,8 @@ namespace WebApi_v1.DataProducts.Utilities
 
         public static DateTime ConvertHapiYMDToDateTime(String utc)
         {
-            char[] seps = new char[] { '-', 'T', 't', ':', '.', 'Z', 'z' };
-            string[] parts = utc.Split(seps, StringSplitOptions.RemoveEmptyEntries);
-            DateTime dt = new DateTime();
+            char[] seps = new char[] { '-', 't', ':', '.', 'z' };
+            string[] parts = utc.ToLower().Split(seps, StringSplitOptions.RemoveEmptyEntries);
             Regex r;
 
             Int32 yr = 0;
