@@ -16,6 +16,7 @@ namespace WebApi_v1.DataProducts
         bool IncludeHeader { get; set; }
         string Format { get; set; }
         Exception Error { get; set; }
+        List<int> ErrorCodes { get; set; }
 
         void Assign(string[] formats, Dictionary<string, string> dict);
 

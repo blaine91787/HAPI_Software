@@ -73,16 +73,33 @@ namespace WebApi_v1.DataProducts
                 return false;
         }
 
+        public bool GetProduct()
+        {
+            if (GetDataProduct())
+                return true;
+
+            return false;
+        }
+
         public bool CreateResponse()
         {
             IResponse resp;
+
+            if (RequestType.ToLower() == "data" && Properties.ErrorCodes.Count() > 0)
+            {
+                resp = new ErrorResponse(this);
+                Response = Request.CreateResponse(HttpStatusCode.OK);
+                resp.SetStatusCode(Properties.ErrorCodes.First());
+                Response.Content = new StringContent(resp.GetResponse());
+                return true;
+            }
+
             switch (RequestType.ToLower())
             {
                 case ("data"):
-                    GetDataProduct();
                     try { resp = new DataResponse(this); }
                     catch (Exception e) { Errors.Add(e); return false; }
-                    Response = Request.CreateResponse(HttpStatusCode.Accepted);
+                    Response = Request.CreateResponse(HttpStatusCode.OK);
                     string format = Properties.Format != null ? Properties.Format : "csv";
                     resp.SetStatusCode(1200);
                     string strcontent = resp.GetResponse();
@@ -91,21 +108,21 @@ namespace WebApi_v1.DataProducts
 
                 case ("catalog"):
                     resp = new CatalogResponse(this);
-                    Response = Request.CreateResponse(HttpStatusCode.Accepted);
+                    Response = Request.CreateResponse(HttpStatusCode.OK);
                     resp.SetStatusCode(1200);
                     Response.Content = new StringContent(resp.GetResponse());
                     break;
 
                 case ("info"):
                     resp = new InfoResponse(this);
-                    Response = Request.CreateResponse(HttpStatusCode.Accepted);
+                    Response = Request.CreateResponse(HttpStatusCode.OK);
                     resp.SetStatusCode(1200);
                     Response.Content = new StringContent(resp.GetResponse());
                     break;
 
                 case ("capabilities"):
                     resp = new CapabilitiesResponse(this);
-                    Response = Request.CreateResponse(HttpStatusCode.Accepted);
+                    Response = Request.CreateResponse(HttpStatusCode.OK);
                     resp.SetStatusCode(1200);
                     Response.Content = new StringContent(resp.GetResponse());
                     break;
@@ -117,17 +134,17 @@ namespace WebApi_v1.DataProducts
             return true;
         }
 
-        private void GetDataProduct()
+        private bool GetDataProduct()
         {
             switch (Properties.SC)
             {
                 case ("rbspicea"):
-                    Product = new RBSpiceAProduct(this.Properties);
+                    Product = new RBSpiceAProduct(this);
                     Product.GetProduct();
-                    return;
+                    return true;
 
                 default:
-                    throw new ArgumentOutOfRangeException(Properties.Id, "Not a valid spacecraft ID.");
+                    return false;
             }
             //Product = new RBSpiceAProduct();
         }
@@ -208,6 +225,7 @@ namespace WebApi_v1.DataProducts
             public bool IncludeHeader { get; set; }
             public string Format { get; set; }
             public Exception Error { get; set; }
+            public List<int> ErrorCodes { get; set; }
 
             #endregion Properties
 
@@ -226,6 +244,7 @@ namespace WebApi_v1.DataProducts
                 IncludeHeader = false;
                 Format = "csv";
                 Error = null;
+                ErrorCodes = new List<int>();
             }
 
             public void Assign(string[] formats, Dictionary<string, string> dict)
@@ -320,6 +339,46 @@ namespace WebApi_v1.DataProducts
             #endregion Methods
         }
 
+        private class ErrorResponse : IResponse
+        {
+            public string HapiVersion { get; private set; }
+            public Status Status { get; }
+            public string[] OutputFormats { get; }
+
+            public ErrorResponse(HapiConfiguration hapi)
+            {
+                HapiVersion = hapi.Version;
+                Status = new Status();
+                OutputFormats = hapi.Capabilities;
+            }
+
+            public string GetResponse(string format)
+            {
+                return String.Empty;
+            }
+
+            public string GetResponse()
+            {
+                StringBuilder sb = new StringBuilder();
+                return sb.Append(String.Format(
+                    "{{\n" +
+                    "\t\"{0}\" : \"{1}\",\n" +
+                    "\t\"{2}\" : {{ \"code\" : {3}, \"message\" : \"{4}\" }},\n" +
+                    "}}\n",
+                    "Hapi",
+                    HapiVersion,
+                    "status",
+                    Status.Code,
+                    Status.Message
+                )).ToString();
+            }
+
+            public void SetStatusCode(int statusCode)
+            {
+                Status.Code = statusCode;
+            }
+        }
+
         private class CapabilitiesResponse : IResponse
         {
             public string HapiVersion { get; private set; }
@@ -366,7 +425,7 @@ namespace WebApi_v1.DataProducts
 
         private class DataResponse : IResponse
         {
-            private HapiConfiguration Hapi;
+            private HapiConfiguration HapiConfig;
             public string HapiVersion;
             public string StartDate = String.Empty;
             public string StopDate = String.Empty;
@@ -377,32 +436,41 @@ namespace WebApi_v1.DataProducts
 
             public DataResponse(HapiConfiguration hapi)
             {
-                Hapi = hapi;
-                IProperties props = Hapi.Properties;
-                if (props == null)
-                    throw new MissingFieldException(nameof(hapi.Properties));
+                HapiConfig = hapi;
+                if (HapiConfig.Properties == null)
+                    throw new MissingFieldException(nameof(HapiConfig.Properties));
 
-                if (props.TimeMin == null)
-                    throw new MissingFieldException(nameof(props.TimeMin));
+                if (HapiConfig.Properties.TimeMin == null)
+                    throw new MissingFieldException(nameof(HapiConfig.Properties.TimeMin));
 
-                if (props.TimeMax == null)
-                    throw new MissingFieldException(nameof(props.TimeMax));
+                if (HapiConfig.Properties.TimeMax == null)
+                    throw new MissingFieldException(nameof(HapiConfig.Properties.TimeMax));
 
-                if (Hapi.Product == null)
-                    throw new MissingFieldException(nameof(Hapi.Product));
+                if (HapiConfig.Product == null)
+                    throw new MissingFieldException(nameof(HapiConfig.Product));
 
-                HapiVersion = Hapi.Version;
-                StartDate = props.TimeMin.ToString();
-                StopDate = props.TimeMax.ToString();
-                Parameters = props.Parameters;
-                Format = props.Format;
+                HapiVersion = HapiConfig.Version;
+                StartDate = HapiConfig.Properties.TimeMin.ToString();
+                StopDate = HapiConfig.Properties.TimeMax.ToString();
+                Parameters = HapiConfig.Properties.Parameters;
+                Format = HapiConfig.Properties.Format;
                 Status = new Status();
-                Data = hapi.Product.Records;
+                Data = HapiConfig.Product.Records;
             }
 
             public string GetResponse()
             {
                 string resp = String.Empty;
+                //if (HapiConfig.Product.Records.Count() == 0)
+                //{
+                //    StringBuilder sb = new StringBuilder();
+                //    foreach (int err in HapiConfig.Properties.ErrorCodes)
+                //    {
+                //        sb.Append()
+                //    }
+
+                //}
+
                 switch (Format.ToLower())
                 {
                     case ("csv"):
@@ -435,13 +503,13 @@ namespace WebApi_v1.DataProducts
                     HapiVersion,
                     Status.Code,
                     Status.Message,
-                    Hapi.Properties.TimeMin,
-                    Hapi.Properties.TimeMax
+                    HapiConfig.Properties.TimeMin,
+                    HapiConfig.Properties.TimeMax
                 );
 
-                if (Hapi.Properties.Parameters != null)
+                if (HapiConfig.Properties.Parameters != null)
                 {
-                    foreach (string param in Hapi.Properties.Parameters)
+                    foreach (string param in HapiConfig.Properties.Parameters)
                     {
                         if (multiLineParameters)
                         {
@@ -484,7 +552,7 @@ namespace WebApi_v1.DataProducts
 
             public string ToCSV()
             {
-                bool header = Hapi.Properties.IncludeHeader;
+                bool header = HapiConfig.Properties.IncludeHeader;
                 StringBuilder sb = new StringBuilder();
 
                 if (header)
@@ -493,16 +561,16 @@ namespace WebApi_v1.DataProducts
                 }
 
                 string last;
-                if (Hapi.Product.Records.Count() > 0)
+                if (HapiConfig.Product.Records.Count() > 0)
                 {
-                    last = Hapi.Product.Records.ToList().First().ToList().Last().Key;
+                    last = HapiConfig.Product.Records.ToList().First().ToList().Last().Key;
                 }
                 else
                 {
                     return ("No records were found. If this is an error, make sure query is valid.");
                 }
 
-                foreach (Dictionary<string, string> rec in Hapi.Product.Records)
+                foreach (Dictionary<string, string> rec in HapiConfig.Product.Records)
                 {
                     foreach (KeyValuePair<string, string> pair in rec)
                     {
@@ -534,13 +602,13 @@ namespace WebApi_v1.DataProducts
                         HapiVersion,
                         Status.Code,
                         Status.Message,
-                        Hapi.Properties.TimeMin,
-                        Hapi.Properties.TimeMax
+                        HapiConfig.Properties.TimeMin,
+                        HapiConfig.Properties.TimeMax
                     );
 
-                    if (Hapi.Properties.Parameters != null)
+                    if (HapiConfig.Properties.Parameters != null)
                     {
-                        foreach (string param in Hapi.Properties.Parameters)
+                        foreach (string param in HapiConfig.Properties.Parameters)
                         {
                             if (multiLineParameters)
                             {
@@ -586,14 +654,14 @@ namespace WebApi_v1.DataProducts
                 string last;
                 try
                 {
-                    last = Hapi.Product.Records.ToList().First().ToList().Last().Key;
+                    last = HapiConfig.Product.Records.ToList().First().ToList().Last().Key;
                 }
                 catch
                 {
                     throw new InvalidOperationException("\"HapiResponse.ToJson()>string last\" is empty. Possibly missing time.min or time.max or invalid request.");
                 }
 
-                foreach (Dictionary<string, string> rec in Hapi.Product.Records)
+                foreach (Dictionary<string, string> rec in HapiConfig.Product.Records)
                 {
                     if (header)
                         sb.Append("\t\t[");
@@ -788,7 +856,7 @@ namespace WebApi_v1.DataProducts
 
         internal class Status
         {
-            private Dictionary<int, string> _messages = new Dictionary<int, string>
+            public Dictionary<int, string> ErrorCodes = new Dictionary<int, string>
             {
                 { 1200, "OK" },
                 { 1201, "OK - no data for time range" },
@@ -807,7 +875,7 @@ namespace WebApi_v1.DataProducts
                 { 1501, "Internal server error - upstream request error" },
             };
             private int _code;
-            public int Code { get { return _code; } set { Message = _messages[value]; _code = value; } }
+            public int Code { get { return _code; } set { Message = ErrorCodes[value]; _code = value; } }
             public string Message { get; private set; }
         }
 

@@ -25,20 +25,13 @@ namespace WebApi_v1.Controllers
         public HttpResponseMessage GetData()
         {
             HapiConfiguration hapi = new HapiConfiguration();
-            if (!hapi.Configure(Request))
-            {
-                foreach (Exception e in hapi.Errors)
-                    Debug.WriteLine(e.Message);
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
-            }
 
-            if (!hapi.CreateResponse())
-            {
-                foreach (Exception e in hapi.Errors)
-                    Debug.WriteLine(e.Message);
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
-            }
-            return hapi.Response;
+            if (hapi.Configure(Request))
+                if (hapi.GetProduct())
+                    if (hapi.CreateResponse())
+                        return hapi.Response;
+
+            return Request.CreateResponse(HttpStatusCode.BadRequest);
         }
 
         [Route("api/Hapi/Catalog")]
