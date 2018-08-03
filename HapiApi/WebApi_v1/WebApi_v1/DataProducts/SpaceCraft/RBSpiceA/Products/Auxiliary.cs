@@ -1,6 +1,7 @@
 ﻿using CsvHelper;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,9 +12,9 @@ namespace WebApi_v1.DataProducts
 {
     public class Auxiliary : IRecord
     {
+        #region Auxiliary Properties
         // TODO: Figure out what to do with this UTC and the abstract UTC
         public DateTime UTC { get; set; }
-
         public string SCLOCK_Full { get; set; }
         public string ET { get; set; }
         public string OrbitNumber { get; set; }
@@ -42,32 +43,41 @@ namespace WebApi_v1.DataProducts
         public Int16 Subsector2 { get; set; }
         public Int16 Subsector3 { get; set; }
         public Int32 SpinDuration { get; set; }
-        private IProperties HapiProperties { get; set; }
+
+        #endregion Auxiliary Properties
+
+        #region Extra Aux Properties
+
+        private HapiConfiguration HapiConfig { get; set; }
         public List<Dictionary<string, string>> Data { get; set; }
+
+        #endregion Extra Aux Properties
+
+        #region Constructors
 
         public Auxiliary()
         {
-            // HACK: Using defaults to determine which properties are set may be bad practice???
 
-            foreach (System.Reflection.PropertyInfo prop in this.GetType().GetProperties())
-            {
-                Type type = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
-            }
         }
 
-        public Auxiliary(IProperties properties)
+        public Auxiliary(HapiConfiguration hapi)
         {
             // HACK: Using defaults to determine which properties are set may be bad practice???
             Converters cons = new Converters();
+
             foreach (System.Reflection.PropertyInfo prop in this.GetType().GetProperties())
             {
                 Type type = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
                 cons.ConvertPropertyToDefault(prop, this);
             }
 
-            if (properties != null)
-                HapiProperties = properties;
+            if (hapi != null)
+                HapiConfig = hapi;
         }
+
+        #endregion Constructors
+
+        #region IProduct Methods
 
         public IEnumerable<Dictionary<string, string>> GetRecords(IEnumerable<string> paths)
         {
@@ -92,7 +102,7 @@ namespace WebApi_v1.DataProducts
                         // else convert all rows to records and save to this.Records
                         // HACK: Figure out a way to save a record with only the requested fields
                         Converters cons = new Converters();
-                        if (HapiProperties.Parameters.Count > 0)
+                        if (HapiConfig.Properties.Parameters.Count > 0)
                         {
                             string[] headers = csv.Context.HeaderRecord;
 
@@ -105,13 +115,13 @@ namespace WebApi_v1.DataProducts
                                 // If csvrecord time is less than time.min or csvrecord
                                 // time is greater than time.max then continue while loop.
                                 // Inclusive min and Exclusive max
-                                bool ltmin = cons.ConvertUTCtoDate(csv["UTC"]) < HapiProperties.TimeMin;
-                                bool gtmax = cons.ConvertUTCtoDate(csv["UTC"]) >= HapiProperties.TimeMax;
+                                bool ltmin = cons.ConvertUTCtoDate(csv["UTC"]) < HapiConfig.Properties.TimeMin;
+                                bool gtmax = cons.ConvertUTCtoDate(csv["UTC"]) >= HapiConfig.Properties.TimeMax;
                                 if (ltmin || gtmax)
                                     continue;
 
                                 AuxRecord aux = new AuxRecord();
-                                foreach (string param in HapiProperties.Parameters)
+                                foreach (string param in HapiConfig.Properties.Parameters)
                                 {
                                     string parameterName = param;
                                     int indexOfParameterName = Array.IndexOf(headers, parameterName.ToLower());
@@ -130,7 +140,7 @@ namespace WebApi_v1.DataProducts
                             for (int i = 0; i < headers.Length; i++)
                             {
                                 headers[i] = headers[i].ToLower();
-                                HapiProperties.Parameters.Add(headers[i]);
+                                HapiConfig.Properties.Parameters.Add(headers[i]);
                             }
 
                             while (csv.Read())
@@ -140,8 +150,8 @@ namespace WebApi_v1.DataProducts
 
                                 // If csvrecord time is less than time.min or
                                 // csvrecord time is greater than time.max then break while loop.
-                                bool ltmin = cons.ConvertUTCtoDate(csv["UTC"]) < HapiProperties.TimeMin;
-                                bool gtmax = cons.ConvertUTCtoDate(csv["UTC"]) > HapiProperties.TimeMax;
+                                bool ltmin = cons.ConvertUTCtoDate(csv["UTC"]) < HapiConfig.Properties.TimeMin;
+                                bool gtmax = cons.ConvertUTCtoDate(csv["UTC"]) > HapiConfig.Properties.TimeMax;
                                 if (ltmin || gtmax)
                                     continue;
 
@@ -169,6 +179,10 @@ namespace WebApi_v1.DataProducts
                     };
                 }
             }
+
+            if (Data.Count == 0)
+                HapiConfig.Properties.ErrorCodes.Add(1201);
+
             return Data;
         }
 
@@ -176,12 +190,12 @@ namespace WebApi_v1.DataProducts
         {
             StringBuilder sb = new StringBuilder();
 
-            if (HapiProperties.Parameters != null)
+            if (HapiConfig.Properties.Parameters != null)
             {
                 foreach (System.Reflection.PropertyInfo prop in this.GetType().GetProperties())
                 {
                     var type = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
-                    if (HapiProperties.Parameters.Contains(prop.Name))
+                    if (HapiConfig.Properties.Parameters.Contains(prop.Name))
                         sb.Append(prop.GetValue(this, null) + ", ");
                 }
             }
@@ -196,6 +210,10 @@ namespace WebApi_v1.DataProducts
 
             return sb.ToString();
         }
+
+        #endregion IProduct Methods
+
+        #region AuxRecord/IRecord
 
         public class AuxRecord : IRecord
         {
@@ -229,5 +247,6 @@ namespace WebApi_v1.DataProducts
                 return sb.ToString();
             }
         }
+        #endregion AuxRecord/IRecord
     }
 }

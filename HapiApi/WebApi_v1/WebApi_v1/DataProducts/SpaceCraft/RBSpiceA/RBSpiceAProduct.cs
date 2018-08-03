@@ -17,7 +17,7 @@ namespace WebApi_v1.DataProducts.RBSpiceA
         public IEnumerable<Dictionary<string, string>> Records { get; set; }
         public List<Dictionary<string, string>> ParameterSpecificRecords { get; set; }
         public List<FileInfo> Files { get; set; }
-        public IProperties HapiProperties { get; set; }
+        public HapiConfiguration HapiConfig { get; set; }
         public List<string> Paths { get; set; }
 
         public void Initialize()
@@ -36,14 +36,14 @@ namespace WebApi_v1.DataProducts.RBSpiceA
                 throw new DirectoryNotFoundException("RBSPiceAProduct._basepath could not resolve to a valid path.");
         }
 
-        public RBSpiceAProduct(IProperties properties)
+        public RBSpiceAProduct(HapiConfiguration hapi)
         {
             Initialize();
 
-            if (properties != null)
-                HapiProperties = properties;
+            if (hapi != null)
+                HapiConfig = hapi;
             else
-                throw new ArgumentNullException(nameof(properties));
+                throw new ArgumentNullException(nameof(HapiConfig));
 
             // HACK: Jerry may have a library for this.
             GetPaths();
@@ -52,8 +52,8 @@ namespace WebApi_v1.DataProducts.RBSpiceA
         private void GetPaths()
         {
             Paths = new List<string>();
-            DateTime mintime = HapiProperties.TimeMin;
-            DateTime maxtime = HapiProperties.TimeMax;
+            DateTime mintime = HapiConfig.Properties.TimeMin;
+            DateTime maxtime = HapiConfig.Properties.TimeMax;
             DateTime mindate = mintime.Date;
             DateTime maxdate = maxtime.Date;
             string basepath = String.Empty;
@@ -62,7 +62,7 @@ namespace WebApi_v1.DataProducts.RBSpiceA
             {
                 basepath = _basepath;
 
-                switch (HapiProperties.Level)
+                switch (HapiConfig.Properties.Level)
                 {
                     case ("l0"):
                         basepath += @"Level_0\";
@@ -72,7 +72,7 @@ namespace WebApi_v1.DataProducts.RBSpiceA
                         break;
                 }
 
-                switch (HapiProperties.RecordType)
+                switch (HapiConfig.Properties.RecordType)
                 {
                     case ("aux"):
                         basepath += @"Auxil\";
@@ -102,7 +102,7 @@ namespace WebApi_v1.DataProducts.RBSpiceA
 
         public void GetProduct() // TODO: change name to getRecords? Might be confusing with csvhelper though.
         {
-            Auxiliary aux = new Auxiliary(HapiProperties);
+            Auxiliary aux = new Auxiliary(HapiConfig);
             Records = aux.GetRecords(Paths);
         }
     }
