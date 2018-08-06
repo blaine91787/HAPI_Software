@@ -325,7 +325,8 @@ namespace WebApi_v1.DataProducts
                             break;
 
                         default:
-                            throw new ArgumentOutOfRangeException(key, String.Format("The url parameter '{0}={1}' is not valid.", key, val));
+                            ErrorCodes.Add(1400);
+                            break;
                     }
                 }
 
