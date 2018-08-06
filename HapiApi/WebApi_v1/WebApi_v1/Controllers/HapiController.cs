@@ -31,7 +31,7 @@ namespace WebApi_v1.Controllers
                     if (hapi.CreateResponse())
                         return hapi.Response;
 
-            return Request.CreateResponse(HttpStatusCode.BadRequest);
+            return hapi.Response; 
         }
 
         [Route("api/Hapi/Catalog")]

@@ -18,7 +18,7 @@ namespace WebApi_v1.DataProducts
         Exception Error { get; set; }
         List<int> ErrorCodes { get; set; }
 
-        void Assign(string[] formats, Dictionary<string, string> dict);
+        bool Assign(string[] formats, Dictionary<string, string> dict);
 
         string ToString();
     }

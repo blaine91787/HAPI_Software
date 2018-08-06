@@ -65,11 +65,10 @@ namespace WebApi_v1.DataProducts
 
             Properties = new HapiProperties();
 
-            Properties.Assign(Formats, QueryDict);
-
-            if (Properties != null)
-                return true; // TODO: Should I return booleans or throw errors?
+            if (Properties.Assign(Formats, QueryDict))
+                return true;
             else
+                CreateErrorResponse();
                 return false;
         }
 
@@ -81,16 +80,22 @@ namespace WebApi_v1.DataProducts
             return false;
         }
 
+        public void CreateErrorResponse()
+        {
+            IResponse resp;
+            resp = new ErrorResponse(this);
+            Response = Request.CreateResponse(HttpStatusCode.OK);
+            resp.SetStatusCode(Properties.ErrorCodes.First());
+            Response.Content = new StringContent(resp.GetResponse());
+        }
+
         public bool CreateResponse()
         {
             IResponse resp;
 
             if (RequestType.ToLower() == "data" && Properties.ErrorCodes.Count() > 0)
             {
-                resp = new ErrorResponse(this);
-                Response = Request.CreateResponse(HttpStatusCode.OK);
-                resp.SetStatusCode(Properties.ErrorCodes.First());
-                Response.Content = new StringContent(resp.GetResponse());
+                CreateErrorResponse();
                 return true;
             }
 
@@ -247,7 +252,7 @@ namespace WebApi_v1.DataProducts
                 ErrorCodes = new List<int>();
             }
 
-            public void Assign(string[] formats, Dictionary<string, string> dict)
+            public bool Assign(string[] formats, Dictionary<string, string> dict)
             {
                 Initialize();
                 string key = String.Empty;
@@ -277,12 +282,16 @@ namespace WebApi_v1.DataProducts
                             dt = cons.ConvertHapiYMDToDateTime(val);
                             if (dt != default(DateTime))
                                 TimeMin = dt.ToUniversalTime();
+                            else
+                                ErrorCodes.Add(1402);
                             break;
 
                         case ("time.max"):
                             dt = cons.ConvertHapiYMDToDateTime(val);
                             if (dt != default(DateTime))
                                 TimeMax = dt.ToUniversalTime();
+                            else
+                                ErrorCodes.Add(1403);
                             break;
 
                         case ("parameters"):
@@ -307,6 +316,10 @@ namespace WebApi_v1.DataProducts
                             throw new ArgumentOutOfRangeException(key, String.Format("The url parameter '{0}={1}' is not valid.", key, val));
                     }
                 }
+                if (ErrorCodes.Count() > 0)
+                    return false;
+                else
+                    return true;
             }
 
             public override string ToString()

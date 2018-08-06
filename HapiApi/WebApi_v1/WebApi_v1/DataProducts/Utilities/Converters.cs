@@ -61,39 +61,45 @@ namespace WebApi_v1.DataProducts.Utilities
                                     else if (parts.Length > 6)
                                     {
                                         Debug.WriteLine("Millisecond is invalid.");
-                                    };
+                                    }
                                 }
                                 else if (parts.Length > 5)
                                 {
                                     Debug.WriteLine("Second is invalid.");
-                                };
+                                }
                             }
                             else if (parts.Length > 4)
                             {
                                 Debug.WriteLine("Minute is invalid.");
-                            };
+                            }
                         }
                         else if (parts.Length > 3)
                         {
                             Debug.WriteLine("Hour is invalid.");
-                        };
+                        }
                     }
                     else if (parts.Length > 2)
                     {
                         Debug.WriteLine("Day is invalid.");
-                    };
+                    }
                 }
                 else if (parts.Length > 1)
                 {
                     Debug.WriteLine("Month is invalid.");
-                };
+                }
             }
             else if (parts.Length > 0)
             {
                 Debug.WriteLine("Year is invalid.");
-            };
-
-            return new DateTime(yr, month, day, hour, min, sec, milli, DateTimeKind.Utc);
+            }
+            try
+            {
+                return new DateTime(yr, month, day, hour, min, sec, milli, DateTimeKind.Utc);
+            }
+            catch
+            {
+                return default(DateTime);
+            }
         }
 
         public DateTime ConvertUTCtoDate(String utc)
