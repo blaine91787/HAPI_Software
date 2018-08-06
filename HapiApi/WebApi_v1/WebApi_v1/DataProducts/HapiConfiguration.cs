@@ -86,7 +86,7 @@ namespace WebApi_v1.DataProducts
         {
             IResponse resp;
             resp = new ErrorResponse(this);
-            Response = Request.CreateResponse(HttpStatusCode.OK);
+            Response = Request.CreateResponse(HttpStatusCode.BadRequest);
             resp.SetStatusCode(Properties.ErrorCodes.First());
             Response.Content = new StringContent(resp.GetResponse());
         }
@@ -298,10 +298,12 @@ namespace WebApi_v1.DataProducts
 
                         case ("time.max"):
                             dt = cons.ConvertHapiYMDToDateTime(val);
-                            if (dt != default(DateTime))
+                            if (dt != default(DateTime) && TimeMin < dt)
                                 TimeMax = dt.ToUniversalTime();
-                            else
+                            else if (dt == default(DateTime))
                                 ErrorCodes.Add(1403);
+                            else if (TimeMin >= dt)
+                                ErrorCodes.Add(1404);
                             break;
 
                         case ("parameters"):
