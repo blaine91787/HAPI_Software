@@ -271,13 +271,16 @@ namespace WebApi_v1.DataProducts
                     {
                         case ("id"):
                             Id = val;
-                            if (hapi.ValidIDs.Contains(Id) && val.Contains('_')) // ex: id=rbspicea_l0_aux
+                            if (hapi.ValidIDs.Intersect(Id.ToLower().Split('_')).Count() > 0) // ex: id=rbspicea_l0_aux
                             {
                                 // HACK: May fail given more spacecraft options.
                                 string[] valArr = val.Split('_');
-                                SC = valArr[(int)IndexOf.SC];
-                                Level = valArr[(int)IndexOf.Level];
-                                RecordType = valArr[(int)IndexOf.RecordType];
+                                if(valArr.Count() >= 0)
+                                    SC = valArr[(int)IndexOf.SC];
+                                    if(valArr.Count() >= 1)
+                                        Level = valArr[(int)IndexOf.Level];
+                                        if(valArr.Count() >= 2)
+                                            RecordType = valArr[(int)IndexOf.RecordType];
                             }
                             else
                             {
@@ -309,7 +312,7 @@ namespace WebApi_v1.DataProducts
                             if (val == "header")
                                 IncludeHeader = true;
                             else
-                                throw new ArgumentOutOfRangeException(key, "Include only has one possible value \"include=header\"");
+                                ErrorCodes.Add(1410); 
                             break;
 
                         case ("format"):
@@ -323,6 +326,7 @@ namespace WebApi_v1.DataProducts
                             throw new ArgumentOutOfRangeException(key, String.Format("The url parameter '{0}={1}' is not valid.", key, val));
                     }
                 }
+
                 if (ErrorCodes.Count() > 0)
                     return false;
                 else
