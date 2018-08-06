@@ -309,7 +309,7 @@ namespace WebApi_v1.DataProducts
                             if (formats.Contains(val))
                                 Format = val;
                             else
-                                throw new ArgumentOutOfRangeException(key, "Include only has one possible value \"include=header\"");
+                                ErrorCodes.Add(1409);
                             break;
 
                         default:
