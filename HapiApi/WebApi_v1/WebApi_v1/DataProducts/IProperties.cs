@@ -18,8 +18,7 @@ namespace WebApi_v1.DataProducts
         Exception Error { get; set; }
         List<int> ErrorCodes { get; set; }
 
-        bool Assign(string[] formats, Dictionary<string, string> dict);
-
+        bool Assign(HapiConfiguration hapi);
         string ToString();
     }
 }

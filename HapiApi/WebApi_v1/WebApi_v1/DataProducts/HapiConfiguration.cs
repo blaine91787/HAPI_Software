@@ -17,6 +17,7 @@ namespace WebApi_v1.DataProducts
         private readonly string[] _capabilities = { "csv", "json" };
         private readonly char[] _delimiters = new char[] { '?', '&', '=' };
         private readonly string[] _requesttypes = new string[] { "data", "info", "capabilities", "catalog" };
+        private readonly string[] _validIDs = new string[] { "rbspicea" };
 
         #endregion ReadOnly Properties
 
@@ -27,6 +28,7 @@ namespace WebApi_v1.DataProducts
         public string Query { get; set; }
         public string[] Capabilities { get { return _capabilities; } }
         public string[] Formats { get { return _capabilities; } }
+        public string[] ValidIDs { get { return _validIDs; } }
         public bool Initialized { get; private set; }
         public Dictionary<string, string> QueryDict { get; private set; }
         public HttpRequestMessage Request { get; set; }
@@ -65,7 +67,7 @@ namespace WebApi_v1.DataProducts
 
             Properties = new HapiProperties();
 
-            if (Properties.Assign(Formats, QueryDict))
+            if (Properties.Assign(this))
                 return true;
             else
                 CreateErrorResponse();
@@ -252,9 +254,10 @@ namespace WebApi_v1.DataProducts
                 ErrorCodes = new List<int>();
             }
 
-            public bool Assign(string[] formats, Dictionary<string, string> dict)
+            public bool Assign(HapiConfiguration hapi)
             {
                 Initialize();
+                Dictionary<string, string> dict = hapi.QueryDict;
                 string key = String.Empty;
                 string val = String.Empty;
                 DateTime dt = default(DateTime);
@@ -268,13 +271,17 @@ namespace WebApi_v1.DataProducts
                     {
                         case ("id"):
                             Id = val;
-                            if (val.Contains('_')) // ex: id=rbspicea_l0_aux
+                            if (hapi.ValidIDs.Contains(Id) && val.Contains('_')) // ex: id=rbspicea_l0_aux
                             {
                                 // HACK: May fail given more spacecraft options.
                                 string[] valArr = val.Split('_');
                                 SC = valArr[(int)IndexOf.SC];
                                 Level = valArr[(int)IndexOf.Level];
                                 RecordType = valArr[(int)IndexOf.RecordType];
+                            }
+                            else
+                            {
+                                ErrorCodes.Add(1406);
                             }
                             break;
 
@@ -306,7 +313,7 @@ namespace WebApi_v1.DataProducts
                             break;
 
                         case ("format"):
-                            if (formats.Contains(val))
+                            if (hapi.Formats.Contains(val))
                                 Format = val;
                             else
                                 ErrorCodes.Add(1409);
