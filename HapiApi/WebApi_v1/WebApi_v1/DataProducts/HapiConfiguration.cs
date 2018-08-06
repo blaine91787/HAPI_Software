@@ -258,6 +258,12 @@ namespace WebApi_v1.DataProducts
             {
                 Initialize();
                 Dictionary<string, string> dict = hapi.QueryDict;
+
+                if (!(RequestParametersValid(hapi.RequestType, dict)))
+                {
+                    ErrorCodes.Add(1401);
+                }
+
                 string key = String.Empty;
                 string val = String.Empty;
                 DateTime dt = default(DateTime);
@@ -334,6 +340,38 @@ namespace WebApi_v1.DataProducts
                     return false;
                 else
                     return true;
+            }
+
+            private bool RequestParametersValid(string requestType, Dictionary<string,string> dict)
+            {
+                List<string> dataParamsRequired = new List<string> { "id", "time.min", "time.max" };
+                List<string> dataParamsOptional = new List<string> { "parameters", "include", "format" };
+                List<string> requestParams = new List<string>();
+                List<int> errors = new List<int>();
+
+                IEnumerable<string> allParamsForRequest;
+                switch(requestType)
+                {
+                    case ("data"):
+                        allParamsForRequest = dataParamsRequired.Concat(dataParamsOptional);
+                        foreach (KeyValuePair<string,string> pair in dict)
+                        {
+                            if (!(allParamsForRequest.Contains(pair.Key)))
+                            {
+                                errors.Add(1401);
+                                return false;
+                            }
+                            requestParams.Add(pair.Key);
+                        }
+
+                        if (!(dataParamsRequired.Intersect(requestParams).Count() == dataParamsRequired.Count()))
+                            errors.Add(1401);
+                        break;
+                    default:
+                        ErrorCodes.Add(1400);
+                        return false;
+                }
+                return true;
             }
 
             public override string ToString()
