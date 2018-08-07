@@ -17,6 +17,7 @@ namespace WebApi_v1.DataProducts
         string Format { get; set; }
         Exception Error { get; set; }
         List<int> ErrorCodes { get; set; }
+        bool InTimeRange { get; set; }
 
         bool Assign(HapiConfiguration hapi);
         string ToString();

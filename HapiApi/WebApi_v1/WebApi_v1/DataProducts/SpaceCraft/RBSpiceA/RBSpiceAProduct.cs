@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using WebApi_v1.DataProducts.Utilities;
 using static WebApi_v1.DataProducts.Utilities.CSVHelperUtilities.Mappings;
 
@@ -45,8 +46,89 @@ namespace WebApi_v1.DataProducts.RBSpiceA
             else
                 throw new ArgumentNullException(nameof(HapiConfig));
 
+            HapiConfig.Properties.InTimeRange = VerifyTimeRange();
+
+            if (!HapiConfig.Properties.InTimeRange)
+            {
+                HapiConfig.Properties.InTimeRange = false; // outside time range
+                return;
+            }
+
             // HACK: Jerry may have a library for this.
             GetPaths();
+        }
+
+        // TODO: Pretty hacky it seems, but it may work.
+        private bool VerifyTimeRange()
+        {
+            TimeRange tr = new TimeRange
+            {
+                UserMin = HapiConfig.Properties.TimeMin,
+                UserMax = HapiConfig.Properties.TimeMax
+            };
+
+            string level = HapiConfig.Properties.Level.TrimStart('l');
+            string recType = "";
+            if (HapiConfig.Properties.RecordType != String.Empty)
+            {
+                switch (HapiConfig.Properties.RecordType)
+                {
+                    case ("aux"):
+                        recType += @"Auxil\";
+                        break;
+                    default:
+                        recType += HapiConfig.Properties.RecordType;
+                        break;
+                }
+            }
+            string path = String.Format(@"{0}Level_{1}\", _basepath, level, recType);
+            var recTypePath = Directory.EnumerateDirectories(path).First();
+
+            // We now have the path to the level and record type the user requested.
+
+            // Now get the minimum possible time possible.
+            var firstYearOfRecTypePath = Directory.EnumerateDirectories(recTypePath).First();
+            var firstRecFileOfRecTypePath = Directory.EnumerateFiles(firstYearOfRecTypePath).First();
+            path = firstRecFileOfRecTypePath;
+            DateTime min = default(DateTime);
+            if (File.Exists(path))
+            {
+                using (TextReader textReader = new StreamReader(File.OpenRead(path)))
+                {
+                    CsvReader csv = new CsvReader(textReader);
+                    csv.Read();
+                    csv.ReadHeader();
+                    Converters cons = new Converters();
+                    string[] headers = csv.Context.HeaderRecord;
+                    csv.Read();
+                    tr.Min = cons.ConvertUTCtoDate(csv[0]);
+                };
+            }
+
+            // Get maximum possible datetime.
+            var lastYearOfRecTypePath = Directory.EnumerateDirectories(recTypePath).Last();
+            var lastRecFileOfRecTypePath = Directory.EnumerateFiles(lastYearOfRecTypePath).Last();
+            path = lastRecFileOfRecTypePath;
+            DateTime max = default(DateTime);
+            if (File.Exists(path))
+            {
+                using (TextReader textReader = new StreamReader(File.OpenRead(path)))
+                {
+                    CsvReader csv = new CsvReader(textReader);
+                    csv.Read();
+                    csv.ReadHeader();
+                    Converters cons = new Converters();
+                    string utc = ""; 
+                    //TODO: Lazily get the last record.
+                    while(csv.Read())
+                    {
+                        utc = csv[0];
+                    }
+                    tr.Max = cons.ConvertUTCtoDate(utc);
+
+                };
+            }
+            return tr.IsValid();
         }
 
         private void GetPaths()

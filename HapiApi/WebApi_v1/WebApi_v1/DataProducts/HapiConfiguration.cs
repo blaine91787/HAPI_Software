@@ -19,6 +19,7 @@ namespace WebApi_v1.DataProducts
         private readonly string[] _requesttypes = new string[] { "data", "info", "capabilities", "catalog" };
         private readonly string[] _validIDs = new string[] { "rbspicea" };
 
+
         #endregion ReadOnly Properties
 
         #region Public Properties
@@ -147,6 +148,12 @@ namespace WebApi_v1.DataProducts
             {
                 case ("rbspicea"):
                     Product = new RBSpiceAProduct(this);
+                    if(!Properties.InTimeRange)
+                    {
+                        Properties.ErrorCodes.Add(1405);
+                        CreateErrorResponse();
+                        return false;
+                    }
                     Product.GetProduct();
                     return true;
 
@@ -233,6 +240,7 @@ namespace WebApi_v1.DataProducts
             public string Format { get; set; }
             public Exception Error { get; set; }
             public List<int> ErrorCodes { get; set; }
+            public bool InTimeRange { get; set; }
 
             #endregion Properties
 
@@ -252,6 +260,7 @@ namespace WebApi_v1.DataProducts
                 Format = "csv";
                 Error = null;
                 ErrorCodes = new List<int>();
+                InTimeRange = true;
             }
 
             public bool Assign(HapiConfiguration hapi)
@@ -367,6 +376,7 @@ namespace WebApi_v1.DataProducts
                         if (!(dataParamsRequired.Intersect(requestParams).Count() == dataParamsRequired.Count()))
                             errors.Add(1401);
                         break;
+
                     default:
                         ErrorCodes.Add(1400);
                         return false;
