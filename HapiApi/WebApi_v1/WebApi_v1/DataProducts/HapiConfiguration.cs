@@ -142,23 +142,26 @@ namespace WebApi_v1.DataProducts
             {
                 case ("rbspicea"):
                     Product = new RBSpiceAProduct(this);
-                    if (!Product.VerifyTimeRange())
-                    {
-                        Properties.ErrorCodes.Add(1405);
-                        return false;
-                    }
-                    else if(!Product.GetProduct())
-                    {
-                        Properties.ErrorCodes.Add(1201);
-                        return false;
-                    }
-
-                    return true;
-
+                    break;
+                  
                 default:
-                    return false;
+                    break;
             }
-            //Product = new RBSpiceAProduct();
+
+            if (!Product.VerifyTimeRange())
+            {
+                // Outside of SC data timerange
+                Properties.ErrorCodes.Add(1405);
+                return false;
+            }
+            else if(!Product.GetProduct())
+            {
+                // Data doesn't exist
+                Properties.ErrorCodes.Add(1201);
+                return false;
+            }
+            
+            return true;
         }
 
         private bool RequestTypeValid()
