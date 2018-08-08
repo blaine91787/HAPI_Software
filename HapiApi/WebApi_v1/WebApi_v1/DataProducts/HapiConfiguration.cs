@@ -63,10 +63,10 @@ namespace WebApi_v1.DataProducts
             if (!RequestTypeValid())
                 return false;
 
+            Properties = new HapiProperties();
+
             if (!TryToCreateQueryDict())
                 return false;
-
-            Properties = new HapiProperties();
 
             if (Properties.Assign(this))
                 return true;
@@ -76,63 +76,49 @@ namespace WebApi_v1.DataProducts
 
         public void GetErrorResponse()
         {
-            IResponse resp;
-            resp = new ErrorResponse(this);
+            ResponseContent content;
+            content = new ErrorResponse(this);
             Response = Request.CreateResponse(HttpStatusCode.BadRequest);
-            resp.SetStatusCode(Properties.ErrorCodes.First());
-            Response.Content = new StringContent(resp.GetResponse());
+            content.SetStatusCode(Properties.ErrorCodes.First());
+            Response.Content = new StringContent(content.GetResponse());
         }
 
         public HttpResponseMessage GetResponse()
         {
-            IResponse resp;
+            ResponseContent content = null;
             switch (RequestType.ToLower())
             {
                 case ("data"):
-                    if (Properties.ErrorCodes.Count() > 0)
-                    {
-                        GetErrorResponse();
-                    }
-                    else if(GetDataProduct())
-                    {
-                        resp = new DataResponse(this);
-                        Response = Request.CreateResponse(HttpStatusCode.OK);
-                        string format = Properties.Format ?? "csv";
-                        resp.SetStatusCode(1200);
-                        string strcontent = resp.GetResponse();
-                        Response.Content = new StringContent(strcontent);
-                    }
-                    else
-                    {
-                        GetErrorResponse();
-                    }
+                    if (Properties.ErrorCodes.Count() == 0 && GetDataProduct())
+                        content = ResponseContent.Create(this, "data");
                     break;
 
-                case ("catalog"):
-                    resp = new CatalogResponse(this);
-                    Response = Request.CreateResponse(HttpStatusCode.OK);
-                    resp.SetStatusCode(1200);
-                    Response.Content = new StringContent(resp.GetResponse());
+                case ("catalog"):;
+                    content = ResponseContent.Create(this, "catalog");
                     break;
 
                 case ("info"):
-                    resp = new InfoResponse(this);
-                    Response = Request.CreateResponse(HttpStatusCode.OK);
-                    resp.SetStatusCode(1200);
-                    Response.Content = new StringContent(resp.GetResponse());
+                    content = ResponseContent.Create(this, "info");
                     break;
 
                 case ("capabilities"):
-                    resp = new CapabilitiesResponse(this);
-                    Response = Request.CreateResponse(HttpStatusCode.OK);
-                    resp.SetStatusCode(1200);
-                    Response.Content = new StringContent(resp.GetResponse());
+                    content = ResponseContent.Create(this, "capabilities");
                     break;
 
                 default:
-                    Response = Request.CreateResponse(HttpStatusCode.InternalServerError, "Unable to create " + RequestType.ToLower() + " product due to internal error.");
                     throw new ArgumentOutOfRangeException(RequestType, "Not a valid request type.");
             };
+
+            if (Properties.ErrorCodes.Count() == 0 && content != null)
+            {
+                Response = Request.CreateResponse(HttpStatusCode.OK);
+                content.SetStatusCode(1200);
+                Response.Content = new StringContent(content.GetResponse());
+            }
+            else
+            {
+                GetErrorResponse();
+            }
             return Response;
         }
 
@@ -247,6 +233,11 @@ namespace WebApi_v1.DataProducts
 
             #region Methods
 
+            public HapiProperties()
+            {
+                Initialize();
+            }
+
             public void Initialize()
             {
                 RequestType = String.Empty;
@@ -291,12 +282,12 @@ namespace WebApi_v1.DataProducts
                             {
                                 // HACK: May fail given more spacecraft options.
                                 string[] valArr = val.Split('_');
-                                if(valArr.Count() >= 0)
+                                if (valArr.Count() >= 0)
                                     SC = valArr[(int)IndexOf.SC];
-                                    if(valArr.Count() >= 1)
-                                        Level = valArr[(int)IndexOf.Level];
-                                        if(valArr.Count() >= 2)
-                                            RecordType = valArr[(int)IndexOf.RecordType];
+                                if (valArr.Count() >= 1)
+                                    Level = valArr[(int)IndexOf.Level];
+                                if (valArr.Count() >= 2)
+                                    RecordType = valArr[(int)IndexOf.RecordType];
                             }
                             else
                             {
@@ -330,7 +321,7 @@ namespace WebApi_v1.DataProducts
                             if (val == "header")
                                 IncludeHeader = true;
                             else
-                                ErrorCodes.Add(1410); 
+                                ErrorCodes.Add(1410);
                             break;
 
                         case ("format"):
@@ -352,36 +343,46 @@ namespace WebApi_v1.DataProducts
                     return true;
             }
 
-            private bool RequestParametersValid(string requestType, Dictionary<string,string> dict)
+            private bool RequestParametersValid(string requestType, Dictionary<string, string> dict)
             {
-                List<string> dataParamsRequired = new List<string> { "id", "time.min", "time.max" };
-                List<string> dataParamsOptional = new List<string> { "parameters", "include", "format" };
-                List<string> requestParams = new List<string>();
-                List<int> errors = new List<int>();
+                List<string> paramsRequired;
+                List<string> paramsOptional;
 
-                IEnumerable<string> allParamsForRequest;
-                switch(requestType)
+                switch (requestType)
                 {
                     case ("data"):
-                        allParamsForRequest = dataParamsRequired.Concat(dataParamsOptional);
-                        foreach (KeyValuePair<string,string> pair in dict)
-                        {
-                            if (!(allParamsForRequest.Contains(pair.Key)))
-                            {
-                                errors.Add(1401);
-                                return false;
-                            }
-                            requestParams.Add(pair.Key);
-                        }
-
-                        if (!(dataParamsRequired.Intersect(requestParams).Count() == dataParamsRequired.Count()))
-                            errors.Add(1401);
+                        paramsRequired = new List<string> { "id", "time.min", "time.max" };
+                        paramsOptional = new List<string> { "parameters", "include", "format" };
                         break;
 
+                    case ("info"):
+                        paramsRequired = new List<string> { "id" };
+                        paramsOptional = new List<string> { "parameters" };
+                        break;
                     default:
                         ErrorCodes.Add(1400);
                         return false;
                 }
+
+                List<string> requestParams = new List<string>();
+                List<int> errors = new List<int>();
+
+                IEnumerable<string> allParamsForRequest;
+
+                allParamsForRequest = paramsRequired.Concat(paramsOptional);
+                foreach (KeyValuePair<string, string> pair in dict)
+                {
+                    if (!(allParamsForRequest.Contains(pair.Key)))
+                    {
+                        errors.Add(1401);
+                        return false;
+                    }
+                    requestParams.Add(pair.Key);
+                }
+
+                if (!(paramsRequired.Intersect(requestParams).Count() == paramsRequired.Count()))
+                    errors.Add(1401);
+
                 return true;
             }
 
@@ -415,10 +416,8 @@ namespace WebApi_v1.DataProducts
             #endregion Methods
         }
 
-        private class ErrorResponse : IResponse
+        internal class ErrorResponse : ResponseContent
         {
-            public string HapiVersion { get; private set; }
-            public Status Status { get; }
             public string[] OutputFormats { get; }
 
             public ErrorResponse(HapiConfiguration hapi)
@@ -428,12 +427,7 @@ namespace WebApi_v1.DataProducts
                 OutputFormats = hapi.Capabilities;
             }
 
-            public string GetResponse(string format)
-            {
-                return String.Empty;
-            }
-
-            public string GetResponse()
+            public override string GetResponse()
             {
                 StringBuilder sb = new StringBuilder();
                 return sb.Append(String.Format(
@@ -448,17 +442,10 @@ namespace WebApi_v1.DataProducts
                     Status.Message
                 )).ToString();
             }
-
-            public void SetStatusCode(int statusCode)
-            {
-                Status.Code = statusCode;
-            }
         }
 
-        private class CapabilitiesResponse : IResponse
+        internal class CapabilitiesResponse : ResponseContent
         {
-            public string HapiVersion { get; private set; }
-            public Status Status { get; }
             public string[] OutputFormats { get; }
 
             public CapabilitiesResponse(HapiConfiguration hapi)
@@ -468,12 +455,7 @@ namespace WebApi_v1.DataProducts
                 OutputFormats = hapi.Capabilities;
             }
 
-            public string GetResponse(string format)
-            {
-                return String.Empty;
-            }
-
-            public string GetResponse()
+            public override string GetResponse()
             {
                 StringBuilder sb = new StringBuilder();
                 return sb.Append(String.Format(
@@ -492,60 +474,43 @@ namespace WebApi_v1.DataProducts
                     OutputFormats[1]
                 )).ToString();
             }
-
-            public void SetStatusCode(int statusCode)
-            {
-                Status.Code = statusCode;
-            }
         }
 
-        private class DataResponse : IResponse
+        internal class DataResponse : ResponseContent
         {
-            private HapiConfiguration HapiConfig;
-            public string HapiVersion;
             public string StartDate = String.Empty;
             public string StopDate = String.Empty;
-            public string Format = null;
-            public Status Status = null;
+            public string Format = String.Empty;
             public List<string> Parameters = null;
             public IEnumerable<Dictionary<string, string>> Data = null;
 
             public DataResponse(HapiConfiguration hapi)
             {
-                HapiConfig = hapi;
-                if (HapiConfig.Properties == null)
-                    throw new MissingFieldException(nameof(HapiConfig.Properties));
+                Hapi = hapi;
+                if (Hapi.Properties == null)
+                    throw new MissingFieldException(nameof(Hapi.Properties));
 
-                if (HapiConfig.Properties.TimeMin == null)
-                    throw new MissingFieldException(nameof(HapiConfig.Properties.TimeMin));
+                if (Hapi.Properties.TimeMin == null)
+                    throw new MissingFieldException(nameof(Hapi.Properties.TimeMin));
 
-                if (HapiConfig.Properties.TimeMax == null)
-                    throw new MissingFieldException(nameof(HapiConfig.Properties.TimeMax));
+                if (Hapi.Properties.TimeMax == null)
+                    throw new MissingFieldException(nameof(Hapi.Properties.TimeMax));
 
-                if (HapiConfig.Product == null)
-                    throw new MissingFieldException(nameof(HapiConfig.Product));
+                if (Hapi.Product == null)
+                    throw new MissingFieldException(nameof(Hapi.Product));
 
-                HapiVersion = HapiConfig.Version;
-                StartDate = HapiConfig.Properties.TimeMin.ToString();
-                StopDate = HapiConfig.Properties.TimeMax.ToString();
-                Parameters = HapiConfig.Properties.Parameters;
-                Format = HapiConfig.Properties.Format;
+                HapiVersion = Hapi.Version;
+                StartDate = Hapi.Properties.TimeMin.ToString();
+                StopDate = Hapi.Properties.TimeMax.ToString();
+                Parameters = Hapi.Properties.Parameters;
+                Format = Hapi.Properties.Format;
                 Status = new Status();
-                Data = HapiConfig.Product.Records;
+                Data = Hapi.Product.Records;
             }
 
-            public string GetResponse()
+            public override string GetResponse()
             {
                 string resp = String.Empty;
-                //if (HapiConfig.Product.Records.Count() == 0)
-                //{
-                //    StringBuilder sb = new StringBuilder();
-                //    foreach (int err in HapiConfig.Properties.ErrorCodes)
-                //    {
-                //        sb.Append()
-                //    }
-
-                //}
 
                 switch (Format.ToLower())
                 {
@@ -579,13 +544,13 @@ namespace WebApi_v1.DataProducts
                     HapiVersion,
                     Status.Code,
                     Status.Message,
-                    HapiConfig.Properties.TimeMin,
-                    HapiConfig.Properties.TimeMax
+                    Hapi.Properties.TimeMin,
+                    Hapi.Properties.TimeMax
                 );
 
-                if (HapiConfig.Properties.Parameters != null)
+                if (Hapi.Properties.Parameters != null)
                 {
-                    foreach (string param in HapiConfig.Properties.Parameters)
+                    foreach (string param in Hapi.Properties.Parameters)
                     {
                         if (multiLineParameters)
                         {
@@ -628,7 +593,7 @@ namespace WebApi_v1.DataProducts
 
             public string ToCSV()
             {
-                bool header = HapiConfig.Properties.IncludeHeader;
+                bool header = Hapi.Properties.IncludeHeader;
                 StringBuilder sb = new StringBuilder();
 
                 if (header)
@@ -637,16 +602,16 @@ namespace WebApi_v1.DataProducts
                 }
 
                 string last;
-                if (HapiConfig.Product.Records.Count() > 0)
+                if (Hapi.Product.Records.Count() > 0)
                 {
-                    last = HapiConfig.Product.Records.ToList().First().ToList().Last().Key;
+                    last = Hapi.Product.Records.ToList().First().ToList().Last().Key;
                 }
                 else
                 {
                     return ("No records were found. If this is an error, make sure query is valid.");
                 }
 
-                foreach (Dictionary<string, string> rec in HapiConfig.Product.Records)
+                foreach (Dictionary<string, string> rec in Hapi.Product.Records)
                 {
                     foreach (KeyValuePair<string, string> pair in rec)
                     {
@@ -678,13 +643,13 @@ namespace WebApi_v1.DataProducts
                         HapiVersion,
                         Status.Code,
                         Status.Message,
-                        HapiConfig.Properties.TimeMin,
-                        HapiConfig.Properties.TimeMax
+                        Hapi.Properties.TimeMin,
+                        Hapi.Properties.TimeMax
                     );
 
-                    if (HapiConfig.Properties.Parameters != null)
+                    if (Hapi.Properties.Parameters != null)
                     {
-                        foreach (string param in HapiConfig.Properties.Parameters)
+                        foreach (string param in Hapi.Properties.Parameters)
                         {
                             if (multiLineParameters)
                             {
@@ -730,14 +695,14 @@ namespace WebApi_v1.DataProducts
                 string last;
                 try
                 {
-                    last = HapiConfig.Product.Records.ToList().First().ToList().Last().Key;
+                    last = Hapi.Product.Records.ToList().First().ToList().Last().Key;
                 }
                 catch
                 {
                     throw new InvalidOperationException("\"HapiResponse.ToJson()>string last\" is empty. Possibly missing time.min or time.max or invalid request.");
                 }
 
-                foreach (Dictionary<string, string> rec in HapiConfig.Product.Records)
+                foreach (Dictionary<string, string> rec in Hapi.Product.Records)
                 {
                     if (header)
                         sb.Append("\t\t[");
@@ -761,18 +726,10 @@ namespace WebApi_v1.DataProducts
 
                 return sb.ToString();
             }
-
-            public void SetStatusCode(int statusCode)
-            {
-                Status.Code = statusCode;
-            }
         }
 
-        public class InfoResponse : IResponse
+        internal class InfoResponse : ResponseContent
         {
-            private HapiConfiguration Hapi;
-            private string HapiVersion { get; set; }
-            private Status Status { get; set; }
             private string Format { get; set; }
             private DateTime StartDate { get; set; }
             private DateTime StopDate { get; set; }
@@ -789,7 +746,7 @@ namespace WebApi_v1.DataProducts
                 Parameters = Hapi.Properties.Parameters;
             }
 
-            public string GetResponse()
+            public override string GetResponse()
             {
                 return GetInfoHeader();
             }
@@ -851,28 +808,20 @@ namespace WebApi_v1.DataProducts
 
                 return sb.ToString();
             }
-
-            public void SetStatusCode(int statusCode)
-            {
-                Status.Code = statusCode;
-            }
         }
 
-        public class CatalogResponse : IResponse
+        internal class CatalogResponse : ResponseContent
         {
-            private HapiConfiguration Hapi;
-            private string HapiVersion { get; set; }
-            private Status Status { get; set; }
-            private List<KeyValuePair<string, string>> Catalog { get; set; }
+            private List<Tuple<string, string>> Catalog { get; set; }
 
             public CatalogResponse(HapiConfiguration hapi)
             {
                 Hapi = hapi;
                 HapiVersion = Hapi.Version;
                 Status = new Status();
-                Catalog = new List<KeyValuePair<string, string>>()
+                Catalog = new List<Tuple<string, string>>()
                 {
-                    GetKeyValPair("RBSPICEA_L0_AUX", "RBSPA Level 0 Auxiliary Data"),
+                    Tuple.Create("RBSPICEA_L0_AUX", "RBSPA Level 0 Auxiliary Data"),
                 };
             }
 
@@ -881,7 +830,7 @@ namespace WebApi_v1.DataProducts
                 return new KeyValuePair<string, string>(id, title);
             }
 
-            public string GetResponse()
+            public override string GetResponse()
             {
                 StringBuilder sb = new StringBuilder();
 
@@ -898,13 +847,13 @@ namespace WebApi_v1.DataProducts
                     )
                 );
 
-                foreach (var dict in Catalog)
+                foreach (var tuple in Catalog)
                 {
                     sb.Append(
                         String.Format(
                             "\t\t{{ \"id\" : \"{0}\", \"title\" : \"{1}\" }},\n",
-                            dict.Key,
-                            dict.Value
+                            tuple.Item1,
+                            tuple.Item2
                         )
                     );
                 }
@@ -913,21 +862,44 @@ namespace WebApi_v1.DataProducts
 
                 return sb.ToString();
             }
-
-            public void SetStatusCode(int statusCode)
-            {
-                Status.Code = statusCode;
-            }
         }
 
         #endregion Helper Classes
 
         #region Internal Classes
 
-        internal interface IResponse
+        internal abstract class ResponseContent
         {
-            string GetResponse();
-            void SetStatusCode(int statusCode);
+            public HapiConfiguration Hapi;
+            public string HapiVersion { get; set; }
+            public Status Status { get; set; }
+
+            public static ResponseContent Create(HapiConfiguration hapi, string type)
+            {
+                if (type == "data")
+                    return new DataResponse(hapi);
+
+                if (type == "info")
+                    return new InfoResponse(hapi);
+
+                if (type == "catalog")
+                    return new CatalogResponse(hapi);
+
+                if (type == "capabilities")
+                    return new CapabilitiesResponse(hapi);
+
+                return null;
+            }
+
+            public abstract string GetResponse();
+
+            public void SetStatusCode(int statusCode)
+            {
+                if (Status == null)
+                    Status = new Status();
+
+                Status.Code = statusCode;
+            }
         }
 
         internal class Status
