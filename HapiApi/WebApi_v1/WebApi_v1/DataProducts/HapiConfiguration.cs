@@ -71,19 +71,10 @@ namespace WebApi_v1.DataProducts
             if (Properties.Assign(this))
                 return true;
             else
-                CreateErrorResponse();
                 return false;
         }
 
-        public bool GetProduct()
-        {
-            if (GetDataProduct())
-                return true;
-
-            return false;
-        }
-
-        public void CreateErrorResponse()
+        public void GetErrorResponse()
         {
             IResponse resp;
             resp = new ErrorResponse(this);
@@ -92,26 +83,25 @@ namespace WebApi_v1.DataProducts
             Response.Content = new StringContent(resp.GetResponse());
         }
 
-        public bool CreateResponse()
+        public HttpResponseMessage GetResponse()
         {
             IResponse resp;
-
-            if (RequestType.ToLower() == "data" && Properties.ErrorCodes.Count() > 0)
-            {
-                CreateErrorResponse();
-                return true;
-            }
-
             switch (RequestType.ToLower())
             {
                 case ("data"):
-                    try { resp = new DataResponse(this); }
-                    catch (Exception e) { Errors.Add(e); return false; }
-                    Response = Request.CreateResponse(HttpStatusCode.OK);
-                    string format = Properties.Format != null ? Properties.Format : "csv";
-                    resp.SetStatusCode(1200);
-                    string strcontent = resp.GetResponse();
-                    Response.Content = new StringContent(strcontent);
+                    if (Properties.ErrorCodes.Count() > 0)
+                    {
+                        GetErrorResponse();
+                    }
+                    else if(GetDataProduct())
+                    {
+                        resp = new DataResponse(this);
+                        Response = Request.CreateResponse(HttpStatusCode.OK);
+                        string format = Properties.Format ?? "csv";
+                        resp.SetStatusCode(1200);
+                        string strcontent = resp.GetResponse();
+                        Response.Content = new StringContent(strcontent);
+                    }
                     break;
 
                 case ("catalog"):
@@ -139,7 +129,7 @@ namespace WebApi_v1.DataProducts
                     Response = Request.CreateResponse(HttpStatusCode.InternalServerError, "Unable to create " + RequestType.ToLower() + " product due to internal error.");
                     throw new ArgumentOutOfRangeException(RequestType, "Not a valid request type.");
             };
-            return true;
+            return Response;
         }
 
         private bool GetDataProduct()
@@ -151,7 +141,6 @@ namespace WebApi_v1.DataProducts
                     if(!Properties.InTimeRange)
                     {
                         Properties.ErrorCodes.Add(1405);
-                        CreateErrorResponse();
                         return false;
                     }
                     Product.GetProduct();

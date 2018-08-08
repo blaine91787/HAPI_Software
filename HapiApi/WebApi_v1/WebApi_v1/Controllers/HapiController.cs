@@ -15,7 +15,7 @@ namespace WebApi_v1.Controllers
         {
             HapiConfiguration hapi = new HapiConfiguration();
             hapi.Configure(Request);
-            hapi.CreateResponse();
+            hapi.GetResponse();
 
             return hapi.Response;
         }
@@ -26,12 +26,9 @@ namespace WebApi_v1.Controllers
         {
             HapiConfiguration hapi = new HapiConfiguration();
 
-            if (hapi.Configure(Request))
-                if (hapi.GetProduct())
-                    if (hapi.CreateResponse())
-                        return hapi.Response;
+            hapi.Configure(Request);
 
-            return hapi.Response; 
+            return hapi.GetResponse(); 
         }
 
         [Route("api/Hapi/Catalog")]
@@ -41,7 +38,7 @@ namespace WebApi_v1.Controllers
             HapiConfiguration hapi = new HapiConfiguration();
             hapi.Configure(Request);
 
-            hapi.CreateResponse();
+            hapi.GetResponse();
 
             return hapi.Response;
         }
@@ -52,7 +49,7 @@ namespace WebApi_v1.Controllers
         {
             HapiConfiguration hapi = new HapiConfiguration();
             hapi.Configure(Request);
-            hapi.CreateResponse();
+            hapi.GetResponse();
             return hapi.Response;
         }
     }
