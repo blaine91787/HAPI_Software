@@ -9,6 +9,7 @@ namespace WebApi_v1.DataProducts
         public List<Dictionary<string, string>> ParameterSpecificRecords { get; set; }
         public string[] Header { get; set; }
 
-        public abstract void GetProduct();
+        public abstract bool GetProduct();
+        public abstract bool VerifyTimeRange();
     }
 }

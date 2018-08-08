@@ -46,20 +46,20 @@ namespace WebApi_v1.DataProducts.RBSpiceA
             else
                 throw new ArgumentNullException(nameof(HapiConfig));
 
-            HapiConfig.Properties.InTimeRange = VerifyTimeRange();
+            //HapiConfig.Properties.InTimeRange = VerifyTimeRange();
 
-            if (!HapiConfig.Properties.InTimeRange)
-            {
-                HapiConfig.Properties.InTimeRange = false; // outside time range
-                return;
-            }
+            //if (!HapiConfig.Properties.InTimeRange)
+            //{
+            //    HapiConfig.Properties.InTimeRange = false; // outside time range
+            //    return;
+            //}
 
             // HACK: Jerry may have a library for this.
             GetPaths();
         }
 
         // TODO: Pretty hacky it seems, but it may work.
-        private bool VerifyTimeRange()
+        public bool VerifyTimeRange()
         {
             TimeRange tr = new TimeRange
             {
@@ -182,10 +182,11 @@ namespace WebApi_v1.DataProducts.RBSpiceA
             return true;
         }
 
-        public void GetProduct() // TODO: change name to getRecords? Might be confusing with csvhelper though.
+        public bool GetProduct() // TODO: change name to getRecords? Might be confusing with csvhelper though.
         {
             Auxiliary aux = new Auxiliary(HapiConfig);
             Records = aux.GetRecords(Paths);
+            return Records.Count() != 0 ? true : false;
         }
     }
 }

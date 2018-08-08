@@ -180,9 +180,6 @@ namespace WebApi_v1.DataProducts
                 }
             }
 
-            if (Data.Count == 0)
-                HapiConfig.Properties.ErrorCodes.Add(1201);
-
             return Data;
         }
 

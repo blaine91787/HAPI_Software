@@ -102,6 +102,10 @@ namespace WebApi_v1.DataProducts
                         string strcontent = resp.GetResponse();
                         Response.Content = new StringContent(strcontent);
                     }
+                    else
+                    {
+                        GetErrorResponse();
+                    }
                     break;
 
                 case ("catalog"):
@@ -138,12 +142,17 @@ namespace WebApi_v1.DataProducts
             {
                 case ("rbspicea"):
                     Product = new RBSpiceAProduct(this);
-                    if(!Properties.InTimeRange)
+                    if (!Product.VerifyTimeRange())
                     {
                         Properties.ErrorCodes.Add(1405);
                         return false;
                     }
-                    Product.GetProduct();
+                    else if(!Product.GetProduct())
+                    {
+                        Properties.ErrorCodes.Add(1201);
+                        return false;
+                    }
+
                     return true;
 
                 default:

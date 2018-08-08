@@ -8,6 +8,7 @@ namespace WebApi_v1.DataProducts
         IEnumerable<Dictionary<string, string>> Records { get; set; }
         List<Dictionary<string, string>> ParameterSpecificRecords { get; set; }
 
-        void GetProduct();
+        bool GetProduct();
+        bool VerifyTimeRange();
     }
 }
