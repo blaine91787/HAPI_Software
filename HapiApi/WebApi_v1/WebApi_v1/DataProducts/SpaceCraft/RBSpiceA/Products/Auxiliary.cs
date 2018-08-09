@@ -62,15 +62,6 @@ namespace WebApi_v1.DataProducts
 
         public Auxiliary(HapiConfiguration hapi)
         {
-            // HACK: Using defaults to determine which properties are set may be bad practice???
-            Converters cons = new Converters();
-
-            foreach (System.Reflection.PropertyInfo prop in this.GetType().GetProperties())
-            {
-                Type type = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
-                cons.ConvertPropertyToDefault(prop, this);
-            }
-
             if (hapi != null)
                 HapiConfig = hapi;
         }
@@ -244,6 +235,7 @@ namespace WebApi_v1.DataProducts
                 return sb.ToString();
             }
         }
+
         #endregion AuxRecord/IRecord
     }
 }

@@ -34,9 +34,9 @@ namespace WebApi_v1.DataProducts
         public Dictionary<string, string> QueryDict { get; private set; }
         public HttpRequestMessage Request { get; set; }
         public HttpResponseMessage Response { get; private set; }
-        public IProperties Properties { get; set; }
+        public HapiProperties Properties { get; set; }
         public List<Exception> Errors { get; private set; }
-        public IProduct Product { get; private set; }
+        public Product Product { get; private set; }
 
         #endregion Public Properties
 
@@ -125,7 +125,8 @@ namespace WebApi_v1.DataProducts
             switch (Properties.SC)
             {
                 case ("rbspicea"):
-                    Product = new RBSpiceAProduct(this);
+                    Product = new RBSpiceAProduct();
+                    Product.Configure(this);
                     break;
                   
                 default:
@@ -194,7 +195,7 @@ namespace WebApi_v1.DataProducts
 
         #region Helper Classes
 
-        public class HapiProperties : IProperties
+        public class HapiProperties
         {
             #region Properties
 

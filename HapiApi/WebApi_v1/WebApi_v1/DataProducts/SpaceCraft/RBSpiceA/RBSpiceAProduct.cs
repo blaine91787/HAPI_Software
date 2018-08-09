@@ -9,20 +9,29 @@ using static WebApi_v1.DataProducts.Utilities.CSVHelperUtilities.Mappings;
 
 namespace WebApi_v1.DataProducts.RBSpiceA
 {
-    public class RBSpiceAProduct : IProduct
+    public class RBSpiceAProduct : Product
     {
         private string _basepath;
 
-        public string[] Header { get; set; }
-
-        public IEnumerable<Dictionary<string, string>> Records { get; set; }
-        public List<Dictionary<string, string>> ParameterSpecificRecords { get; set; }
-        public List<FileInfo> Files { get; set; }
-        public HapiConfiguration HapiConfig { get; set; }
-        public List<string> Paths { get; set; }
-
-        public void Initialize()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="hapi"></param>
+        public RBSpiceAProduct()
         {
+
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public override void Configure(HapiConfiguration hapi)
+        {
+            if (hapi != null)
+                HapiConfig = hapi;
+            else
+                throw new ArgumentNullException(nameof(hapi));
+
+
             string unicornpukepath = @"C:\Users\unicornpuke\\Documents\GitHub\FTECS\HapiApi\WebApi_v1\WebApi_v1\SCRecords\RBSPA\";
             string thinkpadpath = @"C:\Users\FTECS Account\\Documents\GitHub\FTECS\HapiApi\WebApi_v1\WebApi_v1\SCRecords\RBSPA\";
             string gazellepath = @"C:\Users\blaine.harris\Documents\Github\FTECS\HapiApi\WebApi_v1\WebApi_v1\SCRecords\RBSPA\";
@@ -35,103 +44,13 @@ namespace WebApi_v1.DataProducts.RBSpiceA
                 _basepath = unicornpukepath;
             else
                 throw new DirectoryNotFoundException("RBSPiceAProduct._basepath could not resolve to a valid path.");
-        }
 
-        public RBSpiceAProduct(HapiConfiguration hapi)
-        {
-            Initialize();
-
-            if (hapi != null)
-                HapiConfig = hapi;
-            else
-                throw new ArgumentNullException(nameof(HapiConfig));
-
-            //HapiConfig.Properties.InTimeRange = VerifyTimeRange();
-
-            //if (!HapiConfig.Properties.InTimeRange)
-            //{
-            //    HapiConfig.Properties.InTimeRange = false; // outside time range
-            //    return;
-            //}
-
-            // HACK: Jerry may have a library for this.
             GetPaths();
         }
-
-        // TODO: Pretty hacky it seems, but it may work.
-        public bool VerifyTimeRange()
-        {
-            TimeRange tr = new TimeRange
-            {
-                UserMin = HapiConfig.Properties.TimeMin,
-                UserMax = HapiConfig.Properties.TimeMax
-            };
-
-            string level = HapiConfig.Properties.Level.TrimStart('l');
-            string recType = "";
-            if (HapiConfig.Properties.RecordType != String.Empty)
-            {
-                switch (HapiConfig.Properties.RecordType)
-                {
-                    case ("aux"):
-                        recType += @"Auxil\";
-                        break;
-                    default:
-                        recType += HapiConfig.Properties.RecordType;
-                        break;
-                }
-            }
-            string path = String.Format(@"{0}Level_{1}\", _basepath, level, recType);
-            var recTypePath = Directory.EnumerateDirectories(path).First();
-
-            // We now have the path to the level and record type the user requested.
-
-            // Now get the minimum possible time possible.
-            var firstYearOfRecTypePath = Directory.EnumerateDirectories(recTypePath).First();
-            var firstRecFileOfRecTypePath = Directory.EnumerateFiles(firstYearOfRecTypePath).First();
-            path = firstRecFileOfRecTypePath;
-            DateTime min = default(DateTime);
-            if (File.Exists(path))
-            {
-                using (TextReader textReader = new StreamReader(File.OpenRead(path)))
-                {
-                    CsvReader csv = new CsvReader(textReader);
-                    csv.Read();
-                    csv.ReadHeader();
-                    Converters cons = new Converters();
-                    string[] headers = csv.Context.HeaderRecord;
-                    csv.Read();
-                    tr.Min = cons.ConvertUTCtoDate(csv[0]);
-                };
-            }
-
-            // Get maximum possible datetime.
-            var lastYearOfRecTypePath = Directory.EnumerateDirectories(recTypePath).Last();
-            var lastRecFileOfRecTypePath = Directory.EnumerateFiles(lastYearOfRecTypePath).Last();
-            path = lastRecFileOfRecTypePath;
-            DateTime max = default(DateTime);
-            if (File.Exists(path))
-            {
-                using (TextReader textReader = new StreamReader(File.OpenRead(path)))
-                {
-                    CsvReader csv = new CsvReader(textReader);
-                    csv.Read();
-                    csv.ReadHeader();
-                    Converters cons = new Converters();
-                    string utc = ""; 
-                    //TODO: Lazily get the last record.
-                    while(csv.Read())
-                    {
-                        utc = csv[0];
-                    }
-                    tr.Max = cons.ConvertUTCtoDate(utc);
-
-                };
-            }
-            return tr.IsValid();
-        }
-
-        private void GetPaths()
+        /// <summary>
+        /// 
+        /// </summary>
+        public override void GetPaths()
         {
             Paths = new List<string>();
             DateTime mintime = HapiConfig.Properties.TimeMin;
@@ -176,17 +95,99 @@ namespace WebApi_v1.DataProducts.RBSpiceA
                 mindate = mintime.Date;
             }
         }
-
-        public bool Configure()
-        {
-            return true;
-        }
-
-        public bool GetProduct() // TODO: change name to getRecords? Might be confusing with csvhelper though.
+        /// <summary>
+        /// 
+        /// TODO: change name to getRecords? Might be confusing with csvhelper though.
+        /// </summary>
+        /// <returns></returns>
+        public override bool GetProduct()
         {
             Auxiliary aux = new Auxiliary(HapiConfig);
             Records = aux.GetRecords(Paths);
             return Records.Count() != 0 ? true : false;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public bool VerifyParameters()
+        {
+
+            return true;
+        }
+        /// <summary>
+        /// 
+        /// TODO: change name to getRecords? Might be confusing with csvhelper though.
+        /// </summary>
+        /// <returns></returns>
+        public override bool VerifyTimeRange()
+        {
+            TimeRange tr = new TimeRange
+            {
+                UserMin = HapiConfig.Properties.TimeMin,
+                UserMax = HapiConfig.Properties.TimeMax
+            };
+
+            string level = HapiConfig.Properties.Level.TrimStart('l');
+            string recType = "";
+            if (HapiConfig.Properties.RecordType != String.Empty)
+            {
+                switch (HapiConfig.Properties.RecordType)
+                {
+                    case ("aux"):
+                        recType += @"Auxil\";
+                        break;
+                    default:
+                        recType += HapiConfig.Properties.RecordType;
+                        break;
+                }
+            }
+            string path = String.Format(@"{0}Level_{1}\", _basepath, level, recType);
+            var recTypePath = Directory.EnumerateDirectories(path).First();
+
+            // We now have the path to the level and record type the user requested.
+
+            // Now get the minimum possible time possible.
+            var firstYearOfRecTypePath = Directory.EnumerateDirectories(recTypePath).First();
+            var firstRecFileOfRecTypePath = Directory.EnumerateFiles(firstYearOfRecTypePath).First();
+            path = firstRecFileOfRecTypePath;
+            if (File.Exists(path))
+            {
+                using (TextReader textReader = new StreamReader(File.OpenRead(path)))
+                {
+                    CsvReader csv = new CsvReader(textReader);
+                    csv.Read();
+                    csv.ReadHeader();
+                    Converters cons = new Converters();
+                    string[] headers = csv.Context.HeaderRecord;
+                    csv.Read();
+                    tr.Min = cons.ConvertUTCtoDate(csv[0]);
+                };
+            }
+
+            // Get maximum possible datetime.
+            var lastYearOfRecTypePath = Directory.EnumerateDirectories(recTypePath).Last();
+            var lastRecFileOfRecTypePath = Directory.EnumerateFiles(lastYearOfRecTypePath).Last();
+            path = lastRecFileOfRecTypePath;
+            if (File.Exists(path))
+            {
+                using (TextReader textReader = new StreamReader(File.OpenRead(path)))
+                {
+                    CsvReader csv = new CsvReader(textReader);
+                    csv.Read();
+                    csv.ReadHeader();
+                    Converters cons = new Converters();
+                    string utc = "";
+                    //TODO: Lazily get the last record.
+                    while (csv.Read())
+                    {
+                        utc = csv[0];
+                    }
+                    tr.Max = cons.ConvertUTCtoDate(utc);
+
+                };
+            }
+            return tr.IsValid();
         }
     }
 }

@@ -1,15 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace WebApi_v1.DataProducts
 {
-    public abstract class Product : IProduct
+    public abstract class Product
     {
-        public Dictionary<string, string> SearchParameters { get; set; }
-        public IEnumerable<Dictionary<string, string>> Records { get; set; }
-        public List<Dictionary<string, string>> ParameterSpecificRecords { get; set; }
-        public string[] Header { get; set; }
+        public HapiConfiguration HapiConfig { get; set; }
+        public List<string> Paths { get; set; }
+        public List<FileInfo> Files { get; set; }
 
+        public string[] Header { get; set; }
+        public IEnumerable<Dictionary<string, string>> Records { get; set; }
+
+        public abstract void Configure(HapiConfiguration hapi);
         public abstract bool GetProduct();
         public abstract bool VerifyTimeRange();
+        public abstract void GetPaths();
     }
 }

@@ -193,9 +193,7 @@
     <Compile Include="DataProducts\Utilities\CSVHelperUtilities\TypeConverters.cs" />
     <Compile Include="DataProducts\Record.cs" />
     <Compile Include="DataProducts\HapiInfo.cs" />
-    <Compile Include="DataProducts\IProperties.cs" />
     <Compile Include="DataProducts\IRecord.cs" />
-    <Compile Include="DataProducts\IProduct.cs" />
     <Compile Include="DataProducts\SpaceCraft\RBSpiceA\Products\Auxiliary.cs" />
     <Compile Include="DataProducts\Product.cs" />
     <Compile Include="DataProducts\SpaceCraft\RBSpiceA\RBSpiceAProduct.cs" />
