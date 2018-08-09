@@ -1,0 +1,188 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using WebApi_v1.DataProducts;
+using WebApi_v1.DataProducts.RBSpiceA;
+using WebApi_v1.DataProducts.Utilities;
+using static WebApi_v1.Hapi.HapiResponse;
+
+namespace WebApi_v1.Hapi
+{
+    public class HapiConfiguration
+    {
+        #region ReadOnly Properties
+
+        private readonly string _version = "2.0";
+        private readonly string[] _capabilities = { "csv", "json" };
+        private readonly char[] _delimiters = new char[] { '?', '&', '=' };
+        private readonly string[] _requesttypes = new string[] { "data", "info", "capabilities", "catalog" };
+        private readonly string[] _validIDs = new string[] { "rbspicea" };
+
+
+        #endregion ReadOnly Properties
+
+        #region Public Properties
+
+        public string Version { get { return _version; } }
+        public string RequestType { get; set; }
+        public string Query { get; set; }
+        public string[] Capabilities { get { return _capabilities; } }
+        public string[] Formats { get { return _capabilities; } }
+        public string[] ValidIDs { get { return _validIDs; } }
+        public Dictionary<string, string> QueryDict { get; private set; }
+        public HttpRequestMessage Request { get; set; }
+        public HttpResponseMessage Response { get; private set; }
+        public HapiProperties Properties { get; set; }
+        public Product Product { get; private set; }
+
+        #endregion Public Properties
+
+        #region Methods
+
+        public void Initialize()
+        {
+            QueryDict = null;
+            Request = null;
+            Response = null;
+            RequestType = String.Empty;
+            Query = String.Empty;
+            Properties = new HapiProperties();
+            Product = null;
+        }
+
+        public bool Configure(HttpRequestMessage request)
+        {
+            Initialize();
+
+            Request = request;
+            RequestType = Request.RequestUri.LocalPath.Split('/').Last().ToLower();
+
+            if (!TryToCreateQueryDict())
+                return false;
+
+            if (!Properties.Assign(this))
+                return false;
+
+            return true;
+        }
+
+        public HttpResponseMessage GetResponse()
+        {
+            ResponseContent content = null;
+            switch (RequestType.ToLower())
+            {
+                case ("data"):
+                    if (Properties.ErrorCodes.Count() == 0 && GetDataProduct())
+                        content = ResponseContent.Create(this, "data");
+                    break;
+
+                case ("catalog"):;
+                    content = ResponseContent.Create(this, "catalog");
+                    break;
+
+                case ("info"):
+                    content = ResponseContent.Create(this, "info");
+                    break;
+
+                case ("capabilities"):
+                    content = ResponseContent.Create(this, "capabilities");
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(RequestType, "Not a valid request type.");
+            };
+
+            if (Properties.ErrorCodes.Count() == 0 && content != null)
+            {
+                Response = Request.CreateResponse(HttpStatusCode.OK);
+                content.SetStatusCode(1200);
+                Response.Content = new StringContent(content.GetResponse());
+            }
+            else
+            {
+                content = ResponseContent.Create(this, "error");
+                Response = Request.CreateResponse(HttpStatusCode.BadRequest);
+                content.SetStatusCode(Properties.ErrorCodes.First());
+                Response.Content = new StringContent(content.GetResponse());
+            }
+
+            return Response;
+        }
+
+        private bool GetDataProduct()
+        {
+            switch (Properties.SC)
+            {
+                case ("rbspicea"):
+                    Product = new RBSpiceAProduct();
+                    Product.Configure(this);
+                    break;
+                  
+                default:
+                    break;
+            }
+
+            if (!Product.VerifyTimeRange())
+            {
+                // Outside of SC data timerange
+                Properties.ErrorCodes.Add(1405);
+                return false;
+            }
+            else if(!Product.GetProduct())
+            {
+                // Data doesn't exist
+                Properties.ErrorCodes.Add(1201);
+                return false;
+            }
+            
+            return true;
+        }
+
+        public bool TryToCreateQueryDict()
+        {
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            Query = Request.RequestUri.Query;
+
+            string[] arr = Query.ToLower().TrimStart(_delimiters).Split(_delimiters);
+
+            if (arr.Length >= 2 && arr.Length % 2 == 0)
+            {
+                for (int i = 0; i < arr.Length; i += 2)
+                    dict.Add(arr[i], arr[i + 1]);
+            }
+            else
+            {
+                return false;
+            }
+
+            QueryDict = dict;
+
+            return true;
+        }
+
+        new public string ToString
+        {
+            get
+            {
+                string str = String.Empty;
+                string props = Properties.ToString();
+                str = String.Format(
+                    "\n\n\nRequest: \n{0}\n" +
+                    "\nRequestType: {1}\n" +
+                    "Query: {2}\n" +
+                    "\nProperties: \n{3}\n\n\n",
+                    Request.ToString(),
+                    RequestType,
+                    Query,
+                    props
+                );
+                return str;
+            }
+        }
+
+        #endregion Methods
+    }
+}

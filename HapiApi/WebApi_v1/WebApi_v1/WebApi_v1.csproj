@@ -186,24 +186,17 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HapiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\PeopleController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
-    <Compile Include="DataProducts\HapiConfiguration.cs" />
-    <Compile Include="DataProducts\Utilities\CSVHelperUtilities\Mappings.cs" />
-    <Compile Include="DataProducts\Utilities\CSVHelperUtilities\TypeConverters.cs" />
-    <Compile Include="DataProducts\Record.cs" />
-    <Compile Include="DataProducts\HapiInfo.cs" />
-    <Compile Include="DataProducts\IRecord.cs" />
-    <Compile Include="DataProducts\SpaceCraft\RBSpiceA\Products\Auxiliary.cs" />
-    <Compile Include="DataProducts\Product.cs" />
-    <Compile Include="DataProducts\SpaceCraft\RBSpiceA\RBSpiceAProduct.cs" />
-    <Compile Include="DataProducts\Utilities\Converters.cs" />
-    <Compile Include="DataProducts\Utilities\TimeRange.cs" />
+    <Compile Include="Hapi\HapiConfiguration.cs" />
+    <Compile Include="HapiDataProducts\SpaceCraft\RBSpiceA\Products\AuxiliaryProduct\AuxiliaryRecords.cs" />
+    <Compile Include="HapiDataProducts\IPrintableRecord.cs" />
+    <Compile Include="HapiDataProducts\SpaceCraft\RBSpiceA\Products\AuxiliaryProduct\Auxiliary.cs" />
+    <Compile Include="HapiDataProducts\Product.cs" />
+    <Compile Include="HapiDataProducts\SpaceCraft\RBSpiceA\RBSpiceAProduct.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Person.cs" />
-    <Compile Include="Models\SpacecraftInfo.cs" />
+    <Compile Include="Hapi\HapiProperties.cs" />
+    <Compile Include="Hapi\HapiResponses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -300,6 +293,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="HapiUtilities\" />
+    <Folder Include="Hapi\Utilities\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

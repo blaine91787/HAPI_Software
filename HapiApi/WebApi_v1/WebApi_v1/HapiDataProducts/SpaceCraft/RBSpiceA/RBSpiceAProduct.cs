@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using WebApi_v1.DataProducts.Utilities;
-using static WebApi_v1.DataProducts.Utilities.CSVHelperUtilities.Mappings;
+using WebApi_v1.DataProducts.SpaceCraft.RBSpiceA.Products.AuxiliaryProduct;
+using WebApi_v1.Hapi;
+using WebApi_v1.Hapi.Utilities;
 
 namespace WebApi_v1.DataProducts.RBSpiceA
 {
@@ -102,7 +103,7 @@ namespace WebApi_v1.DataProducts.RBSpiceA
         /// <returns></returns>
         public override bool GetProduct()
         {
-            Auxiliary aux = new Auxiliary(HapiConfig);
+            AuxiliaryRecords aux = new AuxiliaryRecords(HapiConfig);
             Records = aux.GetRecords(Paths);
             return Records.Count() != 0 ? true : false;
         }

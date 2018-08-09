@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using WebApi_v1.Hapi;
 
 namespace WebApi_v1.DataProducts
 {
