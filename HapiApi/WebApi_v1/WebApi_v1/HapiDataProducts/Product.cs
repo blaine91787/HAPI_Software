@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using WebApi_v1.Hapi;
 
-namespace WebApi_v1.DataProducts
+namespace WebApi_v1.HapiDataProducts
 {
     public abstract class Product
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using WebApi_v1.Hapi.Utilities;
+using WebApi_v1.HapiUtilities;
 
 namespace WebApi_v1.Hapi
 {

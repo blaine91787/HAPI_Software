@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using WebApi_v1.HapiDataProducts;
 
 namespace WebApi_v1.DataProducts.SpaceCraft.RBSpiceA.Products.AuxiliaryProduct
 {

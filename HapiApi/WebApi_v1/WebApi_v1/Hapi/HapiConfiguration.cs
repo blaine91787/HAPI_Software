@@ -5,8 +5,8 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using WebApi_v1.DataProducts;
-using WebApi_v1.DataProducts.RBSpiceA;
-using WebApi_v1.DataProducts.Utilities;
+using WebApi_v1.HapiDataProducts;
+using WebApi_v1.HapiDataProducts.SpaceCraft.RBSpiceA.Products;
 using static WebApi_v1.Hapi.HapiResponse;
 
 namespace WebApi_v1.Hapi

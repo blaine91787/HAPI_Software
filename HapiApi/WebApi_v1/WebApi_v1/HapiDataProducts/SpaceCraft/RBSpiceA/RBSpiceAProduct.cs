@@ -6,9 +6,9 @@ using System.IO;
 using System.Linq;
 using WebApi_v1.DataProducts.SpaceCraft.RBSpiceA.Products.AuxiliaryProduct;
 using WebApi_v1.Hapi;
-using WebApi_v1.Hapi.Utilities;
+using WebApi_v1.HapiUtilities;
 
-namespace WebApi_v1.DataProducts.RBSpiceA
+namespace WebApi_v1.HapiDataProducts.SpaceCraft.RBSpiceA.Products
 {
     public class RBSpiceAProduct : Product
     {

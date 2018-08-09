@@ -186,6 +186,10 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HapiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="HapiUtilities\Converters.cs" />
+    <Compile Include="HapiUtilities\CSVHelperUtilities\Mappings.cs" />
+    <Compile Include="HapiUtilities\CSVHelperUtilities\TypeConverters.cs" />
+    <Compile Include="HapiUtilities\TimeRange.cs" />
     <Compile Include="Hapi\HapiConfiguration.cs" />
     <Compile Include="HapiDataProducts\SpaceCraft\RBSpiceA\Products\AuxiliaryProduct\AuxiliaryRecords.cs" />
     <Compile Include="HapiDataProducts\IPrintableRecord.cs" />
@@ -293,9 +297,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="HapiUtilities\" />
-    <Folder Include="Hapi\Utilities\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

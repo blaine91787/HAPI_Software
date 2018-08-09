@@ -5,8 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using WebApi_v1.Hapi;
-using WebApi_v1.Hapi.Utilities;
-using static WebApi_v1.Hapi.Utilities.CSVHelperUtilities.Mappings;
+using WebApi_v1.HapiUtilities;
+using static WebApi_v1.HapiUtilities.CSVHelperUtilities.Mappings;
 
 namespace WebApi_v1.DataProducts.SpaceCraft.RBSpiceA.Products.AuxiliaryProduct
 {
