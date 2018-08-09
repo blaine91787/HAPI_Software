@@ -49,7 +49,7 @@ namespace WebApi_v1.DataProducts
             Response = null;
             RequestType = String.Empty;
             Query = String.Empty;
-            Properties = null;
+            Properties = new HapiProperties();
             Errors = new List<Exception>();
             Product = null;
             Initialized = true;
@@ -58,20 +58,17 @@ namespace WebApi_v1.DataProducts
         public bool Configure(HttpRequestMessage request)
         {
             Initialize();
+
             Request = request;
-
-            if (!RequestTypeValid())
-                return false;
-
-            Properties = new HapiProperties();
+            RequestType = Request.RequestUri.LocalPath.Split('/').Last().ToLower();
 
             if (!TryToCreateQueryDict())
                 return false;
 
-            if (Properties.Assign(this))
-                return true;
-            else
+            if (!Properties.Assign(this))
                 return false;
+
+            return true;
         }
 
         public void GetErrorResponse()
@@ -119,6 +116,7 @@ namespace WebApi_v1.DataProducts
             {
                 GetErrorResponse();
             }
+
             return Response;
         }
 
@@ -148,14 +146,6 @@ namespace WebApi_v1.DataProducts
             }
             
             return true;
-        }
-
-        private bool RequestTypeValid()
-        {
-            RequestType = Request.RequestUri.LocalPath.Split('/').Last().ToLower();
-
-            // RequestType can only be equal to info, capability, catalog, or data
-            return _requesttypes.Contains(RequestType);
         }
 
         public bool TryToCreateQueryDict()
