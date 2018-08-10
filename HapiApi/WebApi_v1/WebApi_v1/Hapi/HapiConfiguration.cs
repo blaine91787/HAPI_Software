@@ -43,71 +43,6 @@ namespace WebApi_v1.Hapi
 
         #endregion Public Properties
 
-        #region Private Methods
-
-        private void Initialize()
-        {
-            RequestType = String.Empty;
-            Query = String.Empty;
-            QueryDict = null;
-            Request = null;
-            Response = null;
-            Properties = new HapiProperties();
-            Product = null;
-        }
-
-        private bool TryToCreateQueryDict()
-        {
-            Dictionary<string, string> dict = new Dictionary<string, string>();
-            Query = Request.RequestUri.Query;
-
-            string[] arr = Query.ToLower().TrimStart(_delimiters).Split(_delimiters);
-
-            if (arr.Length >= 2 && arr.Length % 2 == 0)
-            {
-                for (int i = 0; i < arr.Length; i += 2)
-                    dict.Add(arr[i], arr[i + 1]);
-            }
-            else if (RequestType == "data") // Query empty or 
-            {
-                Properties.ErrorCodes.Add(HapiStatusCode.UserInputError);
-                return false;
-            }
-
-            QueryDict = dict;
-
-            return true;
-        }
-
-        private bool GetDataProduct()
-        {
-            switch (Properties.SC)
-            {
-                case ("rbspicea"):
-                    Product = new RBSpiceAProduct();
-                    Product.Configure(this);
-                    break;
-
-                default:
-                    break;
-            }
-
-            if (!Product.VerifyTimeRange()) // Outside of SC data timerange
-            {
-                Properties.ErrorCodes.Add(HapiStatusCode.TimeOutsideValidRange);
-                return false;
-            }
-            else if (!Product.GetProduct()) // Data doesn't exist
-            {
-                Properties.ErrorCodes.Add(HapiStatusCode.OKNoDataForTimeRange);
-                return false;
-            }
-
-            return true;
-        }
-
-        #endregion Private Methods
-
         #region Public Methods
 
         public bool Configure(HttpRequestMessage request)
@@ -175,23 +110,71 @@ namespace WebApi_v1.Hapi
             return Response;
         }
 
-        public override string ToString()
+        #endregion Public Methods
+
+        #region Private Methods
+
+        private void Initialize()
         {
-            string str = String.Empty;
-            string props = Properties.ToString();
-            str = String.Format(
-                "\n\n\nRequest: \n{0}\n" +
-                "\nRequestType: {1}\n" +
-                "Query: {2}\n" +
-                "\nProperties: \n{3}\n\n\n",
-                Request.ToString(),
-                RequestType,
-                Query,
-                props
-            );
-            return str;
+            RequestType = String.Empty;
+            Query = String.Empty;
+            QueryDict = null;
+            Request = null;
+            Response = null;
+            Properties = new HapiProperties();
+            Product = null;
         }
 
-        #endregion Public Methods
+        private bool TryToCreateQueryDict()
+        {
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            Query = Request.RequestUri.Query;
+
+            string[] arr = Query.ToLower().TrimStart(_delimiters).Split(_delimiters);
+
+            if (arr.Length >= 2 && arr.Length % 2 == 0)
+            {
+                for (int i = 0; i < arr.Length; i += 2)
+                    dict.Add(arr[i], arr[i + 1]);
+            }
+            else if (RequestType == "data") // Query empty or 
+            {
+                Properties.ErrorCodes.Add(HapiStatusCode.UserInputError);
+                return false;
+            }
+
+            QueryDict = dict;
+
+            return true;
+        }
+
+        private bool GetDataProduct()
+        {
+            switch (Properties.SC)
+            {
+                case ("rbspicea"):
+                    Product = new RBSpiceAProduct();
+                    Product.Configure(this);
+                    break;
+
+                default:
+                    break;
+            }
+
+            if (!Product.VerifyTimeRange()) // Outside of SC data timerange
+            {
+                Properties.ErrorCodes.Add(HapiStatusCode.TimeOutsideValidRange);
+                return false;
+            }
+            else if (!Product.GetProduct()) // Data doesn't exist
+            {
+                Properties.ErrorCodes.Add(HapiStatusCode.OKNoDataForTimeRange);
+                return false;
+            }
+
+            return true;
+        }
+
+        #endregion Private Methods
     }
 }

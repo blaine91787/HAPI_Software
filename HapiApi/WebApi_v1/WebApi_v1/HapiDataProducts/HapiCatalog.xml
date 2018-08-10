@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<catalog>
+  <missions>
+    <spacecraft>
+      <rbspicea>
+        <l0>
+          <aux>
+            <parameter name="utc" type="DateTime" units="UTC" fill="null" length="24"></parameter>
+            <parameter name="sclock_full" type="string" units="null" fill="null" length="null"></parameter>
+          </aux>
+          <auxil></auxil>
+          <bootstatus></bootstatus>
+          <chsk></chsk>
+          <commands></commands>
+          <ebr></ebr>
+          <erm></erm>
+          <esrhelt></esrhelt>
+          <esrleht></esrleht>
+          <ibr></ibr>
+          <iedr></iedr>
+          <sbr></sbr>
+          <isdr></isdr>
+          <isrhelt></isrhelt>
+          <limits></limits>
+          <memorychecksums></memorychecksums>
+          <memorydump></memorydump>
+          <parameters></parameters>
+          <pixelparameters></pixelparameters>
+          <priorityevents></priorityevents>
+          <reee></reee>
+          <riee></riee>
+          <rise></rise>
+          <status></status>
+          <text></text>
+          <tofxeh></tofxeh>
+          <tofxeion></tofxeion>
+          <tofxenonh></tofxenonh>
+          <tofxphhhelt></tofxphhhelt>
+          <tofxphhleht></tofxphhleht>
+        </l0>
+        <l1>
+          <ebr></ebr>
+          <esrhelt></esrhelt>
+          <ibr></ibr>
+          <isbr></isbr>
+          <isrhelt></isrhelt>
+          <tofxeh></tofxeh>
+          <tofxeion></tofxeion>
+          <tofxenonh></tofxenonh>
+          <tofxphhhelt></tofxphhhelt>
+          <tofxphhleht></tofxphhleht>
+        </l1>
+      </rbspicea>
+      <rbspiceb>
+        
+      </rbspiceb>
+    </spacecraft>
+  </missions>
+</catalog>
