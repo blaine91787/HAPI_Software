@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
+using static WebApi_v1.Hapi.HapiResponse.Status;
 
 namespace WebApi_v1.Hapi
 {
@@ -36,17 +37,36 @@ namespace WebApi_v1.Hapi
 
             public abstract string GetResponse();
 
-            public void SetStatusCode(int statusCode)
+            public void SetStatusCode(HapiStatusCode statusCode)
             {
                 if (Status == null)
                     Status = new Status();
 
-                Status.Code = statusCode;
+                Status.Code = (int)statusCode;
             }
         }
 
         public class Status
         {
+            public enum HapiStatusCode
+            {
+                OK = 1200,
+                OKNoDataForTimeRange = 1201,
+                UserInputError = 1400,
+                UnknownAPIParameterName = 1401,
+                ErrorInStartTime = 1402,
+                ErrorInStopTime = 1403,
+                StartTimeEqualToOrAfterStopTime = 1404,
+                TimeOutsideValidRange = 1405,
+                UnknownDatasetID = 1406,
+                UnknownDatasetParameter = 1407,
+                TooMuchTimeOrDataRequested = 1408,
+                UnsupportedOuputFormat = 1409,
+                UnsupportedIncludeValue = 1410,
+                InternalServerError = 1500,
+                UpstreamRequestError = 1501
+            }
+
             public Dictionary<int, string> ErrorCodes = new Dictionary<int, string>
             {
                 { 1200, "OK" },
@@ -65,6 +85,7 @@ namespace WebApi_v1.Hapi
                 { 1500, "Internal server error" },
                 { 1501, "Internal server error - upstream request error" },
             };
+
             private int _code;
             public int Code { get { return _code; } set { Message = ErrorCodes[value]; _code = value; } }
             public string Message { get; private set; }
@@ -72,7 +93,7 @@ namespace WebApi_v1.Hapi
 
         internal class Capabilities : ResponseContent
         {
-            public string[] OutputFormats { get; }
+            private string[] OutputFormats { get; }
 
             public Capabilities(HapiConfiguration hapi)
             {
@@ -104,15 +125,16 @@ namespace WebApi_v1.Hapi
 
         internal class Data : ResponseContent
         {
-            public string StartDate = String.Empty;
-            public string StopDate = String.Empty;
-            public string Format = String.Empty;
-            public List<string> Parameters = null;
-            public IEnumerable<Dictionary<string, string>> DataRecords = null;
+            private string StartDate = String.Empty;
+            private string StopDate = String.Empty;
+            private string Format = String.Empty;
+            private List<string> Parameters = null;
+            private IEnumerable<Dictionary<string, string>> DataRecords = null;
 
             public Data(HapiConfiguration hapi)
             {
-                Hapi = hapi;
+                Hapi = hapi ?? throw new ArgumentNullException("HapiConfiguration not configured.");
+
                 if (Hapi.Properties == null)
                     throw new MissingFieldException(nameof(Hapi.Properties));
 
@@ -217,7 +239,7 @@ namespace WebApi_v1.Hapi
                 return sb.ToString();
             }
 
-            public string ToCSV()
+            private string ToCSV()
             {
                 bool header = Hapi.Properties.IncludeHeader;
                 StringBuilder sb = new StringBuilder();
@@ -251,7 +273,7 @@ namespace WebApi_v1.Hapi
                 return sb.ToString();
             }
 
-            public string ToJson()
+            private string ToJson()
             {
                 bool multiLineParameters = false;
                 bool header = true;//Hapi.Properties.IncludeHeader;
@@ -363,10 +385,11 @@ namespace WebApi_v1.Hapi
 
             public Info(HapiConfiguration hapi)
             {
-                Hapi = hapi;
+                Hapi = hapi ?? throw new ArgumentNullException("HapiConfiguration not configured.");
+
                 HapiVersion = hapi.Version;
                 Status = new Status(); // HACK: don't use a literal value for code
-                Format = Hapi.Properties.Format == null ? "csv" : Hapi.Properties.Format;
+                Format = Hapi.Properties.Format;
                 StartDate = Hapi.Properties.TimeMin;
                 StopDate = Hapi.Properties.TimeMax;
                 Parameters = Hapi.Properties.Parameters;
@@ -442,18 +465,11 @@ namespace WebApi_v1.Hapi
 
             public Catalog(HapiConfiguration hapi)
             {
-                Hapi = hapi;
+                Hapi = hapi ?? throw new ArgumentNullException("HapiConfiguration not configured.");
+
                 HapiVersion = Hapi.Version;
                 Status = new Status();
-                HapiCatalog = new List<Tuple<string, string>>()
-                {
-                    Tuple.Create("RBSPICEA_L0_AUX", "RBSPA Level 0 Auxiliary Data"),
-                };
-            }
-
-            private KeyValuePair<string, string> GetKeyValPair(string id, string title)
-            {
-                return new KeyValuePair<string, string>(id, title);
+                HapiCatalog = Hapi.Catalog;
             }
 
             public override string GetResponse()
@@ -492,13 +508,15 @@ namespace WebApi_v1.Hapi
 
         internal class Error : ResponseContent
         {
-            public string[] OutputFormats { get; }
+            private string[] OutputFormats { get; }
 
             public Error(HapiConfiguration hapi)
             {
-                HapiVersion = hapi.Version;
+                Hapi = hapi ?? throw new ArgumentNullException("HapiConfiguration not configured.");
+
+                HapiVersion = Hapi.Version;
                 Status = new Status();
-                OutputFormats = hapi.Capabilities;
+                OutputFormats = Hapi.Capabilities;
             }
 
             public override string GetResponse()

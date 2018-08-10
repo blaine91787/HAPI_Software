@@ -3,140 +3,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using WebApi_v1.HapiUtilities;
+using static WebApi_v1.Hapi.HapiResponse.Status;
 
 namespace WebApi_v1.Hapi
 {
     public class HapiProperties
     {
-        private enum IndexOf
-        {
-            SC = 0,
-            Level = 1,
-            RecordType = 2
-        }
 
-        public string RequestType { get; set; }
-        public string Id { get; set; }
-        public string SC { get; set; }
-        public string Level { get; set; }
-        public string RecordType { get; set; }
-        public DateTime TimeMin { get; set; }
-        public DateTime TimeMax { get; set; }
-        public List<string> Parameters { get; set; }
-        public bool IncludeHeader { get; set; }
-        public string Format { get; set; }
-        public Exception Error { get; set; }
-        public List<int> ErrorCodes { get; set; }
-        public bool InTimeRange { get; set; }
+        public string RequestType { get; private set; }
+        public string Id { get; private set; }
+        public string SC { get; private set; }
+        public string Level { get; private set; }
+        public string RecordType { get; private set; }
+        public string Format { get; private set; }
+        public bool IncludeHeader { get; private set; }
+        public DateTime TimeMin { get; private set; }
+        public DateTime TimeMax { get; private set; }
+        public List<string> Parameters { get; private set; }
+        public List<HapiStatusCode> ErrorCodes { get; private set; }
 
-        public HapiProperties()
-        {
-            Initialize();
-        }
+        #region Private Methods
 
-        public void Initialize()
+        private void Initialize()
         {
             RequestType = String.Empty;
             Id = String.Empty;
             SC = String.Empty;
             Level = String.Empty;
             RecordType = String.Empty;
+            Format = "csv";
+            IncludeHeader = false;
             TimeMin = default(DateTime);
             TimeMax = default(DateTime);
             Parameters = new List<string>();
-            IncludeHeader = false;
-            Format = "csv";
-            Error = null;
-            ErrorCodes = new List<int>();
-            InTimeRange = true;
-        }
-
-        public bool Assign(HapiConfiguration hapi)
-        {
-            Initialize();
-            Dictionary<string, string> dict = hapi.QueryDict;
-
-            if (!(RequestParametersValid(hapi.RequestType, dict)))
-            {
-                ErrorCodes.Add(1401);
-            }
-
-            string key = String.Empty;
-            string val = String.Empty;
-            DateTime dt = default(DateTime);
-            Converters cons = new Converters();
-            foreach (KeyValuePair<string, string> pair in dict)
-            {
-                // TODO: Find a better way to check for 'HapiResponse.ToJson>string last' error where time.min and time.max are not valid. Should be able to catch it here.
-                key = pair.Key.ToLower();
-                val = pair.Value.ToLower();
-                switch (key)
-                {
-                    case ("id"):
-                        Id = val;
-                        if (hapi.ValidIDs.Intersect(Id.ToLower().Split('_')).Count() > 0) // ex: id=rbspicea_l0_aux
-                        {
-                            // HACK: May fail given more spacecraft options.
-                            string[] valArr = val.Split('_');
-                            if (valArr.Count() >= 0)
-                                SC = valArr[(int)IndexOf.SC];
-                            if (valArr.Count() >= 1)
-                                Level = valArr[(int)IndexOf.Level];
-                            if (valArr.Count() >= 2)
-                                RecordType = valArr[(int)IndexOf.RecordType];
-                        }
-                        else
-                        {
-                            ErrorCodes.Add(1406);
-                        }
-                        break;
-
-                    case ("time.min"):
-                        dt = cons.ConvertHapiYMDToDateTime(val);
-                        if (dt != default(DateTime))
-                            TimeMin = dt.ToUniversalTime();
-                        else
-                            ErrorCodes.Add(1402);
-                        break;
-
-                    case ("time.max"):
-                        dt = cons.ConvertHapiYMDToDateTime(val);
-                        if (dt != default(DateTime) && TimeMin < dt)
-                            TimeMax = dt.ToUniversalTime();
-                        else if (dt == default(DateTime))
-                            ErrorCodes.Add(1403);
-                        else if (TimeMin >= dt)
-                            ErrorCodes.Add(1404);
-                        break;
-
-                    case ("parameters"):
-                        Parameters = val.Split(new char[] { ',' }).ToList();
-                        break;
-
-                    case ("include"):
-                        if (val == "header")
-                            IncludeHeader = true;
-                        else
-                            ErrorCodes.Add(1410);
-                        break;
-
-                    case ("format"):
-                        if (hapi.Formats.Contains(val))
-                            Format = val;
-                        else
-                            ErrorCodes.Add(1409);
-                        break;
-
-                    default:
-                        ErrorCodes.Add(1400);
-                        break;
-                }
-            }
-
-            if (ErrorCodes.Count() > 0)
-                return false;
-            else
-                return true;
+            ErrorCodes = new List<HapiStatusCode>();
         }
 
         private bool RequestParametersValid(string requestType, Dictionary<string, string> dict)
@@ -155,8 +55,15 @@ namespace WebApi_v1.Hapi
                     paramsRequired = new List<string> { "id" };
                     paramsOptional = new List<string> { "parameters" };
                     break;
+
+                case ("catalog"): // No parameters required/optional
+                    return true;
+
+                case ("capabilities"):
+                    return true; // No parameters required/optional
+
                 default:
-                    ErrorCodes.Add(1400);
+                    ErrorCodes.Add(HapiStatusCode.UserInputError);
                     return false;
             }
 
@@ -170,16 +77,113 @@ namespace WebApi_v1.Hapi
             {
                 if (!(allParamsForRequest.Contains(pair.Key)))
                 {
-                    errors.Add(1401);
+                    ErrorCodes.Add(HapiStatusCode.UnknownAPIParameterName);
                     return false;
                 }
                 requestParams.Add(pair.Key);
             }
 
             if (!(paramsRequired.Intersect(requestParams).Count() == paramsRequired.Count()))
-                errors.Add(1401);
+            {
+                ErrorCodes.Add(HapiStatusCode.UnknownAPIParameterName);
+                return false;
+            }
 
             return true;
+        }
+
+        #endregion Private Methods
+
+        #region Public Methods
+
+        public bool Assign(HapiConfiguration hapi)
+        {
+            if (hapi.QueryDict == null || hapi.RequestType == String.Empty)
+                throw new InvalidOperationException("HapiConfiguration must be configured.");
+            
+            Initialize();
+
+            Dictionary<string, string> dict = hapi.QueryDict;
+
+            if (!(RequestParametersValid(hapi.RequestType, dict)))
+                ErrorCodes.Add(HapiStatusCode.UnknownAPIParameterName);
+
+            string key = String.Empty;
+            string val = String.Empty;
+            DateTime dt = default(DateTime);
+            Converters cons = new Converters();
+            foreach (KeyValuePair<string, string> pair in dict)
+            {
+                // TODO: Find a better way to check for 'HapiResponse.ToJson>string last' error where time.min and time.max are not valid. Should be able to catch it here.
+                key = pair.Key.ToLower();
+                val = pair.Value.ToLower();
+                switch (key)
+                {
+                    case ("id"):
+                        Id = val;
+                        if (hapi.ValidIDs.Intersect(Id.ToLower().Split('_')).Count() > 0) // ex: id=rbspicea_l0_aux
+                        {
+                            // HACK: May fail given more spacecraft options.
+                            int id = 0;
+                            int level = 1;
+                            int recordType = 2;
+                            string[] idArray = val.Split('_'); // id=rbspicea_l0_aux
+                            if (idArray.Count() >= 0)
+                                SC = idArray[id];
+                            if (idArray.Count() >= 1)
+                                Level = idArray[level];
+                            if (idArray.Count() >= 2)
+                                RecordType = idArray[recordType];
+                        }
+                        else
+                        {
+                            ErrorCodes.Add(HapiStatusCode.UnknownDatasetID);
+                        }
+                        break;
+
+                    case ("time.min"):
+                        dt = cons.ConvertHapiYMDToDateTime(val);
+                        if (dt != default(DateTime))
+                            TimeMin = dt.ToUniversalTime();
+                        else
+                            ErrorCodes.Add(HapiStatusCode.ErrorInStartTime);
+                        break;
+
+                    case ("time.max"):
+                        dt = cons.ConvertHapiYMDToDateTime(val);
+                        if (dt != default(DateTime) && TimeMin < dt)
+                            TimeMax = dt.ToUniversalTime();
+                        else if (dt == default(DateTime))
+                            ErrorCodes.Add(HapiStatusCode.ErrorInStopTime);
+                        else if (TimeMin >= dt)
+                            ErrorCodes.Add(HapiStatusCode.StartTimeEqualToOrAfterStopTime);
+                        break;
+
+                    case ("parameters"):
+                        Parameters = val.Split(new char[] { ',' }).ToList();
+                        break;
+
+                    case ("include"):
+                        if (val == "header")
+                            IncludeHeader = true;
+                        else
+                            ErrorCodes.Add(HapiStatusCode.UnsupportedIncludeValue);
+                        break;
+
+                    case ("format"):
+                        if (hapi.Formats.Contains(val))
+                            Format = val;
+                        else
+                            ErrorCodes.Add(HapiStatusCode.UnsupportedOuputFormat);
+                        break;
+
+                    default:
+                        ErrorCodes.Add(HapiStatusCode.UserInputError);
+                        break;
+                }
+            }
+
+            return (ErrorCodes.Count() > 0) ? false : true;
         }
 
         public override string ToString()
@@ -208,5 +212,7 @@ namespace WebApi_v1.Hapi
                 IncludeHeader
             );
         }
+
+        #endregion Public Methods
     }
 }

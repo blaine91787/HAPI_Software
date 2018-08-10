@@ -8,54 +8,116 @@ using WebApi_v1.DataProducts;
 using WebApi_v1.HapiDataProducts;
 using WebApi_v1.HapiDataProducts.SpaceCraft.RBSpiceA.Products;
 using static WebApi_v1.Hapi.HapiResponse;
+using static WebApi_v1.Hapi.HapiResponse.Status;
 
 namespace WebApi_v1.Hapi
 {
     public class HapiConfiguration
     {
-        #region ReadOnly Properties
+        #region Private Properties
 
         private readonly string _version = "2.0";
         private readonly string[] _capabilities = { "csv", "json" };
         private readonly char[] _delimiters = new char[] { '?', '&', '=' };
         private readonly string[] _requesttypes = new string[] { "data", "info", "capabilities", "catalog" };
         private readonly string[] _validIDs = new string[] { "rbspicea" };
+        private readonly List<Tuple<string, string>> _catalog = new List<Tuple<string, string>>()
+        {
+            Tuple.Create("RBSPICEA_L0_AUX", "RBSPA Level 0 Auxiliary Data"),
+        };
 
-
-        #endregion ReadOnly Properties
+        #endregion Private Properties
 
         #region Public Properties
 
         public string Version { get { return _version; } }
-        public string RequestType { get; set; }
-        public string Query { get; set; }
+        public string RequestType { get; private set; }
+        public string Query { get; private set; }
         public string[] Capabilities { get { return _capabilities; } }
         public string[] Formats { get { return _capabilities; } }
         public string[] ValidIDs { get { return _validIDs; } }
+        public List<Tuple<string,string>> Catalog { get { return _catalog; } }
         public Dictionary<string, string> QueryDict { get; private set; }
-        public HttpRequestMessage Request { get; set; }
+        public HttpRequestMessage Request { get; private set; }
         public HttpResponseMessage Response { get; private set; }
-        public HapiProperties Properties { get; set; }
+        public HapiProperties Properties { get; private set; }
         public Product Product { get; private set; }
 
         #endregion Public Properties
 
-        #region Methods
+        #region Private Methods
 
-        public void Initialize()
+        private void Initialize()
         {
+            RequestType = String.Empty;
+            Query = String.Empty;
             QueryDict = null;
             Request = null;
             Response = null;
-            RequestType = String.Empty;
-            Query = String.Empty;
             Properties = new HapiProperties();
             Product = null;
         }
 
+        private bool TryToCreateQueryDict()
+        {
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            Query = Request.RequestUri.Query;
+
+            string[] arr = Query.ToLower().TrimStart(_delimiters).Split(_delimiters);
+
+            if (arr.Length >= 2 && arr.Length % 2 == 0)
+            {
+                for (int i = 0; i < arr.Length; i += 2)
+                    dict.Add(arr[i], arr[i + 1]);
+            }
+            else if (RequestType == "data") // Query empty or 
+            {
+                Properties.ErrorCodes.Add(HapiStatusCode.UserInputError);
+                return false;
+            }
+
+            QueryDict = dict;
+
+            return true;
+        }
+
+        private bool GetDataProduct()
+        {
+            switch (Properties.SC)
+            {
+                case ("rbspicea"):
+                    Product = new RBSpiceAProduct();
+                    Product.Configure(this);
+                    break;
+
+                default:
+                    break;
+            }
+
+            if (!Product.VerifyTimeRange()) // Outside of SC data timerange
+            {
+                Properties.ErrorCodes.Add(HapiStatusCode.TimeOutsideValidRange);
+                return false;
+            }
+            else if (!Product.GetProduct()) // Data doesn't exist
+            {
+                Properties.ErrorCodes.Add(HapiStatusCode.OKNoDataForTimeRange);
+                return false;
+            }
+
+            return true;
+        }
+
+        #endregion Private Methods
+
+        #region Public Methods
+
         public bool Configure(HttpRequestMessage request)
         {
             Initialize();
+
+            if (request == null)
+                return false;
 
             Request = request;
             RequestType = Request.RequestUri.LocalPath.Split('/').Last().ToLower();
@@ -71,6 +133,9 @@ namespace WebApi_v1.Hapi
 
         public HttpResponseMessage GetResponse()
         {
+            if (Properties == null)
+                throw new InvalidOperationException("Hapi.Properties not set.");
+
             ResponseContent content = null;
             switch (RequestType.ToLower())
             {
@@ -98,7 +163,7 @@ namespace WebApi_v1.Hapi
             if (Properties.ErrorCodes.Count() == 0 && content != null)
             {
                 Response = Request.CreateResponse(HttpStatusCode.OK);
-                content.SetStatusCode(1200);
+                content.SetStatusCode(HapiStatusCode.OK);
                 Response.Content = new StringContent(content.GetResponse());
             }
             else
@@ -112,77 +177,23 @@ namespace WebApi_v1.Hapi
             return Response;
         }
 
-        private bool GetDataProduct()
+        public override string ToString()
         {
-            switch (Properties.SC)
-            {
-                case ("rbspicea"):
-                    Product = new RBSpiceAProduct();
-                    Product.Configure(this);
-                    break;
-                  
-                default:
-                    break;
-            }
-
-            if (!Product.VerifyTimeRange())
-            {
-                // Outside of SC data timerange
-                Properties.ErrorCodes.Add(1405);
-                return false;
-            }
-            else if(!Product.GetProduct())
-            {
-                // Data doesn't exist
-                Properties.ErrorCodes.Add(1201);
-                return false;
-            }
-            
-            return true;
+            string str = String.Empty;
+            string props = Properties.ToString();
+            str = String.Format(
+                "\n\n\nRequest: \n{0}\n" +
+                "\nRequestType: {1}\n" +
+                "Query: {2}\n" +
+                "\nProperties: \n{3}\n\n\n",
+                Request.ToString(),
+                RequestType,
+                Query,
+                props
+            );
+            return str;
         }
 
-        public bool TryToCreateQueryDict()
-        {
-            Dictionary<string, string> dict = new Dictionary<string, string>();
-            Query = Request.RequestUri.Query;
-
-            string[] arr = Query.ToLower().TrimStart(_delimiters).Split(_delimiters);
-
-            if (arr.Length >= 2 && arr.Length % 2 == 0)
-            {
-                for (int i = 0; i < arr.Length; i += 2)
-                    dict.Add(arr[i], arr[i + 1]);
-            }
-            else
-            {
-                return false;
-            }
-
-            QueryDict = dict;
-
-            return true;
-        }
-
-        new public string ToString
-        {
-            get
-            {
-                string str = String.Empty;
-                string props = Properties.ToString();
-                str = String.Format(
-                    "\n\n\nRequest: \n{0}\n" +
-                    "\nRequestType: {1}\n" +
-                    "Query: {2}\n" +
-                    "\nProperties: \n{3}\n\n\n",
-                    Request.ToString(),
-                    RequestType,
-                    Query,
-                    props
-                );
-                return str;
-            }
-        }
-
-        #endregion Methods
+        #endregion Public Methods
     }
 }

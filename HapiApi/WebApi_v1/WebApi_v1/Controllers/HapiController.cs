@@ -16,9 +16,7 @@ namespace WebApi_v1.Controllers
         {
             HapiConfiguration hapi = new HapiConfiguration();
             hapi.Configure(Request);
-            hapi.GetResponse();
-
-            return hapi.Response;
+            return hapi.GetResponse();
         }
 
         [Route("api/Hapi/Data")]
@@ -26,9 +24,7 @@ namespace WebApi_v1.Controllers
         public HttpResponseMessage GetData()
         {
             HapiConfiguration hapi = new HapiConfiguration();
-
             hapi.Configure(Request);
-
             return hapi.GetResponse(); 
         }
 
@@ -38,10 +34,7 @@ namespace WebApi_v1.Controllers
         {
             HapiConfiguration hapi = new HapiConfiguration();
             hapi.Configure(Request);
-
-            hapi.GetResponse();
-
-            return hapi.Response;
+            return hapi.GetResponse();
         }
 
         [Route("api/Hapi/Capabilities")]
@@ -50,8 +43,7 @@ namespace WebApi_v1.Controllers
         {
             HapiConfiguration hapi = new HapiConfiguration();
             hapi.Configure(Request);
-            hapi.GetResponse();
-            return hapi.Response;
+            return hapi.GetResponse();
         }
     }
 }
