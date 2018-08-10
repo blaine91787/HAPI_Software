@@ -2,13 +2,41 @@
 <catalog>
   <missions>
     <spacecraft>
-      <rbspicea>
+      <rbspa>
         <l0>
-          <aux>
-            <parameter name="utc" type="DateTime" units="UTC" fill="null" length="24"></parameter>
-            <parameter name="sclock_full" type="string" units="null" fill="null" length="null"></parameter>
-          </aux>
-          <auxil></auxil>
+          <auxil>
+            <productdescription description='{ "id" : "RBSPA_L0_AUXIL", "title" : "RBSpiceA Level 0 Auxiliary Data" }'></productdescription>
+            <path path='C:\Users\unicornpuke\\Documents\GitHub\FTECS\HapiApi\WebApi_v1\WebApi_v1\SCRecords\RBSPA\'></path>
+            <field>UTC</field>
+            <field>SCLOCK_Full</field>
+            <field>ET</field>
+            <field>OrbitNumber</field>
+            <field>Seconds</field>
+            <field>Subseconds</field>
+            <field>Spin</field>
+            <field>SpinTime</field>
+            <field>SpinPeriod</field>
+            <field>SpinPhase</field>
+            <field>MagPhase</field>
+            <field>Mag0Second1</field>
+            <field>Mag0Subsecond1</field>
+            <field>Mag0Second2</field>
+            <field>Mag0Subsecond2</field>
+            <field>IntegrationSectors</field>
+            <field>IntegrationMultiplier1</field>
+            <field>IntegrationMultiplier2</field>
+            <field>IntegrationSpins</field>
+            <field>MagPhaseValid</field>
+            <field>MagDataValid</field>
+            <field>SpinDataValid</field>
+            <field>ElectronPixel</field>
+            <field>IonEnergyPixel</field>
+            <field>IonSpeciesPixel</field>
+            <field>Subsector1</field>
+            <field>Subsector2</field>
+            <field>Subsector3</field>
+            <field>SpinDuration</field>
+          </auxil>
           <bootstatus></bootstatus>
           <chsk></chsk>
           <commands></commands>
@@ -50,10 +78,10 @@
           <tofxphhhelt></tofxphhhelt>
           <tofxphhleht></tofxphhleht>
         </l1>
-      </rbspicea>
-      <rbspiceb>
+      </rbspa>
+      <rbspb>
         
-      </rbspiceb>
+      </rbspb>
     </spacecraft>
   </missions>
 </catalog>
