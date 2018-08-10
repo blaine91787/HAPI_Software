@@ -1,9 +1,5 @@
-﻿using System;
-using System.Diagnostics;
-using System.Net;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Web.Http;
-using WebApi_v1.DataProducts;
 using WebApi_v1.Hapi;
 
 namespace WebApi_v1.Controllers

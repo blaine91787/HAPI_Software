@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
-using WebApi_v1.DataProducts;
 using WebApi_v1.HapiDataProducts;
 using WebApi_v1.HapiDataProducts.SpaceCraft.RBSpiceA.Products;
 using static WebApi_v1.Hapi.HapiResponse;
