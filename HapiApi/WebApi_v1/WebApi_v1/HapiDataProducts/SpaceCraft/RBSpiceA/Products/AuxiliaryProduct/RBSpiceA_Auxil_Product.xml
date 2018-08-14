@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ProductSpecification Name="x323_Auxil" Type="Auxil" Description="RBSPICE Auxiliary Data" NASADataLevel="0" >
+  <FileSpecification RegEx="rbspice_$sc$_DDDD_323_00.ptp.gz" Length="1 metday" SearchPattern="rbspice_$sc$_????_323_??.ptp.gz"
+                     FormatType="SOC" DataFormat="1" DataRevision="1" ReleaseDigits="2"
+					 Type="PTP" Compression="GZIP" Duplicates="Preserve">
+    <HeaderSpecification HasHeader="false" HeaderFields="" TerminatingFields="" Delimiter="" Duplicates="Ignore"/>
+    <KeyFields>
+      <MET/>
+      <Subseconds/>
+      <Spin/>
+      <SpinDuration/>
+    </KeyFields>
+    <TimingFields>
+      <Field Name="MET" Action="Load" Source="MET" Primary="True" Type="UInt32" inclusive_min="0" inclusive_max="473385600" Unit="Ticks" is_data="false" invalid_action="record" />
+      <Field Name="SCLOCK" Action="Load" Source="MET" Type="UInt32" inclusive_min="0" inclusive_max="473385600" Unit="Ticks" is_data="false" invalid_action="record" />
+      <Field Name="SCLOCKFine" Action="Load" Source="Subseconds" Type="UInt16" inclusive_min="0" inclusive_max="65535" Unit="SubTicks" is_data="false" invalid_action="record"/>
+      <Field Name="UTC" Action="Convert" Source="MET" Type="String" is_data="false" Conversion="METtoUTC"/>
+      <Field Name="ET" Action="Convert" Source="MET" Type="Double" inclusive_min="315576066.183925" inclusive_max="788961666.183928" decimal_places="3" is_data="false" Conversion="METtoET"/>
+    </TimingFields>
+    <Fields Delimiter="" Duplicates="Keep">
+      <Field Name="MET" Type="UInt32" inclusive_min="0" inclusive_max="4294967295" Unit="Ticks" is_data="false" invalid_action="record" />
+      <Field Name="Seconds" Type="UInt32" inclusive_min="0" inclusive_max="4294967295" Unit="Ticks" is_data="false" invalid_action="record" />
+      <Field Name="Subseconds" Type="UInt16" inclusive_min="0" inclusive_max="65535" Unit="SubTicks" is_data="false" invalid_action="record"/>
+      <Field Name="Spin" Type="UInt16" inclusive_min="0" inclusive_max="65535" UnitType="None" is_data="false" invalid_action="record" />
+      <Field Name="SpinTime" Type="UInt32" inclusive_min="0" inclusive_max="4294967295" Unit="Ticks" is_data="false" invalid_action="record" />
+      <Field Name="SpinPeriod" Type="UInt16" inclusive_min="15625" inclusive_max="62500" Unit="Microsecs" scale="320" is_data="false" invalid_action="record" />
+      <Field Name="SpinPhase" Type="UInt16" inclusive_min="0" inclusive_max="65535" Unit="Radians" scale="2*pi/2^16" is_data="false" invalid_action="record" />
+      <Field Name="MagPhase" Type="UInt16" inclusive_min="0" inclusive_max="65535" Unit="Radians" scale="2*pi/2^16 r" is_data="false" invalid_action="record" />
+      <Field Name="MagZeroSecond1" Type="Byte" inclusive_min="0" inclusive_max="255" Unit="Ticks" is_data="false" invalid_action="record" />
+      <Field Name="MagZeroSubSecond1" Type="Byte" inclusive_min="0" inclusive_max="156" Unit="Milliseconds" scale="6.4" is_data="false" invalid_action="record" />
+      <Field Name="MagZeroSecond2" Type="Byte" inclusive_min="0" inclusive_max="255" Unit="Ticks" is_data="false" invalid_action="record" />
+      <Field Name="MagZeroSubSecond2" Type="Byte" inclusive_min="0" inclusive_max="156" Unit="Milliseconds" scale="6.4" is_data="false" invalid_action="record" />
+      <Field Name="IntegrationSectors" Type="Byte" inclusive_min="0" inclusive_max="255" Unit="None" is_data="false" invalid_action="record" />
+      <Field Name="IntegrationMultiplier1" Type="Byte" inclusive_min="0" inclusive_max="36" Unit="None" is_data="false" invalid_action="record" />
+      <Field Name="IntegrationMultiplier2" Type="Byte" inclusive_min="0" inclusive_max="36" Unit="None" is_data="false" invalid_action="record" />
+      <Field Name="IntegrationSpins" Type="Byte" inclusive_min="0" inclusive_max="20" Unit="None" is_data="false" invalid_action="record" />
+      <Field Name="MagPhaseValid" Type="Bool" inclusive_min="false" inclusive_max="true" Unit="None" is_data="false" invalid_action="record" />
+      <Field Name="MagDataValid" Type="Bool" inclusive_min="false" inclusive_max="true" Unit="None" is_data="false" invalid_action="record" />
+      <Field Name="SpinDataValid" Type="Bool" inclusive_min="false" inclusive_max="true" Unit="None" is_data="false" invalid_action="record" />
+      <Field Name="ElectronPixel" Type="Bool" inclusive_min="false" inclusive_max="true" Unit="None" is_data="false" invalid_action="record" />
+      <Field Name="IonEnergyPixel" Type="Bool" inclusive_min="false" inclusive_max="true" Unit="None" is_data="false" invalid_action="record" />
+      <Field Name="IonSpeciesPixel" Type="Bool" inclusive_min="false" inclusive_max="true" Unit="None" is_data="false" invalid_action="record" />
+      <Field Name="Subsector1" Type="Byte" inclusive_min="0" inclusive_max="2" Unit="None" is_data="false" invalid_action="record" />
+      <Field Name="Subsector2" Type="Byte" inclusive_min="0" inclusive_max="2" Unit="None" is_data="false" invalid_action="record" />
+      <Field Name="Subsector3" Type="Byte" inclusive_min="0" inclusive_max="2" Unit="None" is_data="false" invalid_action="record" />
+      <Field Name="SpinDuration" Type="UInt16" inclusive_min="5000" inclusive_max="20000" Unit="Milliseconds" is_data="false" invalid_action="record" />
+    </Fields>
+  </FileSpecification>
+</ProductSpecification>

@@ -1,7 +1,9 @@
 ﻿using CsvHelper;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using WebApi_v1.DataProducts.SpaceCraft.RBSpiceA.Products.AuxiliaryProduct;
 using WebApi_v1.Hapi;
@@ -11,7 +13,7 @@ namespace WebApi_v1.HapiDataProducts.SpaceCraft.RBSpiceA.Products
 {
     public class RBSpiceAProduct : Product
     {
-        private string _basepath;
+        private string _basepath = @"RBSPA\";
 
         /// <summary>
         /// 
@@ -31,18 +33,9 @@ namespace WebApi_v1.HapiDataProducts.SpaceCraft.RBSpiceA.Products
             else
                 throw new ArgumentNullException(nameof(hapi));
 
+            _basepath = HapiConfig.Basepath + _basepath;
 
-            string unicornpukepath = @"C:\Users\unicornpuke\\Documents\GitHub\FTECS\HapiApi\WebApi_v1\WebApi_v1\SCRecords\RBSPA\";
-            string thinkpadpath = @"C:\Users\FTECS Account\\Documents\GitHub\FTECS\HapiApi\WebApi_v1\WebApi_v1\SCRecords\RBSPA\";
-            string gazellepath = @"C:\Users\blaine.harris\Documents\Github\FTECS\HapiApi\WebApi_v1\WebApi_v1\SCRecords\RBSPA\";
-
-            if (Directory.Exists(thinkpadpath))
-                _basepath = thinkpadpath;
-            else if (Directory.Exists(gazellepath))
-                _basepath = gazellepath;
-            else if (Directory.Exists(unicornpukepath))
-                _basepath = unicornpukepath;
-            else
+            if(!Directory.Exists(_basepath))
                 throw new DirectoryNotFoundException("RBSPiceAProduct._basepath could not resolve to a valid path.");
 
             GetPaths();
@@ -80,7 +73,7 @@ namespace WebApi_v1.HapiDataProducts.SpaceCraft.RBSpiceA.Products
                         basepath += mindate.ToString("yyyy") + @"\";
                         // TODO: implement gzip
                         basepath += String.Format(
-                            "rbsp-a-rbspice_lev-0_Auxil_{0}_v1.1.1-00.csv",
+                            "rbsp-a-rbspice_lev-0_Auxil_{0}_v1.1.1-00.csv.gz",
                             mindate.ToString("yyyyMMdd")
                         );
                         break;
@@ -143,19 +136,24 @@ namespace WebApi_v1.HapiDataProducts.SpaceCraft.RBSpiceA.Products
                 }
             }
             string path = String.Format(@"{0}Level_{1}\", _basepath, level, recType);
-            var recTypePath = Directory.EnumerateDirectories(path).First();
+            string recTypePath = Directory.EnumerateDirectories(path).First();
 
             // We now have the path to the level and record type the user requested.
 
             // Now get the minimum possible time possible.
-            var firstYearOfRecTypePath = Directory.EnumerateDirectories(recTypePath).First();
-            var firstRecFileOfRecTypePath = Directory.EnumerateFiles(firstYearOfRecTypePath).First();
+            string firstYearOfRecTypePath = Directory.EnumerateDirectories(recTypePath).First();
+            // TODO: BUG, .First() will give null if nothing is found and throw an exception
+            string firstRecFileOfRecTypePath = Directory.GetFiles(firstYearOfRecTypePath, "*.gz").First();
             path = firstRecFileOfRecTypePath;
             if (File.Exists(path))
             {
-                using (TextReader textReader = new StreamReader(File.OpenRead(path)))
+                FileInfo fileToDecompress = new FileInfo(path);
+
+                using (FileStream originalFileStream = fileToDecompress.OpenRead())
+                using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
+                using (TextReader decompressedFileReader = new StreamReader(decompressionStream))
                 {
-                    CsvReader csv = new CsvReader(textReader);
+                    CsvReader csv = new CsvReader(decompressedFileReader);
                     csv.Read();
                     csv.ReadHeader();
                     Converters cons = new Converters();
@@ -166,14 +164,20 @@ namespace WebApi_v1.HapiDataProducts.SpaceCraft.RBSpiceA.Products
             }
 
             // Get maximum possible datetime.
-            var lastYearOfRecTypePath = Directory.EnumerateDirectories(recTypePath).Last();
-            var lastRecFileOfRecTypePath = Directory.EnumerateFiles(lastYearOfRecTypePath).Last();
+            string lastYearOfRecTypePath = Directory.EnumerateDirectories(recTypePath).Last();
+            // TODO: BUG, .Last() will give null if nothing is found and throw an exception
+            string lastRecFileOfRecTypePath = Directory.GetFiles(lastYearOfRecTypePath, "*.gz").Last();
+
             path = lastRecFileOfRecTypePath;
             if (File.Exists(path))
             {
-                using (TextReader textReader = new StreamReader(File.OpenRead(path)))
+                FileInfo fileToDecompress = new FileInfo(path);
+
+                using (FileStream originalFileStream = fileToDecompress.OpenRead())
+                using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
+                using (TextReader decompressedFileReader = new StreamReader(decompressionStream))
                 {
-                    CsvReader csv = new CsvReader(textReader);
+                    CsvReader csv = new CsvReader(decompressedFileReader);
                     csv.Read();
                     csv.ReadHeader();
                     Converters cons = new Converters();
@@ -182,6 +186,7 @@ namespace WebApi_v1.HapiDataProducts.SpaceCraft.RBSpiceA.Products
                     while (csv.Read())
                     {
                         utc = csv[0];
+                        Debug.WriteLine(utc);
                     }
                     tr.Max = cons.ConvertUTCtoDate(utc);
 

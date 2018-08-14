@@ -186,10 +186,12 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HapiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="HapiPaths\HapiPaths.cs" />
     <Compile Include="HapiUtilities\Converters.cs" />
     <Compile Include="HapiUtilities\CSVHelperUtilities\Mappings.cs" />
     <Compile Include="HapiUtilities\CSVHelperUtilities\TypeConverters.cs" />
     <Compile Include="HapiUtilities\TimeRange.cs" />
+    <Compile Include="HapiUtilities\HapiXmlReader.cs" />
     <Compile Include="Hapi\HapiConfiguration.cs" />
     <Compile Include="HapiDataProducts\SpaceCraft\RBSpiceA\Products\AuxiliaryProduct\AuxiliaryRecords.cs" />
     <Compile Include="HapiDataProducts\IPrintableRecord.cs" />
@@ -236,6 +238,8 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="HapiDataProducts\HapiCatalog.xml" />
+    <Content Include="HapiDataProducts\SpaceCraft\RBSpiceA\Products\AuxiliaryProduct\RBSpiceA_Auxil_Product.xml" />
+    <Content Include="HapiXml\HapiConfiguration.xml" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />

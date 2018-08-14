@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using WebApi_v1.HapiDataProducts;
 using WebApi_v1.HapiDataProducts.SpaceCraft.RBSpiceA.Products;
+using WebApi_v1.HapiUtilities;
 using static WebApi_v1.Hapi.HapiResponse;
 using static WebApi_v1.Hapi.HapiResponse.Status;
 
@@ -14,12 +15,14 @@ namespace WebApi_v1.Hapi
     {
         #region Private Properties
 
-        private readonly string _version = "2.0";
-        private readonly string[] _capabilities = { "csv", "json" };
-        private readonly char[] _delimiters = new char[] { '?', '&', '=' };
-        private readonly string[] _requesttypes = new string[] { "data", "info", "capabilities", "catalog" };
-        private readonly string[] _validIDs = new string[] { "rbspicea" };
-        private readonly List<Tuple<string, string>> _catalog = new List<Tuple<string, string>>()
+        private string _basepath = String.Empty;
+        private string _dataArchivePath = String.Empty;
+        private string _version = String.Empty;
+        private string[] _capabilities = null;
+        private char[] _delimiters = new char[] { '?', '&', '=' };
+        private string[] _requesttypes;
+        private string[] _validIDs = new string[] { "rbspicea" };
+        private List<Tuple<string, string>> _catalog = new List<Tuple<string, string>>()
         {
             Tuple.Create("RBSPICEA_L0_AUX", "RBSPA Level 0 Auxiliary Data"),
         };
@@ -28,6 +31,8 @@ namespace WebApi_v1.Hapi
 
         #region Public Properties
 
+        public string Basepath { get { return _basepath; } }
+        public string DataArchivePath { get { return _dataArchivePath; } }
         public string Version { get { return _version; } }
         public string RequestType { get; private set; }
         public string Query { get; private set; }
@@ -116,6 +121,13 @@ namespace WebApi_v1.Hapi
 
         private void Initialize()
         {
+            // Get Hapi Specification defined defaults.
+            HapiXmlReader hxr = new HapiXmlReader();
+            hxr.LoadHapiSpecs(out _version, out _capabilities, out _, out _dataArchivePath, out _);
+
+            HapiPaths.Resolve();
+            _basepath = HapiPaths.DataPath;
+
             RequestType = String.Empty;
             Query = String.Empty;
             QueryDict = null;

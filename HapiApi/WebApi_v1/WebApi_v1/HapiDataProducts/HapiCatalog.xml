@@ -6,7 +6,7 @@
         <l0>
           <auxil>
             <productdescription description='{ "id" : "RBSPA_L0_AUXIL", "title" : "RBSpiceA Level 0 Auxiliary Data" }'></productdescription>
-            <path path='C:\Users\unicornpuke\\Documents\GitHub\FTECS\HapiApi\WebApi_v1\WebApi_v1\SCRecords\RBSPA\'></path>
+            <path>\\ftecs.com\data\Archive\RBSP\RBSPA\RBSPICE\Data\Level_0\Auxil</path>
             <field>UTC</field>
             <field>SCLOCK_Full</field>
             <field>ET</field>
@@ -79,9 +79,6 @@
           <tofxphhleht></tofxphhleht>
         </l1>
       </rbspa>
-      <rbspb>
-        
-      </rbspb>
     </spacecraft>
   </missions>
 </catalog>

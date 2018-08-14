@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using WebApi_v1.Hapi;
 using WebApi_v1.HapiUtilities;
@@ -28,10 +29,14 @@ namespace WebApi_v1.DataProducts.SpaceCraft.RBSpiceA.Products.AuxiliaryProduct
             {
                 if (File.Exists(path))
                 {
-                    using (TextReader textReader = new StreamReader(File.OpenRead(path)))
+                    FileInfo fileToDecompress = new FileInfo(path); ;
+
+                    using (FileStream originalFileStream = fileToDecompress.OpenRead())
+                    using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
+                    using (TextReader decompressedFileReader = new StreamReader(decompressionStream))
                     {
                         // TODO: Try and make this less dependant on Auxiliary type.
-                        CsvReader csv = new CsvReader(textReader);
+                        CsvReader csv = new CsvReader(decompressedFileReader);
 
                         csv.Configuration.RegisterClassMap<Aux_Map>();
                         csv.Configuration.MissingFieldFound = null;
@@ -123,9 +128,5 @@ namespace WebApi_v1.DataProducts.SpaceCraft.RBSpiceA.Products.AuxiliaryProduct
             }
             return Data;
         }
-
-
-
-
     }
 }
