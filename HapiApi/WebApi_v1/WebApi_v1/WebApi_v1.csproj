@@ -239,6 +239,7 @@
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="HapiDataProducts\HapiCatalog.xml" />
     <Content Include="HapiDataProducts\SpaceCraft\RBSpiceA\Products\AuxiliaryProduct\RBSpiceA_Auxil_Product.xml" />
+    <Content Include="HapiXml\HapiCatalog.xml" />
     <Content Include="HapiXml\HapiConfiguration.xml" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />

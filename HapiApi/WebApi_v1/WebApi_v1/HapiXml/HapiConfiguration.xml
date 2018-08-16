@@ -3,6 +3,7 @@
   <Version>2.0</Version>
   <Capabilities>csv,json</Capabilities>
   <Endpoints>data,info,capabilities,catalog</Endpoints>
-  <DataArchivePath>\\ftecs.com\data\Archive</DataArchivePath>
+  <DataArchivePath>C:\HapiApi\data\Archive\</DataArchivePath>
+  <!--<DataArchivePath>\\ftecs.com\data\Archive\</DataArchivePath>-->
   <CatalogPath>pathToCatalogTBD</CatalogPath>
 </HapiConfiguration>

@@ -22,7 +22,7 @@ namespace WebApi_v1.HapiUtilities
 
             version = xdoc.SelectSingleNode("/HapiConfiguration/Version").InnerText;
             capabilities = xdoc.SelectSingleNode("/HapiConfiguration/Capabilities").InnerText.Split(',').ToArray();
-            endpoints = xdoc.SelectSingleNode("/HapiConfiguration/Endpoints").InnerText.Split(',').ToArray(); 
+            endpoints = xdoc.SelectSingleNode("/HapiConfiguration/Endpoints").InnerText.Split(',').ToArray();
             dataArchivePath = xdoc.SelectSingleNode("/HapiConfiguration/DataArchivePath").InnerText;
             catalogPath = xdoc.SelectSingleNode("/HapiConfiguration/CatalogPath").InnerText;
         }

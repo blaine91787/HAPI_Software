@@ -122,7 +122,7 @@ namespace WebApi_v1.HapiDataProducts.SpaceCraft.RBSpiceA.Products
             };
 
             string level = HapiConfig.Properties.Level.TrimStart('l');
-            string recType = "";
+            string recType = String.Empty;
             if (HapiConfig.Properties.RecordType != String.Empty)
             {
                 switch (HapiConfig.Properties.RecordType)
@@ -139,16 +139,26 @@ namespace WebApi_v1.HapiDataProducts.SpaceCraft.RBSpiceA.Products
             string recTypePath = Directory.EnumerateDirectories(path).First();
 
             // We now have the path to the level and record type the user requested.
+            tr.Min = GetMinTime(recTypePath);
+            tr.Max = GetMaxTime(recTypePath);
 
+            return tr.IsValid();
+        }
+
+
+        private DateTime GetMinTime(string path)
+        {
             // Now get the minimum possible time possible.
-            string firstYearOfRecTypePath = Directory.EnumerateDirectories(recTypePath).First();
             // TODO: BUG, .First() will give null if nothing is found and throw an exception
+            string firstYearOfRecTypePath = Directory.EnumerateDirectories(path).First();
             string firstRecFileOfRecTypePath = Directory.GetFiles(firstYearOfRecTypePath, "*.gz").First();
             path = firstRecFileOfRecTypePath;
+
+            DateTime minTime = default (DateTime);
             if (File.Exists(path))
             {
+                // Decompress *.csv.gz file so we get a *.csv and use CsvReader to get the min time of data available.
                 FileInfo fileToDecompress = new FileInfo(path);
-
                 using (FileStream originalFileStream = fileToDecompress.OpenRead())
                 using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
                 using (TextReader decompressedFileReader = new StreamReader(decompressionStream))
@@ -159,20 +169,26 @@ namespace WebApi_v1.HapiDataProducts.SpaceCraft.RBSpiceA.Products
                     Converters cons = new Converters();
                     string[] headers = csv.Context.HeaderRecord;
                     csv.Read();
-                    tr.Min = cons.ConvertUTCtoDate(csv[0]);
+                    minTime = cons.ConvertUTCtoDate(csv[0]);
                 };
             }
 
-            // Get maximum possible datetime.
-            string lastYearOfRecTypePath = Directory.EnumerateDirectories(recTypePath).Last();
-            // TODO: BUG, .Last() will give null if nothing is found and throw an exception
-            string lastRecFileOfRecTypePath = Directory.GetFiles(lastYearOfRecTypePath, "*.gz").Last();
+            return minTime;
+        }
 
+        private DateTime GetMaxTime(string path)
+        {
+            // Get maximum possible datetime.
+            // TODO: BUG, .Last()  give null if nothing is found and throw an exception
+            string lastYearOfRecTypePath = Directory.EnumerateDirectories(path).Last();
+            string lastRecFileOfRecTypePath = Directory.GetFiles(lastYearOfRecTypePath, "*.gz").Last();
             path = lastRecFileOfRecTypePath;
+
+            DateTime maxTime = default(DateTime);
             if (File.Exists(path))
             {
+                // Decompress *.csv.gz file so we get a *.csv and use CsvReader to get the max time of data available.
                 FileInfo fileToDecompress = new FileInfo(path);
-
                 using (FileStream originalFileStream = fileToDecompress.OpenRead())
                 using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
                 using (TextReader decompressedFileReader = new StreamReader(decompressionStream))
@@ -188,11 +204,12 @@ namespace WebApi_v1.HapiDataProducts.SpaceCraft.RBSpiceA.Products
                         utc = csv[0];
                         Debug.WriteLine(utc);
                     }
-                    tr.Max = cons.ConvertUTCtoDate(utc);
+                    maxTime = cons.ConvertUTCtoDate(utc);
 
                 };
             }
-            return tr.IsValid();
+
+            return maxTime;
         }
     }
 }

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<catalog path="C:\HapiApi\data\Archive\">
+  <spacecraft id="rbspa" path="$data$\RBSP\RBSPA\">
+    <instrument id="ect"></instrument>
+    <instrument id="emfisis"></instrument>
+    <instrument id="rbspice" path="$data$\RBSPICE\Data\">
+      <!--<level id="level0" path="$data$Level_0\"-->
+        <product id="rbspa_rbspice_level0_auxil" path="$data$\Level_0\Auxil\$year$\">
+          <field name="UTC"></field>
+          <field name="SCLOCK_FULL"></field>
+        </product>
+      <!--</level>-->
+    </instrument>
+  </spacecraft>
+</catalog>
