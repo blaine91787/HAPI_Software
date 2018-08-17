@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -135,6 +136,11 @@ namespace WebApi_v1.Hapi
             Response = null;
             Properties = new HapiProperties();
             Product = null;
+
+            // TODO: Need to integrate the HapiCatalog
+            HapiCatalog.Catalog cat = new HapiCatalog.Catalog();
+            cat.CreateCatalog();
+            Debug.WriteLine(cat.ToString());
         }
 
         private bool TryToCreateQueryDict()

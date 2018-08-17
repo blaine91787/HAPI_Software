@@ -20,6 +20,7 @@ namespace ConsoleApp1
             HapiCatalog.Product prod = hapiConfig.Catalog.Spacecrafts[productId[0]].Instruments[productId[1]].Products[productId[2]];
 
             Console.WriteLine(String.Format("{0}\n{1}\n{2}", prod.Id, prod.Name, prod.Path));
+
             foreach(var field in prod.Fields)
             {
                 Console.WriteLine(field.Value.Name);

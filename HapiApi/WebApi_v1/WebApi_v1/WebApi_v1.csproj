@@ -186,6 +186,11 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HapiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="HapiCatalog\Catalog.cs" />
+    <Compile Include="HapiCatalog\Field.cs" />
+    <Compile Include="HapiCatalog\Instrument.cs" />
+    <Compile Include="HapiCatalog\Product.cs" />
+    <Compile Include="HapiCatalog\Spacecraft.cs" />
     <Compile Include="HapiPaths\HapiPaths.cs" />
     <Compile Include="HapiUtilities\Converters.cs" />
     <Compile Include="HapiUtilities\CSVHelperUtilities\Mappings.cs" />
