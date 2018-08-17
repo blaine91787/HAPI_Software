@@ -30,6 +30,11 @@ namespace ConsoleApp1.HapiCatalog
                             break;
                         case "path":
                             Path = attr.Value;
+                            if (Path.Contains("$data$"))
+                            {
+                                Path = Path.Replace("$data$", basepath).Replace(@"\\", @"\");
+                                basepath = Path;
+                            }
                             break;
                     }
                 }
@@ -44,7 +49,7 @@ namespace ConsoleApp1.HapiCatalog
                 {
                     product.GetProduct((XmlElement)productNode, basepath);
                 }
-                Products.Add(product.Name, product);
+                Products.Add(product.Id, product);
             }
         }
     }

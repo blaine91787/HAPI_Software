@@ -16,6 +16,7 @@ namespace ConsoleApp1.HapiCatalog
             string catalogXmlPath = @"C:\Users\blaine.harris\Documents\Github\FTECS\HapiApi\WebApi_v1\WebApi_v1\HapiXml\HapiCatalog.xml";
             XmlReaderSettings readerSettings = new XmlReaderSettings();
             readerSettings.IgnoreComments = true;
+
             using (XmlReader reader = XmlReader.Create(catalogXmlPath, readerSettings))
             {
                 XmlDocument xdoc = new XmlDocument();
@@ -45,6 +46,55 @@ namespace ConsoleApp1.HapiCatalog
                     }
                 }
             }
+        }
+
+        public Product GetProduct(string productId)
+        {
+            if (Spacecrafts == null)
+                throw new InvalidOperationException("Catalog must be created before you can get the product.");
+
+            // Must have format: [spacecraft]_[instrument]_[product]
+            Spacecraft sc = null;
+            Instrument instr = null;
+
+            string[] ids = productId.Split('_');
+            if (!Spacecrafts.Keys.Contains(ids[0]))
+                return null;
+
+            sc = Spacecrafts[ids[0]];
+            if (!sc.Instruments.Keys.Contains(ids[1]))
+                return null;
+
+            instr = sc.Instruments[ids[1]];
+            if (!instr.Products.Keys.Contains(ids[2]))
+                return null;
+
+            return instr.Products[ids[2]];
+        }
+
+        public List<Product> GetProducts(string instrumentId)
+        {
+            if(Spacecrafts == null)
+                throw new InvalidOperationException("Catalog must be created before you can get the product.");
+
+            //Must have format: [spacecraft]_[instrument]
+            Spacecraft sc = null;
+
+            string[] ids = instrumentId.Split('_');
+            if (!Spacecrafts.Keys.Contains(ids[0]))
+                return null;
+
+            sc = Spacecrafts[ids[0]];
+            if (!sc.Instruments.Keys.Contains(ids[1]))
+                return null;
+
+            List<Product> prods = new List<Product>();
+            foreach(Product prod in sc.Instruments[ids[1]].Products.Values)
+            {
+                prods.Add(prod);
+            }
+
+            return prods;
         }
     }
 }

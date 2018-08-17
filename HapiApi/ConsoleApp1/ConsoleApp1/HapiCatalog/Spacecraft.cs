@@ -40,7 +40,14 @@ namespace ConsoleApp1.HapiCatalog
                         Name = attr.Value;
 
                     if (attr.Name == "path")
+                    {
                         Path = attr.Value;
+                        if (Path.Contains("$data$"))
+                        {
+                            Path = Path.Replace("$data$", basepath).Replace(@"\\", @"\");
+                            basepath = Path;
+                        }
+                    }
                 }
             }
 

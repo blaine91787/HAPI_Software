@@ -202,7 +202,7 @@ namespace WebApi_v1.HapiDataProducts.SpaceCraft.RBSpiceA.Products
                     while (csv.Read())
                     {
                         utc = csv[0];
-                        Debug.WriteLine(utc);
+                        //Debug.WriteLine(utc);
                     }
                     maxTime = cons.ConvertUTCtoDate(utc);
 

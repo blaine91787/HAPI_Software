@@ -5,5 +5,5 @@
   <Endpoints>data,info,capabilities,catalog</Endpoints>
   <DataArchivePath>C:\HapiApi\data\Archive\</DataArchivePath>
   <!--<DataArchivePath>\\ftecs.com\data\Archive\</DataArchivePath>-->
-  <CatalogPath>pathToCatalogTBD</CatalogPath>
+  <CatalogPath>C:\Users\blaine.harris\Documents\Github\FTECS\HapiApi\WebApi_v1\WebApi_v1\HapiXml\HapiCatalog.xml</CatalogPath>
 </HapiConfiguration>

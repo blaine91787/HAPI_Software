@@ -15,19 +15,23 @@ namespace ConsoleApp1
         {
             HapiConfiguration hapiConfig = new HapiConfiguration();
             string userInput = "rbspa_rbspice_tofxeh";
-            string[] productId = userInput.Split('_');
+            string[] id = userInput.Split('_');
+            string idSC = id[0];
+            string idInstr = id[1];
+            string idProd = id[2];
 
-            HapiCatalog.Product prod = hapiConfig.Catalog.Spacecrafts[productId[0]].Instruments[productId[1]].Products[productId[2]];
-
-            Console.WriteLine(String.Format("{0}\n{1}\n{2}", prod.Id, prod.Name, prod.Path));
-
-            foreach(var field in prod.Fields)
+            foreach (HapiCatalog.Product prod in hapiConfig.Catalog.Spacecrafts[idSC].Instruments[idInstr].Products.Values)
             {
-                Console.WriteLine(field.Value.Name);
-                foreach(var attr in field.Value.Attributes)
-                {
-                    Console.WriteLine(String.Format("{0} : {1}", attr.Key, attr.Value));
-                }
+                Console.WriteLine(prod.ToString());
+            }
+
+            HapiCatalog.Product prod1 = hapiConfig.Catalog.GetProduct(userInput);
+
+            Console.WriteLine(prod1.ToString());
+
+            foreach(HapiCatalog.Product prod2 in hapiConfig.Catalog.GetProducts(idSC + "_" + idInstr))
+            {
+                Console.WriteLine(prod2.ToString());
             }
             Console.ReadKey();
         } 
