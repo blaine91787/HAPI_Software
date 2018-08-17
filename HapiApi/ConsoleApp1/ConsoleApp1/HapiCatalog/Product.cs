@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
-namespace ConsoleApp1
+namespace ConsoleApp1.HapiCatalog
 {
-    public class HapiProduct
+    public class Product
     {
         public string Id { get; set; }
+        public string Name { get; set; }
         public string Path { get; set; }
+        public string Description { get; set; }
         public Dictionary<string, Field> Fields { get; set; }
 
 
@@ -25,26 +24,30 @@ namespace ConsoleApp1
                 throw new ArgumentOutOfRangeException("basepath directory does not exist");
 
             if (productElement.HasAttribute("id"))
-            {
-                string id = productElement.Attributes["id"].Value;
-                Id = id;
-                Console.WriteLine(id);
-            }
+                Id = productElement.Attributes["id"].Value;
 
-            if(productElement.HasAttribute("path"))
+            if (productElement.HasAttribute("name"))
+                Name = productElement.Attributes["name"].Value;
+
+            if (productElement.HasAttribute("description"))
+                Description = productElement.Attributes["description"].Value;
+
+            if (productElement.HasAttribute("path"))
             {
-                string productPath = productElement.Attributes["path"].Value;
-                basepath = productPath.Replace("$data$", basepath);
-                Path = basepath;
-                Console.WriteLine(Path);
+                Path = productElement.Attributes["path"].Value;
+                if (Path.Contains("$data$"))
+                {
+                    Path = Path.Replace("$data$", basepath);
+                    basepath = Path;
+                }
             }
 
             XmlNodeList fieldNodes = productElement.ChildNodes;
             Fields = new Dictionary<string, Field>();
-            foreach(XmlNode fieldNode in fieldNodes)
+            foreach (XmlNode fieldNode in fieldNodes)
             {
                 Field field = new Field();
-                if(fieldNode.GetType() == typeof(XmlElement))
+                if (fieldNode.GetType() == typeof(XmlElement))
                 {
                     field.GetField((XmlElement)fieldNode);
                 }

@@ -1,15 +1,42 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <catalog path="C:\HapiApi\data\Archive\">
-  <spacecraft id="rbspa" path="$data$\RBSP\RBSPA\">
-    <instrument id="ect"></instrument>
-    <instrument id="emfisis"></instrument>
-    <instrument id="rbspice" path="$data$\RBSPICE\Data\">
-      <!--<level id="level0" path="$data$Level_0\"-->
-        <product id="rbspa_rbspice_level0_auxil" path="$data$\Level_0\Auxil\$year$\">
-          <field name="UTC"></field>
-          <field name="SCLOCK_FULL"></field>
-        </product>
-      <!--</level>-->
+  <spacecraft name="rbspa" path="$data$\RBSP\RBSPA\">
+    <instrument name="ect"></instrument>
+    <instrument name="emfisis"></instrument>
+    <instrument name="rbspice" path="$data$\RBSPICE\Data\">
+      <product name="tofxeh" id="rbspa_rbspice_tofxeh" path="$data$\Level_3PAP\TOFxEH\$year$" description="rbspice high energy res low time res tofxe proton intensities/pressures sorted by pitch angles">
+        <field name="Epoch" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="UTC" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="DDOY" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="ET" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="MidET" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="StopET" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="Duration" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="OrbitNumber" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="Spin" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="FPDU" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="FPDU_Weight" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="FPDU_PerpPressure" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="FPDU_ParaPressure" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="FPDU_Density" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="FPDU_IntegralFlux" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="FPDU_OmniFlux" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="FPDU_MinimFlux" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="FPDU_MaximFlux" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="FPDU_Error" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="FPDU_Energy" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="FPDU_EnergyRange" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="FPDU_Quality" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="Position" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="Position_SM" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="Position_GSM" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="Position_Quality" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="L" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="MLT" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="L_Eq" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="L_Star" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="I" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+      </product>
     </instrument>
   </spacecraft>
 </catalog>

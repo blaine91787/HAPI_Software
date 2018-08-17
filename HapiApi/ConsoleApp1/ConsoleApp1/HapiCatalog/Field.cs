@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace ConsoleApp1
+namespace ConsoleApp1.HapiCatalog
 {
     public class Field
     {
@@ -15,13 +15,15 @@ namespace ConsoleApp1
         public void GetField(XmlElement fieldElement)
         {
             if (fieldElement == null)
-                throw new ArgumentNullException("XmlElement is null.");
+                throw new ArgumentNullException("Field's fieldElement is null.");
 
             if (fieldElement.HasAttribute("name"))
+                Name = fieldElement.Attributes["name"].Value;
+
+            Attributes = new Dictionary<string, string>();
+            foreach (XmlAttribute attribute in fieldElement.Attributes)
             {
-                string name = fieldElement.Attributes["name"].Value;
-                Name = name;
-                Console.WriteLine(Name);
+                Attributes.Add(attribute.Name, attribute.Value);
             }
         }
     }

@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace ConsoleApp1
+namespace ConsoleApp1.HapiCatalog
 {
-    public partial class Hapi
+    public class Catalog
     {
-        public Dictionary<string, Spacecraft> Catalog { get; set; }
+        public Dictionary<string, Spacecraft> Spacecrafts { get; set; }
 
         public void CreateCatalog()
         {
@@ -30,34 +30,17 @@ namespace ConsoleApp1
 
                     if (catalogNode.HasChildNodes)
                     {
-                        Catalog = new Dictionary<string, Spacecraft>();
+                        Spacecrafts = new Dictionary<string, Spacecraft>();
                         XmlNodeList spacecraftNodes = catalogNode.ChildNodes;
 
-                        foreach(XmlNode spacecraftNode in spacecraftNodes)
+                        foreach (XmlNode spacecraftNode in spacecraftNodes)
                         {
                             Spacecraft sc = new Spacecraft();
                             if (spacecraftNode.GetType() == typeof(XmlElement))
                             {
                                 sc.GetSpacecraft((XmlElement)spacecraftNode, basepath);
-
                             }
-                            Catalog.Add(sc.Name, sc);
-                        }
-                    }
-                }
-            }
-            foreach(Spacecraft sc in Catalog.Values)
-            {
-                Console.WriteLine(sc.Name + " : " + sc.Path);
-                foreach(Instrument instr in sc.Instruments.Values)
-                {
-                    Console.WriteLine(instr.Name + " : " + instr.Path);
-                    foreach(HapiProduct prod in instr.Products.Values)
-                    {
-                        Console.WriteLine(prod.Id + " : " + prod.Path);
-                        foreach(Field field in prod.Fields.Values)
-                        {
-                            Console.WriteLine(field.Name);
+                            Spacecrafts.Add(sc.Name, sc);
                         }
                     }
                 }
