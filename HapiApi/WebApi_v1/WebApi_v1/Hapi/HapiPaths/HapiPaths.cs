@@ -4,15 +4,16 @@ using System.IO;
 using System.Linq;
 using System.Web;
 
-namespace WebApi_v1.Hapi
+namespace WebApi_v1.HAPI
 {
-    public class Paths
+    public class HapiPaths
     {
-        public static string UserPath = String.Empty;
-        public static string SoftwarePath = String.Empty;
-        public static string DataPath = String.Empty;
+        private bool UseFtecsArchive = false;
+        public string UserPath = String.Empty;
+        public string SoftwarePath = String.Empty;
+        public string DataPath = String.Empty;
 
-        public static void Resolve()
+        public void ResolveUserPath()
         {
             string unicornpukepath = @"C:\Users\unicornpuke\";
             string thinkpadpath = @"C:\Users\FTECS Account\";
@@ -30,6 +31,21 @@ namespace WebApi_v1.Hapi
 
             SoftwarePath = UserPath + @"\Documents\Github\FTECS\HapiApi\WebApi_v1\WebApi_v1\";
             DataPath = SoftwarePath + @"\SCRecords\";
+        }
+
+        public void ResolveDataPath()
+        {
+            string ftecspath = @"\\ftecs.com\data\";
+
+
+            if (UseFtecsArchive == true && Directory.Exists(ftecspath))
+                DataPath = ftecspath;
+
+        }
+
+        public void ResolveHapiXmlPath()
+        {
+
         }
     }
 }

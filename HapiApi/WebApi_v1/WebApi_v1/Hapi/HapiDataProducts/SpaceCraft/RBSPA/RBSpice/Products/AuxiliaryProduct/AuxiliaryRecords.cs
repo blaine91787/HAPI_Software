@@ -4,20 +4,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using WebApi_v1.Hapi.Utilities;
-using WebApi_v1.Hapi.Utilities.CSVHelperUtilities;
+using WebApi_v1.HAPI.Utilities;
+using WebApi_v1.HAPI.Configuration;
+using WebApi_v1.HAPI.Utilities.CSVHelperUtilities;
 
-namespace WebApi_v1.Hapi.DataProducts.SpaceCraft.RBSPA.RBSpice.Auxiliary
+namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA.RBSpice.Auxiliary
 {
     public class AuxiliaryRecords
     {
-        private Hapi.Configuration HapiConfig { get; set; }
+        private Hapi Hapi { get; set; }
         private List<Dictionary<string,string>> Data { get; set; }
 
-        public AuxiliaryRecords(Configuration hapi)
+        public AuxiliaryRecords(Hapi hapi)
         {
             if (hapi != null)
-                HapiConfig = hapi;
+                Hapi = hapi;
         }
 
 
@@ -48,7 +49,7 @@ namespace WebApi_v1.Hapi.DataProducts.SpaceCraft.RBSPA.RBSpice.Auxiliary
                         // else convert all rows to records and save to this.Records
                         // HACK: Figure out a way to save a record with only the requested fields
                         Converters cons = new Converters();
-                        if (HapiConfig.Properties.Parameters.Count > 0)
+                        if (Hapi.Properties.Parameters.Count > 0)
                         {
                             string[] headers = csv.Context.HeaderRecord;
 
@@ -61,13 +62,13 @@ namespace WebApi_v1.Hapi.DataProducts.SpaceCraft.RBSPA.RBSpice.Auxiliary
                                 // If csvrecord time is less than time.min or csvrecord
                                 // time is greater than time.max then continue while loop.
                                 // Inclusive min and Exclusive max
-                                bool ltmin = cons.ConvertUTCtoDate(csv["UTC"]) < HapiConfig.Properties.TimeMin;
-                                bool gtmax = cons.ConvertUTCtoDate(csv["UTC"]) >= HapiConfig.Properties.TimeMax;
+                                bool ltmin = cons.ConvertUTCtoDate(csv["UTC"]) < Hapi.Properties.TimeMin;
+                                bool gtmax = cons.ConvertUTCtoDate(csv["UTC"]) >= Hapi.Properties.TimeMax;
                                 if (ltmin || gtmax)
                                     continue;
 
                                 AuxRecord aux = new AuxRecord();
-                                foreach (string param in HapiConfig.Properties.Parameters)
+                                foreach (string param in Hapi.Properties.Parameters)
                                 {
                                     string parameterName = param;
                                     int indexOfParameterName = Array.IndexOf(headers, parameterName.ToLower());
@@ -86,7 +87,7 @@ namespace WebApi_v1.Hapi.DataProducts.SpaceCraft.RBSPA.RBSpice.Auxiliary
                             for (int i = 0; i < headers.Length; i++)
                             {
                                 headers[i] = headers[i].ToLower();
-                                HapiConfig.Properties.Parameters.Add(headers[i]);
+                                Hapi.Properties.Parameters.Add(headers[i]);
                             }
 
                             while (csv.Read())
@@ -96,8 +97,8 @@ namespace WebApi_v1.Hapi.DataProducts.SpaceCraft.RBSPA.RBSpice.Auxiliary
 
                                 // If csvrecord time is less than time.min or
                                 // csvrecord time is greater than time.max then break while loop.
-                                bool ltmin = cons.ConvertUTCtoDate(csv["UTC"]) < HapiConfig.Properties.TimeMin;
-                                bool gtmax = cons.ConvertUTCtoDate(csv["UTC"]) > HapiConfig.Properties.TimeMax;
+                                bool ltmin = cons.ConvertUTCtoDate(csv["UTC"]) < Hapi.Properties.TimeMin;
+                                bool gtmax = cons.ConvertUTCtoDate(csv["UTC"]) > Hapi.Properties.TimeMax;
                                 if (ltmin || gtmax)
                                     continue;
 

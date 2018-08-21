@@ -186,6 +186,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HapiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Hapi\Hapi.cs" />
     <Compile Include="Hapi\HapiCatalog\Catalog.cs" />
     <Compile Include="Hapi\HapiCatalog\Field.cs" />
     <Compile Include="Hapi\HapiCatalog\Instrument.cs" />

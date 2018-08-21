@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using WebApi_v1.Hapi.Utilities;
-using WebApi_v1.Hapi.Response;
+using WebApi_v1.HAPI.Configuration;
+using WebApi_v1.HAPI.Utilities;
+using WebApi_v1.HAPI.Response;
+using System.Net.Http;
 
-namespace WebApi_v1.Hapi
+namespace WebApi_v1.HAPI.Properties
 {
-    public class Properties
+    public class HapiProperties
     {
-
+        public HttpRequestMessage Request { get; private set; }
         public string RequestType { get; private set; }
+        public string RequestQuery { get; private set; }
         public string Id { get; private set; }
         public string SC { get; private set; }
         public string Level { get; private set; }
@@ -27,6 +30,7 @@ namespace WebApi_v1.Hapi
         private void Initialize()
         {
             RequestType = String.Empty;
+            RequestQuery = String.Empty;
             Id = String.Empty;
             SC = String.Empty;
             Level = String.Empty;
@@ -96,16 +100,26 @@ namespace WebApi_v1.Hapi
 
         #region Public Methods
 
-        public bool Assign(Configuration hapi)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="hapi"></param>
+        /// <returns></returns>
+        public bool Assign(HttpRequestMessage request, HapiConfiguration hapiConfig)
         {
-            if (hapi.QueryDict == null || hapi.RequestType == String.Empty)
-                throw new InvalidOperationException("HapiConfiguration must be configured.");
             
             Initialize();
 
-            Dictionary<string, string> dict = hapi.QueryDict;
+            Request = request;
+            RequestType = request.RequestUri.LocalPath.Split('/').Last().ToLower();
 
-            if (!(RequestParametersValid(hapi.RequestType, dict)))
+            if (RequestType == String.Empty)
+                throw new InvalidOperationException("HapiConfiguration must be configured.");
+
+            RequestQuery = request.RequestUri.Query;
+            Dictionary<string, string> dict = CreateQueryDictionary(RequestQuery);
+
+            if (!(RequestParametersValid(RequestType, dict)))
                 ErrorCodes.Add(Status.HapiStatusCode.UnknownAPIParameterName);
 
             string key = String.Empty;
@@ -121,7 +135,7 @@ namespace WebApi_v1.Hapi
                 {
                     case ("id"):
                         Id = val;
-                        if (hapi.ValidIDs.Intersect(Id.ToLower().Split('_')).Count() > 0) // ex: id=rbspicea_l0_aux
+                        if (hapiConfig.ValidIDs.Intersect(Id.ToLower().Split('_')).Count() > 0) // ex: id=rbspicea_l0_aux
                         {
                             // HACK: May fail given more spacecraft options.
                             int id = 0;
@@ -171,7 +185,7 @@ namespace WebApi_v1.Hapi
                         break;
 
                     case ("format"):
-                        if (hapi.Formats.Contains(val))
+                        if (hapiConfig.Formats.Contains(val))
                             Format = val;
                         else
                             ErrorCodes.Add(Status.HapiStatusCode.UnsupportedOuputFormat);
@@ -184,6 +198,30 @@ namespace WebApi_v1.Hapi
             }
 
             return (ErrorCodes.Count() > 0) ? false : true;
+        }
+
+        private Dictionary<string, string> CreateQueryDictionary(string hapiQuery)
+        {
+            if (hapiQuery == null)
+                throw new ArgumentNullException(nameof(hapiQuery));
+
+            char[] delimiters = { '?', '&', '=' };
+            Dictionary<string, string> dict = new Dictionary<string, string>();;
+
+            string[] arr = hapiQuery.ToLower().TrimStart(delimiters).Split(delimiters);
+
+            if (arr.Length >= 2 && arr.Length % 2 == 0)
+            {
+                for (int i = 0; i < arr.Length; i += 2)
+                    dict.Add(arr[i], arr[i + 1]);
+            }
+            else if (RequestType == "data") // Query empty or 
+            {
+                ErrorCodes.Add(Status.HapiStatusCode.UserInputError);
+                return dict;
+            }
+
+            return dict;
         }
 
         public override string ToString()

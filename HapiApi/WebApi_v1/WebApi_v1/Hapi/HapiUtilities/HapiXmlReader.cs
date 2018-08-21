@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Xml;
 
-namespace WebApi_v1.Hapi.Utilities
+namespace WebApi_v1.HAPI.Utilities
 {
     public class HapiXmlReader
     {

@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
-namespace WebApi_v1.Hapi.Utilities
+namespace WebApi_v1.HAPI.Utilities
 {
     public class Converters
     {

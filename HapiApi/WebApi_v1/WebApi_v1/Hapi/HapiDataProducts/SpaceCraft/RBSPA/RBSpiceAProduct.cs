@@ -5,12 +5,14 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using WebApi_v1.Hapi.DataProducts.SpaceCraft.RBSPA.RBSpice.Auxiliary;
-using WebApi_v1.Hapi.Utilities;
+using WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA.RBSpice.Auxiliary;
+using WebApi_v1.HAPI.Configuration;
+using WebApi_v1.HAPI.Utilities;
+using WebApi_v1.HAPI.Properties;
 
-namespace WebApi_v1.Hapi.DataProducts.SpaceCraft.RBSPA
+namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
 {
-    public class RBSpiceAProduct : DataProduct
+    public class RBSpiceAProduct : HapiDataProduct
     {
         private string _basepath = @"RBSPA\";
 
@@ -25,14 +27,17 @@ namespace WebApi_v1.Hapi.DataProducts.SpaceCraft.RBSPA
         /// <summary>
         /// 
         /// </summary>
-        public override void Configure(Configuration hapi)
+        public override void Configure(Hapi hapi)
         {
-            if (hapi != null)
-                HapiConfig = hapi;
-            else
-                throw new ArgumentNullException(nameof(hapi));
+            this.Hapi = hapi;
 
-            _basepath = HapiConfig.Basepath + _basepath;
+            if (Hapi.Configuration == null)
+                throw new ArgumentNullException(nameof(Hapi.Configuration));
+
+            if (Hapi.Properties == null)
+                throw new ArgumentNullException(nameof(Hapi.Properties));
+
+            _basepath = Hapi.Configuration.Basepath + _basepath;
 
             if(!Directory.Exists(_basepath))
                 throw new DirectoryNotFoundException("RBSPiceAProduct._basepath could not resolve to a valid path.");
@@ -45,8 +50,8 @@ namespace WebApi_v1.Hapi.DataProducts.SpaceCraft.RBSPA
         public override void GetPaths()
         {
             Paths = new List<string>();
-            DateTime mintime = HapiConfig.Properties.TimeMin;
-            DateTime maxtime = HapiConfig.Properties.TimeMax;
+            DateTime mintime = Hapi.Properties.TimeMin;
+            DateTime maxtime = Hapi.Properties.TimeMax;
             DateTime mindate = mintime.Date;
             DateTime maxdate = maxtime.Date;
             string basepath = String.Empty;
@@ -55,7 +60,7 @@ namespace WebApi_v1.Hapi.DataProducts.SpaceCraft.RBSPA
             {
                 basepath = _basepath;
 
-                switch (HapiConfig.Properties.Level)
+                switch (Hapi.Properties.Level)
                 {
                     case ("l0"):
                         basepath += @"Level_0\";
@@ -65,7 +70,7 @@ namespace WebApi_v1.Hapi.DataProducts.SpaceCraft.RBSPA
                         break;
                 }
 
-                switch (HapiConfig.Properties.RecordType)
+                switch (Hapi.Properties.RecordType)
                 {
                     case ("aux"):
                         basepath += @"Auxil\";
@@ -94,7 +99,7 @@ namespace WebApi_v1.Hapi.DataProducts.SpaceCraft.RBSPA
         /// <returns></returns>
         public override bool GetProduct()
         {
-            AuxiliaryRecords aux = new AuxiliaryRecords(HapiConfig);
+            AuxiliaryRecords aux = new AuxiliaryRecords(Hapi);
             Records = aux.GetRecords(Paths);
             return Records.Count() != 0 ? true : false;
         }
@@ -116,21 +121,21 @@ namespace WebApi_v1.Hapi.DataProducts.SpaceCraft.RBSPA
         {
             TimeRange tr = new TimeRange
             {
-                UserMin = HapiConfig.Properties.TimeMin,
-                UserMax = HapiConfig.Properties.TimeMax
+                UserMin = Hapi.Properties.TimeMin,
+                UserMax = Hapi.Properties.TimeMax
             };
 
-            string level = HapiConfig.Properties.Level.TrimStart('l');
+            string level = Hapi.Properties.Level.TrimStart('l');
             string recType = String.Empty;
-            if (HapiConfig.Properties.RecordType != String.Empty)
+            if (Hapi.Properties.RecordType != String.Empty)
             {
-                switch (HapiConfig.Properties.RecordType)
+                switch (Hapi.Properties.RecordType)
                 {
                     case ("aux"):
                         recType += @"Auxil\";
                         break;
                     default:
-                        recType += HapiConfig.Properties.RecordType;
+                        recType += Hapi.Properties.RecordType;
                         break;
                 }
             }

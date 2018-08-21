@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace WebApi_v1.Hapi.Catalog
+namespace WebApi_v1.HAPI.Catalog
 {
-    public class Content
+    public class HapiCatalog
     {
         public Dictionary<string, Spacecraft> Spacecrafts { get; set; }
 

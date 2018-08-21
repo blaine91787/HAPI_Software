@@ -1,39 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using WebApi_v1.Hapi.DataProducts.SpaceCraft.RBSPA;
+using WebApi_v1.HAPI.Configuration;
+using WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA;
+using WebApi_v1.HAPI.Properties;
 
-namespace WebApi_v1.Hapi.DataProducts
+namespace WebApi_v1.HAPI.DataProducts
 {
-    public abstract class DataProduct
+    public abstract class HapiDataProduct
     {
-        public Configuration HapiConfig { get; set; }
+        public Hapi Hapi { get; set; }
         public List<string> Paths { get; set; }
         public List<FileInfo> Files { get; set; }
 
         public string[] Header { get; set; }
         public IEnumerable<Dictionary<string, string>> Records { get; set; }
 
-        public static DataProduct Create(Configuration hapi)
+        public static HapiDataProduct Create(string scName, Hapi hapi)
         {
-            if (hapi == null)
-                throw new ArgumentNullException("Configuration hapi");
+            if (hapi.Properties == null)
+                throw new ArgumentNullException("HapiProperties is null.");
 
-            DataProduct temp = null;
-            switch(hapi.Properties.SC)
+            if (hapi.Configuration == null)
+                throw new ArgumentNullException("HapiConfiguration is null");
+
+            HapiDataProduct product = null;
+            switch (scName)
             {
                 case ("rbspicea"):
-                    temp = new RBSpiceAProduct();
-                    temp.Configure(hapi);
-                    temp.GetProduct();
+                    product = new RBSpiceAProduct();
+                    product.Configure(hapi);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("Not a valid spacecraft.");
             }
 
-            return temp;
+            return product;
         }
-        public abstract void Configure(Configuration hapi);
+        public abstract void Configure(Hapi hapi);
         public abstract bool GetProduct();
         public abstract bool VerifyTimeRange();
         public abstract void GetPaths();

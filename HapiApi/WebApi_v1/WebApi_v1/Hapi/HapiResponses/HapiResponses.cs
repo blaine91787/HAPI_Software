@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
-using static WebApi_v1.Hapi.Response.Status;
+using WebApi_v1.HAPI.Configuration;
+using WebApi_v1.HAPI.Catalog;
 
-namespace WebApi_v1.Hapi.Response
+namespace WebApi_v1.HAPI.Response
 {
     public abstract class Content
     {
-        public Configuration Hapi;
+        public Hapi Hapi { get; set; }
         public string HapiVersion { get; set; }
         public Status Status { get; set; }
 
-        public static Content Create(Configuration hapi, string type)
+        public static Content Create(Hapi hapi, string type)
         {
             if (type == "data")
                 return new Data(hapi);
@@ -35,7 +36,7 @@ namespace WebApi_v1.Hapi.Response
 
         public abstract string GetResponse();
 
-        public void SetStatusCode(HapiStatusCode statusCode)
+        public void SetStatusCode(Status.HapiStatusCode statusCode)
         {
             if (Status == null)
                 Status = new Status();
@@ -93,11 +94,11 @@ namespace WebApi_v1.Hapi.Response
     {
         private string[] OutputFormats { get; }
 
-        public Capabilities(Configuration hapi)
+        public Capabilities(Hapi hapi)
         {
-            HapiVersion = hapi.Version;
+            HapiVersion = hapi.Configuration.Version;
             Status = new Status();
-            OutputFormats = hapi.Capabilities;
+            OutputFormats = hapi.Configuration.Capabilities;
         }
 
         public override string GetResponse()
@@ -129,7 +130,7 @@ namespace WebApi_v1.Hapi.Response
         private List<string> Parameters = null;
         private IEnumerable<Dictionary<string, string>> DataRecords = null;
 
-        public Data(Configuration hapi)
+        public Data(Hapi hapi)
         {
             Hapi = hapi ?? throw new ArgumentNullException("HapiConfiguration not configured.");
 
@@ -142,16 +143,16 @@ namespace WebApi_v1.Hapi.Response
             if (Hapi.Properties.TimeMax == null)
                 throw new MissingFieldException(nameof(Hapi.Properties.TimeMax));
 
-            if (Hapi.Product == null)
-                throw new MissingFieldException(nameof(Hapi.Product));
+            if (Hapi.DataProduct == null)
+                throw new MissingFieldException(nameof(Hapi.DataProduct));
 
-            HapiVersion = Hapi.Version;
+            HapiVersion = Hapi.Configuration.Version;
             StartDate = Hapi.Properties.TimeMin.ToString();
             StopDate = Hapi.Properties.TimeMax.ToString();
             Parameters = Hapi.Properties.Parameters;
             Format = Hapi.Properties.Format;
             Status = new Status();
-            DataRecords = Hapi.Product.Records;
+            DataRecords = Hapi.DataProduct.Records;
         }
 
         public override string GetResponse()
@@ -248,16 +249,16 @@ namespace WebApi_v1.Hapi.Response
             }
 
             string last;
-            if (Hapi.Product.Records.Count() > 0)
+            if (Hapi.DataProduct.Records.Count() > 0)
             {
-                last = Hapi.Product.Records.ToList().First().ToList().Last().Key;
+                last = Hapi.DataProduct.Records.ToList().First().ToList().Last().Key;
             }
             else
             {
                 return ("No records were found. If this is an error, make sure query is valid.");
             }
 
-            foreach (Dictionary<string, string> rec in Hapi.Product.Records)
+            foreach (Dictionary<string, string> rec in Hapi.DataProduct.Records)
             {
                 foreach (KeyValuePair<string, string> pair in rec)
                 {
@@ -341,14 +342,14 @@ namespace WebApi_v1.Hapi.Response
             string last;
             try
             {
-                last = Hapi.Product.Records.ToList().First().ToList().Last().Key;
+                last = Hapi.DataProduct.Records.ToList().First().ToList().Last().Key;
             }
             catch
             {
                 throw new InvalidOperationException("\"HapiResponse.ToJson()>string last\" is empty. Possibly missing time.min or time.max or invalid request.");
             }
 
-            foreach (Dictionary<string, string> rec in Hapi.Product.Records)
+            foreach (Dictionary<string, string> rec in Hapi.DataProduct.Records)
             {
                 if (header)
                     sb.Append("\t\t[");
@@ -381,11 +382,11 @@ namespace WebApi_v1.Hapi.Response
         private DateTime StopDate { get; set; }
         private List<string> Parameters { get; set; }
 
-        public Info(Configuration hapi)
+        public Info(Hapi hapi)
         {
             Hapi = hapi ?? throw new ArgumentNullException("Configuration not configured.");
 
-            HapiVersion = hapi.Version;
+            HapiVersion = Hapi.Configuration.Version;
             Status = new Status(); // HACK: don't use a literal value for code
             Format = Hapi.Properties.Format;
             StartDate = Hapi.Properties.TimeMin;
@@ -459,11 +460,11 @@ namespace WebApi_v1.Hapi.Response
 
     internal class Catalog : Content
     {
-        public Catalog(Configuration hapi)
+        public Catalog(Hapi hapi)
         {
             Hapi = hapi ?? throw new ArgumentNullException("HapiConfiguration not configured.");
 
-            HapiVersion = Hapi.Version;
+            HapiVersion = Hapi.Configuration.Version;
             Status = new Status();
         }
 
@@ -484,7 +485,7 @@ namespace WebApi_v1.Hapi.Response
                 )
             );
 
-            foreach (Hapi.Catalog.Product prod in Hapi.Catalog.GetProducts())
+            foreach (Product prod in Hapi.Catalog.GetProducts())
             {
                 sb.Append(
                     String.Format(
@@ -505,13 +506,13 @@ namespace WebApi_v1.Hapi.Response
     {
         private string[] OutputFormats { get; }
 
-        public Error(Configuration hapi)
+        public Error(Hapi hapi)
         {
             Hapi = hapi ?? throw new ArgumentNullException("HapiConfiguration not configured.");
 
-            HapiVersion = Hapi.Version;
+            HapiVersion = Hapi.Configuration.Version;
             Status = new Status();
-            OutputFormats = Hapi.Capabilities;
+            OutputFormats = Hapi.Configuration.Capabilities;
         }
 
         public override string GetResponse()

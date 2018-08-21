@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using WebApi_v1.Hapi.DataProducts;
+using WebApi_v1.HAPI.DataProducts;
 
-namespace WebApi_v1.Hapi.DataProducts.SpaceCraft.RBSPA.RBSpice.Auxiliary
+namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA.RBSpice.Auxiliary
 {
     public class AuxRecord
     {

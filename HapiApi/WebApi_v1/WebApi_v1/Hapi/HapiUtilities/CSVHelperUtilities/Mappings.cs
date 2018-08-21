@@ -1,7 +1,7 @@
 ﻿using CsvHelper.Configuration;
-using WebApi_v1.Hapi.DataProducts.SpaceCraft.RBSPA.RBSpice.Auxiliary;
+using WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA.RBSpice.Auxiliary;
 
-namespace WebApi_v1.Hapi.Utilities.CSVHelperUtilities
+namespace WebApi_v1.HAPI.Utilities.CSVHelperUtilities
 {
     public static class Mappings
     {

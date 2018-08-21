@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebApi_v1.Hapi.Utilities
+namespace WebApi_v1.HAPI.Utilities
 {
     public class TimeRange
     {
