@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace ConsoleApp1.HapiCatalog
+namespace WebApi_v1.Hapi.Catalog
 {
     public class Spacecraft
     {

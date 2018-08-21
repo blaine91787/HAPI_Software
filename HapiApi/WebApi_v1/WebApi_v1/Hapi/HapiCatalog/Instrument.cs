@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
-namespace ConsoleApp1.HapiCatalog
+namespace WebApi_v1.Hapi.Catalog
 {
     public class Instrument
     {

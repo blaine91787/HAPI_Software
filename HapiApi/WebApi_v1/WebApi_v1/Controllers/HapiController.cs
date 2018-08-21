@@ -1,6 +1,5 @@
 ﻿using System.Net.Http;
 using System.Web.Http;
-using WebApi_v1.Hapi;
 
 namespace WebApi_v1.Controllers
 {
@@ -10,7 +9,7 @@ namespace WebApi_v1.Controllers
         [HttpGet]
         public HttpResponseMessage GetInfo()
         {
-            HapiConfiguration hapi = new HapiConfiguration();
+            Hapi.Configuration hapi = new Hapi.Configuration();
             hapi.Configure(Request);
             return hapi.GetResponse();
         }
@@ -19,7 +18,7 @@ namespace WebApi_v1.Controllers
         [HttpGet]
         public HttpResponseMessage GetData()
         {
-            HapiConfiguration hapi = new HapiConfiguration();
+            Hapi.Configuration hapi = new Hapi.Configuration();
             hapi.Configure(Request);
             return hapi.GetResponse(); 
         }
@@ -28,7 +27,7 @@ namespace WebApi_v1.Controllers
         [HttpGet]
         public HttpResponseMessage GetCatalog()
         {
-            HapiConfiguration hapi = new HapiConfiguration();
+            Hapi.Configuration hapi = new Hapi.Configuration();
             hapi.Configure(Request);
             return hapi.GetResponse();
         }
@@ -37,7 +36,7 @@ namespace WebApi_v1.Controllers
         [HttpGet]
         public HttpResponseMessage GetCapabilities()
         {
-            HapiConfiguration hapi = new HapiConfiguration();
+            Hapi.Configuration hapi = new Hapi.Configuration();
             hapi.Configure(Request);
             return hapi.GetResponse();
         }

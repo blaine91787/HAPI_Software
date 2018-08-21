@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
-namespace ConsoleApp1.HapiCatalog
+namespace WebApi_v1.Hapi.Catalog
 {
     public class Product
     {
@@ -78,7 +78,7 @@ namespace ConsoleApp1.HapiCatalog
         {
             return String.Format(
                 "Name:\t\t{0}\nId:\t\t{1}\nHapiId:\t\t{2}\nTitle:\t\t{3}\nPath:\t\t{4}\nDescription:\t{5}\n",
-                this.Name, 
+                this.Name,
                 this.Id,
                 this.HapiId,
                 this.Title,

@@ -14,13 +14,13 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             HapiConfiguration hapiConfig = new HapiConfiguration();
-            string userInput = "rbspa_rbspice_tofxeh";
+            string userInput = "rbspa_rbspice_auxil";
             string[] id = userInput.Split('_');
-            string idSC = id[0];
-            string idInstr = id[1];
-            string idProd = id[2];
+            string scId = id[0];
+            string instrId = id[1];
+            string prodId = id[2];
 
-            foreach (HapiCatalog.Product prod in hapiConfig.Catalog.Spacecrafts[idSC].Instruments[idInstr].Products.Values)
+            foreach (HapiCatalog.Product prod in hapiConfig.Catalog.Spacecrafts[scId].Instruments[instrId].Products.Values)
             {
                 Console.WriteLine(prod.ToString());
             }
@@ -29,7 +29,7 @@ namespace ConsoleApp1
 
             Console.WriteLine(prod1.ToString());
 
-            foreach(HapiCatalog.Product prod2 in hapiConfig.Catalog.GetProducts(idSC + "_" + idInstr))
+            foreach(HapiCatalog.Product prod2 in hapiConfig.Catalog.GetProducts(scId + "_" + instrId))
             {
                 Console.WriteLine(prod2.ToString());
             }

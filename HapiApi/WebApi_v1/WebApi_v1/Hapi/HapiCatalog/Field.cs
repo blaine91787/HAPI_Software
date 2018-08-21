@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace ConsoleApp1.HapiCatalog
+namespace WebApi_v1.Hapi
 {
     public class Field
     {
@@ -21,7 +21,7 @@ namespace ConsoleApp1.HapiCatalog
         public void GetField(XmlElement fieldElement)
         {
             if (fieldElement == null)
-                throw new ArgumentNullException("Field's fieldElement is null.");;
+                throw new ArgumentNullException("Field's fieldElement is null."); ;
 
             if (!fieldElement.HasAttributes)
                 throw new InvalidOperationException("Fields must have attributes for catalog entry to be valid. Check the catalog xml for errors."); ;
