@@ -74,6 +74,15 @@ namespace WebApi_v1.HAPI.Catalog
             }
         }
 
+        public List<Field> GetFields()
+        {
+            List<Field> temp = new List<Field>();
+            foreach(Field field in Fields.Values)
+            {
+                temp.Add(field);
+            }
+            return temp;
+        }
         public override string ToString()
         {
             return String.Format(

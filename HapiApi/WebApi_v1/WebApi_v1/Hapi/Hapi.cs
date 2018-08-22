@@ -9,6 +9,7 @@ using WebApi_v1.HAPI.Catalog;
 using WebApi_v1.HAPI.Properties;
 using WebApi_v1.HAPI.DataProducts;
 using System.Net;
+using System.Diagnostics;
 
 namespace WebApi_v1.HAPI
 {
@@ -20,6 +21,15 @@ namespace WebApi_v1.HAPI
         public HapiProperties Properties { get; set; }
         public HapiDataProduct DataProduct { get; set; }
 
+        public Hapi()
+        {
+            Configuration = null;
+            Catalog = null;
+            Response = null;
+            Properties = null;
+            DataProduct = null;
+        }
+
         public Hapi(HttpRequestMessage request)
         {
             Configure(request);
@@ -28,12 +38,13 @@ namespace WebApi_v1.HAPI
         public void Configure(HttpRequestMessage request)
         {
             Configuration = new HapiConfiguration();
-            Properties = new HapiProperties();
-            Catalog = new HapiCatalog();
-
             Configuration.ParseRequest(request);
-            Properties.Assign(request, Configuration);
+
+            Catalog = new HapiCatalog();
             Catalog.Create();
+
+            Properties = new HapiProperties();
+            Properties.Assign(request, Configuration, Catalog);
         }
 
         public HttpResponseMessage GetResponse()
@@ -85,7 +96,21 @@ namespace WebApi_v1.HAPI
 
         private bool GetDataProduct()
         {
-            DataProduct = HapiDataProduct.Create(Properties.SC, this);
+            try
+            {
+                DataProduct = HapiDataProduct.Create(Properties.SC, this);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Properties.ErrorCodes.Add(Status.HapiStatusCode.InternalServerError);
+            }
+
+            if (DataProduct == null)
+            {
+
+                return false;
+            }
 
             if (!DataProduct.VerifyTimeRange()) // Outside of SC data timerange
             {

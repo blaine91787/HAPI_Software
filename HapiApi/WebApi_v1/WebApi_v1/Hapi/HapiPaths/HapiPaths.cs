@@ -9,6 +9,7 @@ namespace WebApi_v1.HAPI
     public class HapiPaths
     {
         private bool UseFtecsArchive = false;
+        private bool UseGazelleArchive = false;
         public string UserPath = String.Empty;
         public string SoftwarePath = String.Empty;
         public string DataPath = String.Empty;
@@ -26,7 +27,7 @@ namespace WebApi_v1.HAPI
             else if (Directory.Exists(unicornpukepath))
                 UserPath = unicornpukepath;
             else
-                throw new DirectoryNotFoundException("RBSPiceAProduct._basepath could not resolve to a valid path.");
+                throw new DirectoryNotFoundException("RBSPAProduct._basepath could not resolve to a valid path.");
 
 
             SoftwarePath = UserPath + @"\Documents\Github\FTECS\HapiApi\WebApi_v1\WebApi_v1\";

@@ -12,15 +12,15 @@ using WebApi_v1.HAPI.Properties;
 
 namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
 {
-    public class RBSpiceAProduct : HapiDataProduct
+    public class RBSPAProduct : HapiDataProduct
     {
-        private string _basepath = @"RBSPA\";
+        private string _basepath = String.Empty;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="hapi"></param>
-        public RBSpiceAProduct()
+        public RBSPAProduct()
         {
 
         }
@@ -37,10 +37,17 @@ namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
             if (Hapi.Properties == null)
                 throw new ArgumentNullException(nameof(Hapi.Properties));
 
-            _basepath = Hapi.Configuration.Basepath + _basepath;
+            try
+            {
+                _basepath = Hapi.Catalog.GetProduct(Hapi.Properties.ID).Path;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
 
             if(!Directory.Exists(_basepath))
-                throw new DirectoryNotFoundException("RBSPiceAProduct._basepath could not resolve to a valid path.");
+                throw new DirectoryNotFoundException("RBSPAProduct._basepath could not resolve to a valid path.");
 
             GetPaths();
         }
@@ -54,29 +61,19 @@ namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
             DateTime maxtime = Hapi.Properties.TimeMax;
             DateTime mindate = mintime.Date;
             DateTime maxdate = maxtime.Date;
-            string basepath = String.Empty;
+            string filepath = String.Empty;
+            string year = String.Empty;
+            string filename = String.Empty;
 
             while (mintime <= maxtime)
             {
-                basepath = _basepath;
 
-                switch (Hapi.Properties.Level)
+                
+                switch (Hapi.Properties.Product)
                 {
-                    case ("l0"):
-                        basepath += @"Level_0\";
-                        break;
-
-                    default:
-                        break;
-                }
-
-                switch (Hapi.Properties.RecordType)
-                {
-                    case ("aux"):
-                        basepath += @"Auxil\";
-                        basepath += mindate.ToString("yyyy") + @"\";
-                        // TODO: implement gzip
-                        basepath += String.Format(
+                    case ("auxil"):
+                        year = mindate.ToString("yyyy");
+                        filename = String.Format(
                             "rbsp-a-rbspice_lev-0_Auxil_{0}_v1.1.1-00.csv.gz",
                             mindate.ToString("yyyyMMdd")
                         );
@@ -86,7 +83,10 @@ namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
                         break;
                 }
 
-                Paths.Add(basepath);
+                filepath = String.Format(_basepath + @"{0}\{1}", year, filename);
+                //filepath.Replace(@"\\", @"\");
+                if(File.Exists(filepath))
+                    Paths.Add(filepath);
 
                 mintime = mintime.AddDays(1.0);
                 mindate = mintime.Date;
@@ -125,26 +125,10 @@ namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
                 UserMax = Hapi.Properties.TimeMax
             };
 
-            string level = Hapi.Properties.Level.TrimStart('l');
-            string recType = String.Empty;
-            if (Hapi.Properties.RecordType != String.Empty)
-            {
-                switch (Hapi.Properties.RecordType)
-                {
-                    case ("aux"):
-                        recType += @"Auxil\";
-                        break;
-                    default:
-                        recType += Hapi.Properties.RecordType;
-                        break;
-                }
-            }
-            string path = String.Format(@"{0}Level_{1}\", _basepath, level, recType);
-            string recTypePath = Directory.EnumerateDirectories(path).First();
 
             // We now have the path to the level and record type the user requested.
-            tr.Min = GetMinTime(recTypePath);
-            tr.Max = GetMaxTime(recTypePath);
+            tr.Min = GetMinTime(_basepath);
+            tr.Max = GetMaxTime(_basepath);
 
             return tr.IsValid();
         }
@@ -155,7 +139,7 @@ namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
             // Now get the minimum possible time possible.
             // TODO: BUG, .First() will give null if nothing is found and throw an exception
             string firstYearOfRecTypePath = Directory.EnumerateDirectories(path).First();
-            string firstRecFileOfRecTypePath = Directory.GetFiles(firstYearOfRecTypePath, "*.gz").First();
+            string firstRecFileOfRecTypePath = Directory.GetFiles(firstYearOfRecTypePath, "*.gz").FirstOrDefault();
             path = firstRecFileOfRecTypePath;
 
             DateTime minTime = default (DateTime);
@@ -185,7 +169,7 @@ namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
             // Get maximum possible datetime.
             // TODO: BUG, .Last()  give null if nothing is found and throw an exception
             string lastYearOfRecTypePath = Directory.EnumerateDirectories(path).Last();
-            string lastRecFileOfRecTypePath = Directory.GetFiles(lastYearOfRecTypePath, "*.gz").Last();
+            string lastRecFileOfRecTypePath = Directory.GetFiles(lastYearOfRecTypePath, "*.gz").LastOrDefault();
             path = lastRecFileOfRecTypePath;
 
             DateTime maxTime = default(DateTime);

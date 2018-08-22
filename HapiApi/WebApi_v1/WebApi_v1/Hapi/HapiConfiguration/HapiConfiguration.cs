@@ -20,7 +20,7 @@ namespace WebApi_v1.HAPI.Configuration
         private string _dataArchivePath = String.Empty;
         private string _version = String.Empty;
         private string[] _capabilities = null;
-        private string[] _validIDs = new string[] { "rbspicea" };
+        private string[] _validIDs = new string[] { "rbspa" };
 
         #endregion Private Properties
 

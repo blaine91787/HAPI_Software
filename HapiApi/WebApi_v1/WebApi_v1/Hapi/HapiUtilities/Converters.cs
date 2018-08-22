@@ -14,6 +14,10 @@ namespace WebApi_v1.HAPI.Utilities
             string[] parts = utc.ToLower().Split(seps, StringSplitOptions.RemoveEmptyEntries);
             Regex r;
 
+            if (parts.Length > 0 && parts[0].Length == 4)
+                if (parts[1].Length == 3)
+                    return ConvertUTCtoDate(utc);
+
             Int32 yr = 0;
             Int32 month = 0;
             Int32 day = 0;
@@ -103,7 +107,7 @@ namespace WebApi_v1.HAPI.Utilities
 
         public DateTime ConvertUTCtoDate(String utc)
         {
-            String[] seps = new String[4] { "-", ":", "T", "." };
+            String[] seps = new String[7] { "-", ":", "T", "t", "Z", "z", "." };
             String[] parts = utc.Split(seps, StringSplitOptions.None);
 
             if (parts.Length == 0) return new DateTime();

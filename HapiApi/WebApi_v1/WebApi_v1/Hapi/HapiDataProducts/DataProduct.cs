@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using WebApi_v1.HAPI.Configuration;
 using WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA;
@@ -27,9 +28,17 @@ namespace WebApi_v1.HAPI.DataProducts
             HapiDataProduct product = null;
             switch (scName)
             {
-                case ("rbspicea"):
-                    product = new RBSpiceAProduct();
-                    product.Configure(hapi);
+                case ("rbspa"):
+                    try
+                    {
+                        product = new RBSPAProduct();
+                        product.Configure(hapi);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e.Message);
+                        throw e;
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("Not a valid spacecraft.");

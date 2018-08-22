@@ -380,7 +380,7 @@ namespace WebApi_v1.HAPI.Response
         private string Format { get; set; }
         private DateTime StartDate { get; set; }
         private DateTime StopDate { get; set; }
-        private List<string> Parameters { get; set; }
+        private List<Field> Parameters { get; set; }
 
         public Info(Hapi hapi)
         {
@@ -391,7 +391,8 @@ namespace WebApi_v1.HAPI.Response
             Format = Hapi.Properties.Format;
             StartDate = Hapi.Properties.TimeMin;
             StopDate = Hapi.Properties.TimeMax;
-            Parameters = Hapi.Properties.Parameters;
+            Parameters = Hapi.Catalog.GetProduct(Hapi.Properties.ID).GetFields();
+
         }
 
         public override string GetResponse()
@@ -419,7 +420,7 @@ namespace WebApi_v1.HAPI.Response
 
             if (Hapi.Properties.Parameters != null)
             {
-                foreach (string param in Hapi.Properties.Parameters)
+                foreach (Field param in Parameters)
                 {
                     if (multiLineParameters)
                     {
@@ -431,22 +432,22 @@ namespace WebApi_v1.HAPI.Response
                             "\t\t   \"fill\" : \"{3}\",\n" +
                             "\t\t   \"length\" : {4},\n" +
                             "\t\t}},\n",
-                            param.ToLower(),
-                            "null",
-                            "null",
-                            "null",
-                            "null"
+                            param.Name,
+                            param.Type,
+                            param.Units,
+                            param.Fill,
+                            param.Length
                         ));
                     }
                     else
                     {
                         sb.Append(String.Format(
                             "\t\t{{ \"name\" : \"{0}\", \"type\" : \"{1}\", \"units\" : \"{2}\", \"fill\" : \"{3}\", \"length\" : {4} }},\n",
-                            param.ToLower(),
-                            "null",
-                            "null",
-                            "null",
-                            "null"
+                            param.Name,
+                            param.Type,
+                            param.Units,
+                            param.Fill,
+                            param.Length                            
                         ));
                     }
                 }

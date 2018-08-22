@@ -5,7 +5,9 @@ using System.Web;
 using WebApi_v1.HAPI.Configuration;
 using WebApi_v1.HAPI.Utilities;
 using WebApi_v1.HAPI.Response;
+using WebApi_v1.HAPI.Catalog;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 
 namespace WebApi_v1.HAPI.Properties
 {
@@ -14,10 +16,10 @@ namespace WebApi_v1.HAPI.Properties
         public HttpRequestMessage Request { get; private set; }
         public string RequestType { get; private set; }
         public string RequestQuery { get; private set; }
-        public string Id { get; private set; }
+        public string ID { get; private set; }
         public string SC { get; private set; }
-        public string Level { get; private set; }
-        public string RecordType { get; private set; }
+        public string Instrument { get; private set; }
+        public string Product { get; private set; }
         public string Format { get; private set; }
         public bool IncludeHeader { get; private set; }
         public DateTime TimeMin { get; private set; }
@@ -31,10 +33,10 @@ namespace WebApi_v1.HAPI.Properties
         {
             RequestType = String.Empty;
             RequestQuery = String.Empty;
-            Id = String.Empty;
+            ID = String.Empty;
             SC = String.Empty;
-            Level = String.Empty;
-            RecordType = String.Empty;
+            Instrument = String.Empty;
+            Product = String.Empty;
             Format = "csv";
             IncludeHeader = false;
             TimeMin = default(DateTime);
@@ -105,7 +107,7 @@ namespace WebApi_v1.HAPI.Properties
         /// </summary>
         /// <param name="hapi"></param>
         /// <returns></returns>
-        public bool Assign(HttpRequestMessage request, HapiConfiguration hapiConfig)
+        public bool Assign(HttpRequestMessage request, HapiConfiguration hapiConfig, HapiCatalog catalog)
         {
             
             Initialize();
@@ -134,33 +136,37 @@ namespace WebApi_v1.HAPI.Properties
                 switch (key)
                 {
                     case ("id"):
-                        Id = val;
-                        if (hapiConfig.ValidIDs.Intersect(Id.ToLower().Split('_')).Count() > 0) // ex: id=rbspicea_l0_aux
+                        ID = val;
+                        
+                        if (catalog.IsValidProduct(ID)) // ex: id=rbspicea_l0_aux
                         {
                             // HACK: May fail given more spacecraft options.
-                            int id = 0;
-                            int level = 1;
-                            int recordType = 2;
+                            int sc = 0;
+                            int instr = 1;
+                            int prod = 2;
                             string[] idArray = val.Split('_'); // id=rbspicea_l0_aux
-                            if (idArray.Count() >= 0)
-                                SC = idArray[id];
-                            if (idArray.Count() >= 1)
-                                Level = idArray[level];
-                            if (idArray.Count() >= 2)
-                                RecordType = idArray[recordType];
+                            SC = idArray[sc];
+                            Instrument = idArray[instr];
+                            Product = idArray[prod];
                         }
                         else
                         {
                             ErrorCodes.Add(Status.HapiStatusCode.UnknownDatasetID);
+                            return false;
                         }
                         break;
 
                     case ("time.min"):
                         dt = cons.ConvertHapiYMDToDateTime(val);
                         if (dt != default(DateTime))
+                        {
                             TimeMin = dt.ToUniversalTime();
+                        }
                         else
+                        {
                             ErrorCodes.Add(Status.HapiStatusCode.ErrorInStartTime);
+                            return false;
+                        }
                         break;
 
                     case ("time.max"):
@@ -168,9 +174,15 @@ namespace WebApi_v1.HAPI.Properties
                         if (dt != default(DateTime) && TimeMin < dt)
                             TimeMax = dt.ToUniversalTime();
                         else if (dt == default(DateTime))
+                        {
                             ErrorCodes.Add(Status.HapiStatusCode.ErrorInStopTime);
+                            return false;
+                        }
                         else if (TimeMin >= dt)
+                        {
                             ErrorCodes.Add(Status.HapiStatusCode.StartTimeEqualToOrAfterStopTime);
+                            return false;
+                        }
                         break;
 
                     case ("parameters"):
@@ -179,25 +191,35 @@ namespace WebApi_v1.HAPI.Properties
 
                     case ("include"):
                         if (val == "header")
+                        {
                             IncludeHeader = true;
+                        }
                         else
+                        {
                             ErrorCodes.Add(Status.HapiStatusCode.UnsupportedIncludeValue);
+                            return false;
+                        }
                         break;
 
                     case ("format"):
                         if (hapiConfig.Formats.Contains(val))
+                        {
                             Format = val;
+                        }
                         else
+                        {
                             ErrorCodes.Add(Status.HapiStatusCode.UnsupportedOuputFormat);
+                            return false;
+                        }
                         break;
 
                     default:
                         ErrorCodes.Add(Status.HapiStatusCode.UserInputError);
-                        break;
+                        return false;
                 }
             }
 
-            return (ErrorCodes.Count() > 0) ? false : true;
+            return true;
         }
 
         private Dictionary<string, string> CreateQueryDictionary(string hapiQuery)
@@ -243,7 +265,7 @@ namespace WebApi_v1.HAPI.Properties
                 "TimeMax: {2}\n" +
                 "Parameters: {3}\n" +
                 "IncludeHeader: {4}\n",
-                Id,
+                ID,
                 TimeMin == default(DateTime) ? "No start time provided." : TimeMin.ToString(),
                 TimeMax == default(DateTime) ? "No end time provided." : TimeMax.ToString(),
                 pars,

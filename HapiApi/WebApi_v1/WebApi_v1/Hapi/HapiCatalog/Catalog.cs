@@ -54,22 +54,30 @@ namespace WebApi_v1.HAPI.Catalog
                 throw new InvalidOperationException("Catalog must be created before you can get the product.");
 
             // Must have format: [spacecraft]_[instrument]_[product]
+            if (productId.Split('_').Length != 3)
+                return null;
+
             Spacecraft sc = null;
             Instrument instr = null;
 
             string[] ids = productId.Split('_');
-            if (!Spacecrafts.Keys.Contains(ids[0]))
+            string scID = ids[0];
+            string instrID = ids[1];
+            string prodID = ids[2];
+
+            if (!Spacecrafts.Keys.Contains(scID))                
                 return null;
 
-            sc = Spacecrafts[ids[0]];
-            if (!sc.Instruments.Keys.Contains(ids[1]))
+            // TODO: Exceptions shouldn't be thrown. Instead it should be handled gracefully and reported to user.
+            sc = Spacecrafts[scID];
+            if (!sc.Instruments.Keys.Contains(instrID))
                 return null;
 
-            instr = sc.Instruments[ids[1]];
-            if (!instr.Products.Keys.Contains(ids[2]))
+            instr = sc.Instruments[instrID];
+            if (!instr.Products.Keys.Contains(prodID))
                 return null;
 
-            return instr.Products[ids[2]];
+            return instr.Products[prodID];
         }
 
         public List<Product> GetProducts()
@@ -91,6 +99,11 @@ namespace WebApi_v1.HAPI.Catalog
                 }
                 return prods;
             }
+        }
+
+        public bool IsValidProduct(string productID)
+        {
+            return GetProduct(productID) != null ? true : false;
         }
     }
 }
