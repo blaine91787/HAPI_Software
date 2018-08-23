@@ -13,7 +13,7 @@ namespace ConsoleApp1.HapiCatalog
 
         public void CreateCatalog()
         {
-            string catalogXmlPath = @"C:\Users\blaine.harris\Documents\Github\FTECS\HapiApi\WebApi_v1\WebApi_v1\HapiXml\HapiCatalog.xml";
+            string catalogXmlPath = @"C:\Users\blaine.harris\Documents\Github\FTECS\HapiApi\WebApi_v1\WebApi_v1\Hapi\HapiXml\HapiCatalog.xml";
             XmlReaderSettings readerSettings = new XmlReaderSettings();
             readerSettings.IgnoreComments = true;
 

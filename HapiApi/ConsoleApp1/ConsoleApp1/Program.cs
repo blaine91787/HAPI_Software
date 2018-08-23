@@ -13,6 +13,18 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
+
+
+
+
+            RunCatalog();
+
+
+            Console.ReadKey();
+        }
+
+        static void RunCatalog()
+        {
             HapiConfiguration hapiConfig = new HapiConfiguration();
             string userInput = "rbspa_rbspice_auxil";
             string[] id = userInput.Split('_');
@@ -29,11 +41,10 @@ namespace ConsoleApp1
 
             Console.WriteLine(prod1.ToString());
 
-            foreach(HapiCatalog.Product prod2 in hapiConfig.Catalog.GetProducts(scId + "_" + instrId))
+            foreach (HapiCatalog.Product prod2 in hapiConfig.Catalog.GetProducts(scId + "_" + instrId))
             {
                 Console.WriteLine(prod2.ToString());
             }
-            Console.ReadKey();
-        } 
+        }
     }
 }
