@@ -41,7 +41,7 @@ namespace WebApi_v1.HAPI
             Configuration.ParseRequest(request);
 
             Catalog = new HapiCatalog();
-            Catalog.Create();
+            Catalog.Create(Configuration.Paths);
 
             Properties = new HapiProperties();
             Properties.Assign(request, Configuration, Catalog);

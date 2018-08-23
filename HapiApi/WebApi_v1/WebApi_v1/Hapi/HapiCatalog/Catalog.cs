@@ -11,9 +11,10 @@ namespace WebApi_v1.HAPI.Catalog
     {
         public Dictionary<string, Spacecraft> Spacecrafts { get; set; }
 
-        public void Create()
+        public void Create(HapiPaths paths)
         {
-            string catalogXmlPath = @"C:\Users\blaine.harris\Documents\Github\FTECS\HapiApi\WebApi_v1\WebApi_v1\Hapi\HapiXml\HapiCatalog.xml";
+            
+            string catalogXmlPath = paths.CatalogXmlPath;
             XmlReaderSettings readerSettings = new XmlReaderSettings();
             readerSettings.IgnoreComments = true;
 
@@ -25,9 +26,7 @@ namespace WebApi_v1.HAPI.Catalog
                 XmlNodeList catalogNodes = xdoc.GetElementsByTagName("catalog");
                 foreach (XmlNode catalogNode in catalogNodes)
                 {
-                    string basepath = String.Empty;
-                    if (catalogNode.Attributes["path"] != null)
-                        basepath = catalogNode.Attributes["path"].Value;
+                    string basepath = paths.DataPath;
 
                     if (catalogNode.HasChildNodes)
                     {

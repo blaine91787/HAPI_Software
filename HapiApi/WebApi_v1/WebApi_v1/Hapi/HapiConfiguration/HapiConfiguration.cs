@@ -20,7 +20,6 @@ namespace WebApi_v1.HAPI.Configuration
         private string _dataArchivePath = String.Empty;
         private string _version = String.Empty;
         private string[] _capabilities = null;
-        private string[] _validIDs = new string[] { "rbspa" };
 
         #endregion Private Properties
 
@@ -33,7 +32,7 @@ namespace WebApi_v1.HAPI.Configuration
         public string Query { get; private set; }
         public string[] Capabilities { get { return _capabilities; } }
         public string[] Formats { get { return _capabilities; } }
-        public string[] ValidIDs { get { return _validIDs; } }
+        public HapiPaths Paths { get; private set; }
         public HttpRequestMessage Request { get; private set; }
         public HttpResponseMessage Response { get; private set; }
         public HapiDataProduct Product { get; private set; }
@@ -44,15 +43,14 @@ namespace WebApi_v1.HAPI.Configuration
 
         public void ParseRequest(HttpRequestMessage request)
         {
+
+            Paths = new HapiPaths();
+            Paths.ResolveUserPath();
+            _basepath = Paths.DataPath;
+
             // Get Hapi Specification defined defaults.
             HapiXmlReader hxr = new HapiXmlReader();
-            hxr.LoadHapiSpecs(out _version, out _capabilities, out _, out _dataArchivePath, out _);
-
-            HapiPaths paths = new HapiPaths();
-            paths.ResolveUserPath();
-            _basepath = paths.DataPath;
-
-
+            hxr.LoadHapiSpecs(Paths.ConfigurationXmlPath, out _version, out _capabilities, out _, out _dataArchivePath, out _);
 
             // TODO: Need to integrate the HapiCatalog
         }

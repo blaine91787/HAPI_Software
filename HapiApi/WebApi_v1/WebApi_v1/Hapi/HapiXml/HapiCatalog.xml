@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<catalog path="C:\HapiApi\data\Archive\">
+<catalog>
   <spacecraft name="rbspa" path="$data$\RBSP\RBSPA\">
     <instrument name="ect"></instrument>
     <instrument name="emfisis"></instrument>
