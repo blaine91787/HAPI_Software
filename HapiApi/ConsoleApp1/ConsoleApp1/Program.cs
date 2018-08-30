@@ -6,34 +6,25 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using ConsoleApp1;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using SPDF.CDF.CSharp;
 
 namespace ConsoleApp1
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main()
         {
-            HapiConfiguration hapiConfig = new HapiConfiguration();
-            string userInput = "rbspa_rbspice_auxil";
-            string[] id = userInput.Split('_');
-            string scId = id[0];
-            string instrId = id[1];
-            string prodId = id[2];
-
-            foreach (HapiCatalog.Product prod in hapiConfig.Catalog.Spacecrafts[scId].Instruments[instrId].Products.Values)
-            {
-                Console.WriteLine(prod.ToString());
-            }
-
-            HapiCatalog.Product prod1 = hapiConfig.Catalog.GetProduct(userInput);
-
-            Console.WriteLine(prod1.ToString());
-
-            foreach(HapiCatalog.Product prod2 in hapiConfig.Catalog.GetProducts(scId + "_" + instrId))
-            {
-                Console.WriteLine(prod2.ToString());
-            }
+            XmlCatalogProducer catProducer = new XmlCatalogProducer();
+            catProducer.CreateCatalog();
+            //string cdfFilePath = @"C:\HapiApi\data\Archive\RBSP\RBSPA\RBSPICE\Data\Level_3PAP\TOFxEH\2013\rbsp-a-rbspice_lev-3-PAP_TOFxEH_20130126_v1.1.2-00.cdf";
+            //CDFReader cdfFile = new CDFReader(cdfFilePath);
+            //cdfFile.GetAttributes();
             Console.ReadKey();
-        } 
+        }
+
+
+
     }
 }

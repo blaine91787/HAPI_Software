@@ -107,14 +107,20 @@ namespace WebApi_v1.HAPI
             }
 
             if (DataProduct == null)
-            {
-
                 return false;
-            }
 
             if (!DataProduct.VerifyTimeRange()) // Outside of SC data timerange
             {
-                Properties.ErrorCodes.Add(Status.HapiStatusCode.TimeOutsideValidRange);
+                DateTime min = Properties.TimeRange.UserMin;
+                DateTime max = Properties.TimeRange.UserMax;
+                DateTime availMin = Properties.TimeRange.Min;
+                DateTime availMax = Properties.TimeRange.Max;
+
+                if (min == max || min > max)
+                    Properties.ErrorCodes.Add(Status.HapiStatusCode.StartTimeEqualToOrAfterStopTime);
+
+                if (min <= availMin || max >= availMax)
+                    Properties.ErrorCodes.Add(Status.HapiStatusCode.TimeOutsideValidRange);
                 return false;
             }
             else if (!DataProduct.GetProduct()) // Data doesn't exist

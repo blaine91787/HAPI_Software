@@ -62,8 +62,8 @@ namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA.RBSpice.Auxiliary
                                 // If csvrecord time is less than time.min or csvrecord
                                 // time is greater than time.max then continue while loop.
                                 // Inclusive min and Exclusive max
-                                bool ltmin = cons.ConvertUTCtoDate(csv["UTC"]) < Hapi.Properties.TimeMin;
-                                bool gtmax = cons.ConvertUTCtoDate(csv["UTC"]) >= Hapi.Properties.TimeMax;
+                                bool ltmin = cons.ConvertUTCtoDate(csv["UTC"]) < Hapi.Properties.TimeRange.UserMin;
+                                bool gtmax = cons.ConvertUTCtoDate(csv["UTC"]) >= Hapi.Properties.TimeRange.UserMax;
                                 if (ltmin || gtmax)
                                     continue;
 
@@ -97,8 +97,8 @@ namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA.RBSpice.Auxiliary
 
                                 // If csvrecord time is less than time.min or
                                 // csvrecord time is greater than time.max then break while loop.
-                                bool ltmin = cons.ConvertUTCtoDate(csv["UTC"]) < Hapi.Properties.TimeMin;
-                                bool gtmax = cons.ConvertUTCtoDate(csv["UTC"]) > Hapi.Properties.TimeMax;
+                                bool ltmin = cons.ConvertUTCtoDate(csv["UTC"]) < Hapi.Properties.TimeRange.UserMin;
+                                bool gtmax = cons.ConvertUTCtoDate(csv["UTC"]) > Hapi.Properties.TimeRange.UserMax;
                                 if (ltmin || gtmax)
                                     continue;
 

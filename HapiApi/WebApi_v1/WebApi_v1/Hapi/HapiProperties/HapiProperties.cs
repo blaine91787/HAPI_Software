@@ -22,8 +22,7 @@ namespace WebApi_v1.HAPI.Properties
         public string Product { get; private set; }
         public string Format { get; private set; }
         public bool IncludeHeader { get; private set; }
-        public DateTime TimeMin { get; private set; }
-        public DateTime TimeMax { get; private set; }
+        public TimeRange TimeRange { get; private set; }
         public List<string> Parameters { get; private set; }
         public List<Status.HapiStatusCode> ErrorCodes { get; private set; }
 
@@ -39,8 +38,7 @@ namespace WebApi_v1.HAPI.Properties
             Product = String.Empty;
             Format = "csv";
             IncludeHeader = false;
-            TimeMin = default(DateTime);
-            TimeMax = default(DateTime);
+            TimeRange = new TimeRange();
             Parameters = new List<string>();
             ErrorCodes = new List<Status.HapiStatusCode>();
         }
@@ -160,7 +158,7 @@ namespace WebApi_v1.HAPI.Properties
                         dt = cons.ConvertHapiYMDToDateTime(val);
                         if (dt != default(DateTime))
                         {
-                            TimeMin = dt.ToUniversalTime();
+                            TimeRange.UserMin = dt.ToUniversalTime();
                         }
                         else
                         {
@@ -171,14 +169,20 @@ namespace WebApi_v1.HAPI.Properties
 
                     case ("time.max"):
                         dt = cons.ConvertHapiYMDToDateTime(val);
-                        if (dt != default(DateTime) && TimeMin < dt)
-                            TimeMax = dt.ToUniversalTime();
+                        if (dt != default(DateTime))
+                            TimeRange.UserMax = dt.ToUniversalTime();
                         else if (dt == default(DateTime))
                         {
                             ErrorCodes.Add(Status.HapiStatusCode.ErrorInStopTime);
                             return false;
                         }
-                        else if (TimeMin >= dt)
+                        else if (TimeRange.UserMax >= dt)
+                        {
+                            ErrorCodes.Add(Status.HapiStatusCode.StartTimeEqualToOrAfterStopTime);
+                            return false;
+                        }
+
+                        if (TimeRange.UserMin == TimeRange.UserMax)
                         {
                             ErrorCodes.Add(Status.HapiStatusCode.StartTimeEqualToOrAfterStopTime);
                             return false;
@@ -218,7 +222,6 @@ namespace WebApi_v1.HAPI.Properties
                         return false;
                 }
             }
-
             return true;
         }
 
@@ -266,8 +269,8 @@ namespace WebApi_v1.HAPI.Properties
                 "Parameters: {3}\n" +
                 "IncludeHeader: {4}\n",
                 ID,
-                TimeMin == default(DateTime) ? "No start time provided." : TimeMin.ToString(),
-                TimeMax == default(DateTime) ? "No end time provided." : TimeMax.ToString(),
+                TimeRange.UserMin == default(DateTime) ? "No start time provided." : TimeRange.UserMin.ToString(),
+                TimeRange.UserMax == default(DateTime) ? "No end time provided." : TimeRange.UserMax.ToString(),
                 pars,
                 IncludeHeader
             );

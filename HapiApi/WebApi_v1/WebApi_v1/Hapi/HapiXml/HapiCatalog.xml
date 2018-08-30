@@ -1,124 +1,460 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <catalog>
   <spacecraft name="rbspa" path="$data$\RBSP\RBSPA\">
-    <instrument name="ect"></instrument>
-    <instrument name="emfisis"></instrument>
+    <instrument name="ect">
+    </instrument>
+    <instrument name="emfisis">
+    </instrument>
     <instrument name="rbspice" path="$data$\RBSPICE\Data\">
       <product name="Auxil" id="auxil" hapiId="rbspa_rbspice_auxil" title="RBSPA RBSPICE Auxiliary Data" path="$data$\Level_0\Auxil\" description="RBSPICE Level 0 Auxiliary Data">
-        <field name="UTC" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="SCLOCK_Full" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="ET" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="OrbitNumber" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="Seconds" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="Subseconds" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="Spin" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="SpinTime" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="SpinPeriod" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="SpinPhase" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="MagPhase" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="Mag0Second1" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="Mag0Subsecond1" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="Mag0Second2" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="Mag0Subsecond2" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="IntegrationSectors" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="IntegrationMultiplier1" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="IntegrationMultiplier2" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="IntegrationSpins" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="MagPhaseValid" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="MagDataValid" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="SpinDataValid" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="ElectronPixel" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="IonEnergyPixel" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="IonSpeciesPixel" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="Subsector1" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="Subsector2" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="Subsector3" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="SpinDuration" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+        <field name="UTC" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="SCLOCK_Full" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="ET" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="OrbitNumber" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="Seconds" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="Subseconds" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="Spin" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="SpinTime" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="SpinPeriod" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="SpinPhase" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="MagPhase" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="Mag0Second1" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="Mag0Subsecond1" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="Mag0Second2" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="Mag0Subsecond2" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="IntegrationSectors" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="IntegrationMultiplier1" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="IntegrationMultiplier2" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="IntegrationSpins" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="MagPhaseValid" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="MagDataValid" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="SpinDataValid" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="ElectronPixel" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="IonEnergyPixel" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="IonSpeciesPixel" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="Subsector1" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="Subsector2" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="Subsector3" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
+        <field name="SpinDuration" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
+        </field>
       </product>
-      <product name="ESRHELT"
-        id="esrhelt"
-        hapiId="rbspa_rbspice_esrhelt"
-        title="Electron Rates High Energy Low Time Resolution" 
-        path="$data$\Level_3PAP\ESRHELT\"
-        description="Electron Rates measured using the RBSPICE Energy Mode: High Energy Resolution Low Time Resolution">
+      <product name="ESRHELT" id="esrhelt" hapiId="rbspa_rbspice_esrhelt" title="RBSP A - RBSPICE ESRHELT LEVEL_3" path="$data$\Level_3PAP\ESRHELT\">
+        <field name="Epoch" type="DateTime" units="ns" fill="-9223372036854775808" length="null" description="Ephemeris Time of the start  of the accumulation for this measurement." bins="null" size="null" />
+        <field name="UTC" type="String" units="seconds" fill="null" length="null" description="The time of the start of the measurement in as a UTC time string (CCYY-DOYTHH:MM:SS.hhh)" bins="null" size="null" />
+        <field name="DDOY" type="Double" units="seconds" fill="-1E+31" length="null" description="The decimal day of year of the time at MidET" bins="null" size="null" />
+        <field name="ET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the start of the spin group." bins="null" size="null" />
+        <field name="MidET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the centered at the mid-point of the spin group." bins="null" size="null" />
+        <field name="StopET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the end of the spin group." bins="null" size="null" />
+        <field name="Duration" type="Double" units="Seconds" fill="-1E+31" length="null" description="Duration of the spin group." bins="null" size="null" />
+        <field name="OrbitNumber" type="Int32" units="null" fill="-2147483648" length="null" description="Orbit Number at the time of the measurement." bins="null" size="null" />
+        <field name="Spin" type="UInt32" units="null" fill="4294967295" length="null" description="The spin number as identified by the spacecraft at the beginning of the measurement(cyclical value)" bins="null" size="null" />
+        <field name="FEDU" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Directional Differential protons Flux one record per spin binned by pitch angle in 17 bins (9.99999999000001 degrees with 15 degree outer bins): Counts/(MeV-cm^2-s-sr)" bins="null" size="null" />
+        <field name="FEDU_Weight" type="Int16" units="null" fill="-32768" length="null" description="Weighting factors used to calculate spin integration of differential flux indicating the number of observations made for each energy channel/bin combination per spin" bins="null" size="null" />
+        <field name="FEDU_PerpPressure" type="Double" units="nPa" fill="-1E+31" length="null" description="Calculated protons perpendicular partial pressure for energies: 20Kev-940KeV.  Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FEDU_ParaPressure" type="Double" units="nPa" fill="-1E+31" length="null" description="Calculated protons parallel partial pressure for energies: 20Kev-940KeV.  Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FEDU_Density" type="Double" units="Counts/cm^3" fill="-1E+31" length="null" description="The Number Density (#/cm^3) calculated by integrating the distribution function over energy (20Kev-940KeV) and pitch angle for the species. Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FEDU_IntegralFlux" type="Double" units="Counts/s" fill="-1E+31" length="null" description="Pitch Angle Integrated and Energy Integrated total intensity of particles per second observed during the spin for energies: 20Kev-940KeV. Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FEDU_OmniFlux" type="Double" units="Counts/(MeV-s-cm^2)" fill="-1E+31" length="null" description="Omni Directional Total Flux per spin for energies: 20Kev-940KeV (Counts/(MeV-s-cm^2))" bins="null" size="null" />
+        <field name="FEDU_MinimFlux" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Observed minimum intensity in the spin for each energy channel measured (20Kev-940KeV): Counts/(MeV-cm^2-s)" bins="null" size="null" />
+        <field name="FEDU_MaximFlux" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Observed maximum intensity in the spin for each energy channel measured (20Kev-940KeV): Counts/(MeV-cm^2-s)" bins="null" size="null" />
+        <field name="FEDU_Error" type="Single" units="null" fill="-1E+31" length="null" description="The Poisson statistical counting percentage error of the measurement for each energy channel and bin calculated as 1/sqrt(Counts)*100." bins="null" size="null" />
+        <field name="FEDU_Energy" type="Single" units="MeV" fill="-1E+31" length="null" description="Midpoint energy of each measurement channel in MeV. A value of -1 indicates that an energy definition for this channel is not applicable" bins="null" size="null" />
+        <field name="FEDU_EnergyRange" type="Single" units="MeV" fill="-1E+31" length="null" description="Minimum and Maximum energy in MeV of the measurement channel. A value of -1 indicates that either an energy definition for this channel is not applicable or that the upper end of the channel is undefined - i.e. the channel becomes integral." bins="null" size="null" />
+        <field name="FEDU_Quality" type="Int16" units="null" fill="-32768" length="null" description="Quality flag for the measurement for each pitch angle bin/timestep. &#xA;see PREBM standards for definition" bins="null" size="null" />
+        <field name="Position" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The position of the SC at MidET in the GEO Reference Frame." bins="null" size="null" />
+        <field name="Position_SM" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="Position of the spacecraft at MidET in the SM (Solar Magnetospheric) reference frame using the definition SPICE kernels available at production.&#xA;The position varies with time and contains the position for the X, Y, and Z axis of the SC in Earth Radii." bins="null" size="null" />
+        <field name="Position_GSM" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The position of the SC at MidET in the GSM Reference Frame." bins="null" size="null" />
+        <field name="Position_Quality" type="Int16" units="None" fill="-32768" length="null" description="The position quality flag, 0=good, 1=bad." bins="null" size="null" />
+        <field name="L" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="Dipole L value at MidET calculated using the SM Reference Frame and taken from the definitive SPICE SPK kernels that are available at the time. " bins="null" size="null" />
+        <field name="MLT" type="Single" units="Degrees" fill="-1E+31" length="null" description="The Magnetic Local Time of S/C at MidET in Centerted Dipole Coordinates derived from ECT MagEphem data." bins="null" size="null" />
+        <field name="L_Eq" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The McElqain L value at MidET calculated at the Equator (derived from ECT MagEphem data) using the OP77Q field model." bins="null" size="null" />
+        <field name="L_Star" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The Roeder's L* value at MidET (derived from ECT MagEphem data) for the average pitch angle using the OP77Q field model." bins="null" size="null" />
+        <field name="I" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The Integral invariant at MidET for the average pitch angle derived from ECT MagEphem data using the OP77Q field model." bins="null" size="null" />
+        <field name="PA_Midpoint" type="Single" units="Degrees" fill="-1E+31" length="null" description="Center-point pitch angle in Degrees." bins="null" size="null" />
+        <field name="PA_Range" type="Single" units="null" fill="-1E+31" length="null" description="Pitch Angle Range as minimum value and maximum value for each PA bin." bins="null" size="null" />
+        <field name="Channel" type="SByte" units="null" fill="-128" length="null" description="Identifies the energy channel range for this product and is used to iterate through the other arrays and/or for labels" bins="null" size="null" />
+        <field name="Bin" type="SByte" units="null" fill="-128" length="null" description="Identifies the pitch angle bin range for this product and is used to iterate through the arrays and/or for labels" bins="null" size="null" />
+        <field name="Axis" type="SByte" units="null" fill="-128" length="null" description="Axis of the position (X, Y, Z)" bins="null" size="null" />
+        <field name="MinMaxRange" type="SByte" units="None" fill="-128" length="null" description="Loop variable for Minimum/Maximum range values." bins="null" size="null" />
       </product>
-      <product name="TOFxEH"
-        id="tofxeh"
-        hapiId="rbspa_rbspice_tofxeh"
-        title="TOFxE Hydrogen" 
-        path="$data$\Level_3PAP\TOFxEH\" 
-        description="rbspice high energy res low time res tofxe proton intensities/pressures sorted by pitch angles">
-        <field name="Epoch" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="UTC" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="DDOY" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="ET" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="MidET" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="StopET" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="Duration" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="OrbitNumber" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="Spin" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="FPDU" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="FPDU_Weight" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="FPDU_PerpPressure" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="FPDU_ParaPressure" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="FPDU_Density" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="FPDU_IntegralFlux" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="FPDU_OmniFlux" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="FPDU_MinimFlux" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="FPDU_MaximFlux" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="FPDU_Error" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="FPDU_Energy" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="FPDU_EnergyRange" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="FPDU_Quality" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="Position" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="Position_SM" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="Position_GSM" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="Position_Quality" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="L" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="MLT" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="L_Eq" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="L_Star" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
-        <field name="I" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false"></field>
+      <product name="ESRLEHT" id="esrleht" hapiId="rbspa_rbspice_esrleht" title="RBSP A - RBSPICE ESRLEHT LEVEL_3" path="$data$\Level_3PAP\ESRLEHT\">
+        <field name="Epoch" type="DateTime" units="ns" fill="-9223372036854775808" length="null" description="Ephemeris Time of the start  of the accumulation for this measurement." bins="null" size="null" />
+        <field name="UTC" type="String" units="seconds" fill="null" length="null" description="The time of the start of the measurement in as a UTC time string (CCYY-DOYTHH:MM:SS.hhh)" bins="null" size="null" />
+        <field name="DDOY" type="Double" units="seconds" fill="-1E+31" length="null" description="The decimal day of year of the time at MidET" bins="null" size="null" />
+        <field name="ET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the start of the spin group." bins="null" size="null" />
+        <field name="MidET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the centered at the mid-point of the spin group." bins="null" size="null" />
+        <field name="StopET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the end of the spin group." bins="null" size="null" />
+        <field name="Duration" type="Double" units="Seconds" fill="-1E+31" length="null" description="Duration of the spin group." bins="null" size="null" />
+        <field name="OrbitNumber" type="Int32" units="null" fill="-2147483648" length="null" description="Orbit Number at the time of the measurement." bins="null" size="null" />
+        <field name="Spin" type="UInt32" units="null" fill="4294967295" length="null" description="The spin number as identified by the spacecraft at the beginning of the measurement(cyclical value)" bins="null" size="null" />
+        <field name="FEDU" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Directional Differential protons Flux one record per spin binned by pitch angle in 17 bins (9.99999999000001 degrees with 15 degree outer bins): Counts/(MeV-cm^2-s-sr)" bins="null" size="null" />
+        <field name="FEDU_Weight" type="Int16" units="null" fill="-32768" length="null" description="Weighting factors used to calculate spin integration of differential flux indicating the number of observations made for each energy channel/bin combination per spin" bins="null" size="null" />
+        <field name="FEDU_PerpPressure" type="Double" units="nPa" fill="-1E+31" length="null" description="Calculated protons perpendicular partial pressure for energies: 24.7Kev-527KeV.  Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FEDU_ParaPressure" type="Double" units="nPa" fill="-1E+31" length="null" description="Calculated protons parallel partial pressure for energies: 24.7Kev-527KeV.  Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FEDU_Density" type="Double" units="Counts/cm^3" fill="-1E+31" length="null" description="The Number Density (#/cm^3) calculated by integrating the distribution function over energy (24.7Kev-527KeV) and pitch angle for the species. Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FEDU_IntegralFlux" type="Double" units="Counts/s" fill="-1E+31" length="null" description="Pitch Angle Integrated and Energy Integrated total intensity of particles per second observed during the spin for energies: 24.7Kev-527KeV. Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FEDU_OmniFlux" type="Double" units="Counts/(MeV-s-cm^2)" fill="-1E+31" length="null" description="Omni Directional Total Flux per spin for energies: 19.7Kev-527KeV (Counts/(MeV-s-cm^2))" bins="null" size="null" />
+        <field name="FEDU_MinimFlux" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Observed minimum intensity in the spin for each energy channel measured (19.7Kev-527KeV): Counts/(MeV-cm^2-s)" bins="null" size="null" />
+        <field name="FEDU_MaximFlux" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Observed maximum intensity in the spin for each energy channel measured (19.7Kev-527KeV): Counts/(MeV-cm^2-s)" bins="null" size="null" />
+        <field name="FEDU_Error" type="Single" units="null" fill="-1E+31" length="null" description="The Poisson statistical counting percentage error of the measurement for each energy channel and bin calculated as 1/sqrt(Counts)*100." bins="null" size="null" />
+        <field name="FEDU_Energy" type="Single" units="MeV" fill="-1E+31" length="null" description="Midpoint energy of each measurement channel in MeV. A value of -1 indicates that an energy definition for this channel is not applicable" bins="null" size="null" />
+        <field name="FEDU_EnergyRange" type="Single" units="MeV" fill="-1E+31" length="null" description="Minimum and Maximum energy in MeV of the measurement channel. A value of -1 indicates that either an energy definition for this channel is not applicable or that the upper end of the channel is undefined - i.e. the channel becomes integral." bins="null" size="null" />
+        <field name="FEDU_Quality" type="Int16" units="null" fill="-32768" length="null" description="Quality flag for the measurement for each pitch angle bin/timestep. &#xA;see PREBM standards for definition" bins="null" size="null" />
+        <field name="Position" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The position of the SC at MidET in the GEO Reference Frame." bins="null" size="null" />
+        <field name="Position_SM" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="Position of the spacecraft at MidET in the SM (Solar Magnetospheric) reference frame using the definition SPICE kernels available at production.&#xA;The position varies with time and contains the position for the X, Y, and Z axis of the SC in Earth Radii." bins="null" size="null" />
+        <field name="Position_GSM" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The position of the SC at MidET in the GSM Reference Frame." bins="null" size="null" />
+        <field name="Position_Quality" type="Int16" units="None" fill="-32768" length="null" description="The position quality flag, 0=good, 1=bad." bins="null" size="null" />
+        <field name="L" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="Dipole L value at MidET calculated using the SM Reference Frame and taken from the definitive SPICE SPK kernels that are available at the time. " bins="null" size="null" />
+        <field name="MLT" type="Single" units="Degrees" fill="-1E+31" length="null" description="The Magnetic Local Time of S/C at MidET in Centerted Dipole Coordinates derived from ECT MagEphem data." bins="null" size="null" />
+        <field name="L_Eq" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The McElqain L value at MidET calculated at the Equator (derived from ECT MagEphem data) using the OP77Q field model." bins="null" size="null" />
+        <field name="L_Star" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The Roeder's L* value at MidET (derived from ECT MagEphem data) for the average pitch angle using the OP77Q field model." bins="null" size="null" />
+        <field name="I" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The Integral invariant at MidET for the average pitch angle derived from ECT MagEphem data using the OP77Q field model." bins="null" size="null" />
+        <field name="PA_Midpoint" type="Single" units="Degrees" fill="-1E+31" length="null" description="Center-point pitch angle in Degrees." bins="null" size="null" />
+        <field name="PA_Range" type="Single" units="null" fill="-1E+31" length="null" description="Pitch Angle Range as minimum value and maximum value for each PA bin." bins="null" size="null" />
+        <field name="Channel" type="SByte" units="null" fill="-128" length="null" description="Identifies the energy channel range for this product and is used to iterate through the other arrays and/or for labels" bins="null" size="null" />
+        <field name="Bin" type="SByte" units="null" fill="-128" length="null" description="Identifies the pitch angle bin range for this product and is used to iterate through the arrays and/or for labels" bins="null" size="null" />
+        <field name="Axis" type="SByte" units="null" fill="-128" length="null" description="Axis of the position (X, Y, Z)" bins="null" size="null" />
+        <field name="MinMaxRange" type="SByte" units="None" fill="-128" length="null" description="Loop variable for Minimum/Maximum range values." bins="null" size="null" />
       </product>
-      <product name="TOFxEHe" 
-        id="tofxehe"
-        hapiId="rbspa_rbspice_tofxehe"
-        title="TOFxE Helium"
-        path="$data$\Level_3PAP\TOFxEHe\"
-        description="rbspa rbspice high energy res low time res tofxe helium intensities/pressures sorted by pitch angles.">
-        
+      <product name="TOFxEH" id="tofxeh" hapiId="rbspa_rbspice_tofxeh" title="Direct URL to Instrument Data Location for the file " path="$data$\Level_3PAP\TOFxEH\">
+        <field name="Epoch" type="DateTime" units="ns" fill="-9223372036854775808" length="null" description="Ephemeris Time of the start  of the accumulation for this measurement." bins="null" size="null" />
+        <field name="UTC" type="String" units="seconds" fill="null" length="null" description="The time of the start of the measurement in as a UTC time string (CCYY-DOYTHH:MM:SS.hhh)" bins="null" size="null" />
+        <field name="DDOY" type="Double" units="seconds" fill="-1E+31" length="null" description="The decimal day of year of the time at MidET" bins="null" size="null" />
+        <field name="ET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the start of the spin group." bins="null" size="null" />
+        <field name="MidET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the centered at the mid-point of the spin group." bins="null" size="null" />
+        <field name="StopET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the end of the spin group." bins="null" size="null" />
+        <field name="Duration" type="Double" units="Seconds" fill="-1E+31" length="null" description="Duration of the spin group." bins="null" size="null" />
+        <field name="OrbitNumber" type="Int32" units="null" fill="-2147483648" length="null" description="Orbit Number at the time of the measurement" bins="null" size="null" />
+        <field name="Spin" type="UInt32" units="null" fill="4294967295" length="null" description="The spin number as identified by the spacecraft at the beginning of the measurement(cyclical value)" bins="null" size="null" />
+        <field name="FPDU" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="UniDirectional Differential protons Flux one record per spin binned by pitch angle in 17 bins (binsize$ degrees with 15 degree outer bins): Counts/(MeV-cm^2-s-sr)" bins="null" size="null" />
+        <field name="FPDU_Weight" type="Int16" units="null" fill="-32768" length="null" description="Weighting factors used to calculate spin integration of differential flux indicating the number of observations made for each energy channel/bin combination per spin" bins="null" size="null" />
+        <field name="FPDU_PerpPressure" type="Double" units="nPa" fill="-1E+31" length="null" description="Calculated protons perpendicular partial pressure for energies: 50Kev-660KeV.  Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FPDU_ParaPressure" type="Double" units="nPa" fill="-1E+31" length="null" description="Calculated protons parallel partial pressure for energies: 50Kev-660KeV.  Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FPDU_Density" type="Double" units="Counts/cm^3" fill="-1E+31" length="null" description="The Number Density (#/cm^3) calculated by integrating the distribution function over energy (50Kev-660KeV) and pitch angle for the species. Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FPDU_IntegralFlux" type="Double" units="Counts/s" fill="-1E+31" length="null" description="Pitch Angle Integrated and Energy Integrated total intensity of particles per second observed during the spin for energies: 50Kev-660KeV. Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FPDU_OmniFlux" type="Double" units="Counts/(MeV-s-cm^2)" fill="-1E+31" length="null" description="Omni Directional Total Flux per spin for energies: 40Kev-660KeV (Counts/(MeV-s-cm^2))" bins="null" size="null" />
+        <field name="FPDU_MinimFlux" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Observed minimum intensity in the spin for each energy channel measured (40Kev-660KeV): Counts/(MeV-cm^2-s)" bins="null" size="null" />
+        <field name="FPDU_MaximFlux" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Observed maximum intensity in the spin for each energy channel measured (40Kev-660KeV): Counts/(MeV-cm^2-s)" bins="null" size="null" />
+        <field name="FPDU_Error" type="Single" units="null" fill="-1E+31" length="null" description="The Poisson statistical counting percentage error of the measurement for each energy channel and bin calculated as 1/sqrt(Counts)*100." bins="null" size="null" />
+        <field name="FPDU_Energy" type="Single" units="MeV" fill="-1E+31" length="null" description="Midpoint energy of each measurement channel in MeV. A value of -1 indicates that an energy definition for this channel is not applicable" bins="null" size="null" />
+        <field name="FPDU_EnergyRange" type="Single" units="MeV" fill="-1E+31" length="null" description="Minimum and Maximum energy in MeV of the measurement channel. A value of -1 indicates that either an energy definition for this channel is not applicable or that the upper end of the channel is undefined - i.e. the channel becomes integral." bins="null" size="null" />
+        <field name="FPDU_Quality" type="Int16" units="null" fill="-32768" length="null" description="Quality flag for the measurement for each pitch angle bin/timestep. &#xA;see PREBM standards for definition" bins="null" size="null" />
+        <field name="Position" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The position of the SC at MidET in the GEO Reference Frame." bins="null" size="null" />
+        <field name="Position_SM" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="Position of the spacecraft at MidET in the SM (Solar Magnetospheric) reference frame using the definition SPICE kernels available at production.&#xA;The position varies with time and contains the position for the X, Y, and Z axis of the SC in Earth Radii." bins="null" size="null" />
+        <field name="Position_GSM" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The position of the SC at MidET in the GSM Reference Frame." bins="null" size="null" />
+        <field name="Position_Quality" type="Int16" units="None" fill="-32768" length="null" description="The position quality flag, 0=good, 1=bad." bins="null" size="null" />
+        <field name="L" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="Dipole L value at MidET calculated using the SM Reference Frame and taken from the definitive SPICE SPK kernels that are available at the time. " bins="null" size="null" />
+        <field name="MLT" type="Single" units="Degrees" fill="-1E+31" length="null" description="The Magnetic Local Time of S/C at MidET in Centerted Dipole Coordinates derived from ECT MagEphem data." bins="null" size="null" />
+        <field name="L_Eq" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The McElqain L value at MidET calculated at the Equator (derived from ECT MagEphem data) using the OP77Q field model." bins="null" size="null" />
+        <field name="L_Star" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The Roeder's L* value at MidET (derived from ECT MagEphem data) for the average pitch angle using the OP77Q field model." bins="null" size="null" />
+        <field name="I" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The Integral invariant at MidET for the average pitch angle derived from ECT MagEphem data using the OP77Q field model." bins="null" size="null" />
+        <field name="PA_Midpoint" type="Single" units="Degrees" fill="-1E+31" length="null" description="Center-point pitch angle in Degrees." bins="null" size="null" />
+        <field name="PA_Range" type="Single" units="null" fill="-1E+31" length="null" description="Pitch Angle Range as minimum value and maximum value for each PA bin." bins="null" size="null" />
+        <field name="Channel" type="SByte" units="null" fill="-128" length="null" description="Identifies the energy channel range for this product and is used to iterate through the other arrays and/or for labels" bins="null" size="null" />
+        <field name="Bin" type="SByte" units="null" fill="-128" length="null" description="Identifies the pitch angle bin range for this product and is used to iterate through the arrays and/or for labels" bins="null" size="null" />
+        <field name="Axis" type="SByte" units="null" fill="-128" length="null" description="Axis of the position (X, Y, Z)" bins="null" size="null" />
+        <field name="MinMaxRange" type="SByte" units="None" fill="-128" length="null" description="Loop variable for Minimum/Maximum range values." bins="null" size="null" />
       </product>
-      <product name="TOFxEIon"
-        id="tofxeion"
-        hapiId="rbspa_rbspice_tofxeion"
-        title="TOFxE Ion"
-        path="$data$\Level_3PAP\TOFxEIon\"
-        description="rbspa rbspice high energy res low time res tofxe ion(proton) intensities/pressures sorted by pitch angles.">
-        
+      <product name="TOFxEHe" id="tofxehe" hapiId="rbspa_rbspice_tofxehe" title="RBSP A - RBSPICE TOFXENONH LEVEL_3" path="$data$\Level_3PAP\TOFxEHe\">
+        <field name="Epoch" type="DateTime" units="ns" fill="-9223372036854775808" length="null" description="Ephemeris Time of the start  of the accumulation for this measurement." bins="null" size="null" />
+        <field name="UTC" type="String" units="seconds" fill="null" length="null" description="The time of the start of the measurement in as a UTC time string (CCYY-DOYTHH:MM:SS.hhh)" bins="null" size="null" />
+        <field name="DDOY" type="Double" units="seconds" fill="-1E+31" length="null" description="The decimal day of year of the time at MidET" bins="null" size="null" />
+        <field name="ET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the start of the spin group." bins="null" size="null" />
+        <field name="MidET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the centered at the mid-point of the spin group." bins="null" size="null" />
+        <field name="StopET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the end of the spin group." bins="null" size="null" />
+        <field name="Duration" type="Double" units="Seconds" fill="-1E+31" length="null" description="Duration of the spin group." bins="null" size="null" />
+        <field name="OrbitNumber" type="Int32" units="null" fill="-2147483648" length="null" description="Orbit Number at the time of the measurement." bins="null" size="null" />
+        <field name="Spin" type="UInt32" units="null" fill="4294967295" length="null" description="The spin number as identified by the spacecraft at the beginning of the measurement(cyclical value)" bins="null" size="null" />
+        <field name="FHeDU" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Directional Differential he Flux one record per spin binned by pitch angle in 17 bins (binsize$ degrees with 15 degree outer bins): Counts/(MeV-cm^2-s-sr)" bins="null" size="null" />
+        <field name="FHeDU_Weight" type="Int16" units="null" fill="-32768" length="null" description="Weighting factors used to calculate spin integration of differential flux indicating the number of observations made for each energy channel/bin combination per spin" bins="null" size="null" />
+        <field name="FHeDU_PerpPressure" type="Double" units="nPa" fill="-1E+31" length="null" description="Calculated he perpendicular partial pressure for energies: 60Kev-590KeV.  Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FHeDU_ParaPressure" type="Double" units="nPa" fill="-1E+31" length="null" description="Calculated he parallel partial pressure for energies: 60Kev-590KeV.  Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FHeDU_Density" type="Double" units="Particles/cm^3" fill="-1E+31" length="null" description="The Number Density (#/cm^3) calculated by integrating the distribution function over energy (60Kev-590KeV) and pitch angle for the species. Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FHeDU_IntegralFlux" type="Double" units="Counts/s" fill="-1E+31" length="null" description="Pitch Angle Integrated and Energy Integrated total intensity of particles per second observed during the spin for energies: 60Kev-590KeV. Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FHeDU_OmniFlux" type="Double" units="Counts/(MeV-s-cm^2)" fill="-1E+31" length="null" description="Omni Directional Total Flux per spin for energies: 60Kev-590KeV (Counts/(MeV-s-cm^2))" bins="null" size="null" />
+        <field name="FHeDU_MinimFlux" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Observed minimum intensity in the spin for each energy channel measured (60Kev-590KeV): Counts/(MeV-cm^2-s)" bins="null" size="null" />
+        <field name="FHeDU_MaximFlux" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Observed maximum intensity in the spin for each energy channel measured (60Kev-590KeV): Counts/(MeV-cm^2-s)" bins="null" size="null" />
+        <field name="FHeDU_Error" type="Single" units="null" fill="-1E+31" length="null" description="The Poisson statistical counting percentage error of the measurement for each energy channel and bin calculated as 1/sqrt(Counts)*100." bins="null" size="null" />
+        <field name="FHeDU_Energy" type="Single" units="MeV" fill="-1E+31" length="null" description="Midpoint energy of each measurement channel in MeV. A value of -1 indicates that an energy definition for this channel is not applicable" bins="null" size="null" />
+        <field name="FHeDU_EnergyRange" type="Single" units="MeV" fill="-1E+31" length="null" description="Minimum and Maximum energy in MeV of the measurement channel. A value of -1 indicates that either an energy definition for this channel is not applicable or that the upper end of the channel is undefined - i.e. the channel becomes integral." bins="null" size="null" />
+        <field name="FHeDU_Quality" type="Int16" units="null" fill="-32768" length="null" description="Quality flag for the measurement for each pitch angle bin/timestep. &#xA;see PREBM standards for definition" bins="null" size="null" />
+        <field name="Position" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The position of the SC at MidET in the GEO Reference Frame." bins="null" size="null" />
+        <field name="Position_SM" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="Position of the spacecraft at MidET in the SM (Solar Magnetospheric) reference frame using the definition SPICE kernels available at production.&#xA;The position varies with time and contains the position for the X, Y, and Z axis of the SC in Earth Radii." bins="null" size="null" />
+        <field name="Position_GSM" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The position of the SC at MidET in the GSM Reference Frame." bins="null" size="null" />
+        <field name="Position_Quality" type="Int16" units="None" fill="-32768" length="null" description="The position quality flag, 0=good, 1=bad." bins="null" size="null" />
+        <field name="L" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="Dipole L value at MidET calculated using the SM Reference Frame and taken from the definitive SPICE SPK kernels that are available at the time. " bins="null" size="null" />
+        <field name="MLT" type="Single" units="Degrees" fill="-1E+31" length="null" description="The Magnetic Local Time of S/C at MidET in Centerted Dipole Coordinates derived from ECT MagEphem data." bins="null" size="null" />
+        <field name="L_Eq" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The McElqain L value at MidET calculated at the Equator (derived from ECT MagEphem data) using the OP77Q field model." bins="null" size="null" />
+        <field name="L_Star" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The Roeder's L* value at MidET (derived from ECT MagEphem data) for the average pitch angle using the OP77Q field model." bins="null" size="null" />
+        <field name="I" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The Integral invariant at MidET for the average pitch angle derived from ECT MagEphem data using the OP77Q field model." bins="null" size="null" />
+        <field name="PA_Midpoint" type="Single" units="Degrees" fill="-1E+31" length="null" description="Center-point pitch angle in Degrees." bins="null" size="null" />
+        <field name="PA_Range" type="Single" units="null" fill="-1E+31" length="null" description="Pitch Angle Range as minimum value and maximum value for each PA bin." bins="null" size="null" />
+        <field name="Channel" type="SByte" units="null" fill="-128" length="null" description="Identifies the energy channel range for this product and is used to iterate through the other arrays and/or for labels" bins="null" size="null" />
+        <field name="Bin" type="SByte" units="null" fill="-128" length="null" description="Identifies the pitch angle bin range for this product and is used to iterate through the arrays and/or for labels" bins="null" size="null" />
+        <field name="Axis" type="SByte" units="null" fill="-128" length="null" description="Axis of the position (X, Y, Z)" bins="null" size="null" />
+        <field name="MinMaxRange" type="SByte" units="None" fill="-128" length="null" description="Loop variable for Minimum/Maximum range values." bins="null" size="null" />
       </product>
-      <product name="TOFxEO"
-        id="tofxeo"
-        hapiId="rbspa_rbspice_tofxeo"
-        title="TOFxE Oxygen"
-        path="$data$\Level_3PAP\TOFxEO\"
-        description="rbspa rbspice high energy res low time res tofxe oxygen intensities/pressures sorted by pitch angles.">
-
+      <product name="TOFxEIon" id="tofxeion" hapiId="rbspa_rbspice_tofxeion" title="RBSP A - RBSPICE TOFXEION LEVEL_3" path="$data$\Level_3PAP\TOFxEIon\">
+        <field name="Epoch" type="DateTime" units="ns" fill="-9223372036854775808" length="null" description="Ephemeris Time of the start  of the accumulation for this measurement." bins="null" size="null" />
+        <field name="UTC" type="String" units="seconds" fill="null" length="null" description="The time of the start of the measurement in as a UTC time string (CCYY-DOYTHH:MM:SS.hhh)" bins="null" size="null" />
+        <field name="DDOY" type="Double" units="seconds" fill="-1E+31" length="null" description="The decimal day of year of the time at MidET" bins="null" size="null" />
+        <field name="ET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the start of the spin group." bins="null" size="null" />
+        <field name="MidET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the centered at the mid-point of the spin group." bins="null" size="null" />
+        <field name="StopET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the end of the spin group." bins="null" size="null" />
+        <field name="Duration" type="Double" units="Seconds" fill="-1E+31" length="null" description="Duration of the spin group." bins="null" size="null" />
+        <field name="OrbitNumber" type="Int32" units="null" fill="-2147483648" length="null" description="Orbit Number at the time of the measurement." bins="null" size="null" />
+        <field name="Spin" type="UInt32" units="null" fill="4294967295" length="null" description="The spin number as identified by the spacecraft at the beginning of the measurement(cyclical value)" bins="null" size="null" />
+        <field name="FIDU" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Directional Differential ions Flux one record per spin binned by pitch angle in 17 bins (9.99999999000001 degrees with 15 degree outer bins): Counts/(MeV-cm^2-s-sr)" bins="null" size="null" />
+        <field name="FIDU_Weight" type="Int16" units="null" fill="-32768" length="null" description="Weighting factors used to calculate spin integration of differential flux indicating the number of observations made for each energy channel/bin combination per spin" bins="null" size="null" />
+        <field name="FIDU_PerpPressure" type="Double" units="nPa" fill="-1E+31" length="null" description="Calculated ions perpendicular partial pressure for energies: 48Kev-5MeV.  Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FIDU_ParaPressure" type="Double" units="nPa" fill="-1E+31" length="null" description="Calculated ions parallel partial pressure for energies: 48Kev-5MeV.  Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FIDU_Density" type="Double" units="Counts/cm^3" fill="-1E+31" length="null" description="The Number Density (#/cm^3) calculated by integrating the distribution function over energy (48Kev-5MeV) and pitch angle for the species. Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FIDU_IntegralFlux" type="Double" units="Counts/s" fill="-1E+31" length="null" description="Pitch Angle Integrated and Energy Integrated total intensity of particles per second observed during the spin for energies: 48Kev-5MeV. Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FIDU_OmniFlux" type="Double" units="Counts/(MeV-s-cm^2)" fill="-1E+31" length="null" description="Omni Directional Total Flux per spin for energies: 21Kev-10MeV (Counts/(MeV-s-cm^2))" bins="null" size="null" />
+        <field name="FIDU_MinimFlux" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Observed minimum intensity in the spin for each energy channel measured (21Kev-10MeV): Counts/(MeV-cm^2-s)" bins="null" size="null" />
+        <field name="FIDU_MaximFlux" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Observed maximum intensity in the spin for each energy channel measured (21Kev-10MeV): Counts/(MeV-cm^2-s)" bins="null" size="null" />
+        <field name="FIDU_Error" type="Single" units="null" fill="-1E+31" length="null" description="The Poisson statistical counting percentage error of the measurement for each energy channel and bin calculated as 1/sqrt(Counts)*100." bins="null" size="null" />
+        <field name="FIDU_Energy" type="Single" units="MeV" fill="-1E+31" length="null" description="Midpoint energy of each measurement channel in MeV. A value of -1 indicates that an energy definition for this channel is not applicable" bins="null" size="null" />
+        <field name="FIDU_EnergyRange" type="Single" units="MeV" fill="-1E+31" length="null" description="Minimum and Maximum energy in MeV of the measurement channel. A value of -1 indicates that either an energy definition for this channel is not applicable or that the upper end of the channel is undefined - i.e. the channel becomes integral." bins="null" size="null" />
+        <field name="FIDU_Quality" type="Int16" units="null" fill="-32768" length="null" description="Quality flag for the measurement for each pitch angle bin/timestep. &#xA;see PREBM standards for definition" bins="null" size="null" />
+        <field name="Position" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The position of the SC at MidET in the GEO Reference Frame." bins="null" size="null" />
+        <field name="Position_SM" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="Position of the spacecraft at MidET in the SM (Solar Magnetospheric) reference frame using the definition SPICE kernels available at production.&#xA;The position varies with time and contains the position for the X, Y, and Z axis of the SC in Earth Radii." bins="null" size="null" />
+        <field name="Position_GSM" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The position of the SC at MidET in the GSM Reference Frame." bins="null" size="null" />
+        <field name="Position_Quality" type="Int16" units="None" fill="-32768" length="null" description="The position quality flag, 0=good, 1=bad." bins="null" size="null" />
+        <field name="L" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="Dipole L value at MidET calculated using the SM Reference Frame and taken from the definitive SPICE SPK kernels that are available at the time. " bins="null" size="null" />
+        <field name="MLT" type="Single" units="Degrees" fill="-1E+31" length="null" description="The Magnetic Local Time of S/C at MidET in Centerted Dipole Coordinates derived from ECT MagEphem data." bins="null" size="null" />
+        <field name="L_Eq" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The McElqain L value at MidET calculated at the Equator (derived from ECT MagEphem data) using the OP77Q field model." bins="null" size="null" />
+        <field name="L_Star" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The Roeder's L* value at MidET (derived from ECT MagEphem data) for the average pitch angle using the OP77Q field model." bins="null" size="null" />
+        <field name="I" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The Integral invariant at MidET for the average pitch angle derived from ECT MagEphem data using the OP77Q field model." bins="null" size="null" />
+        <field name="PA_Midpoint" type="Single" units="Degrees" fill="-1E+31" length="null" description="Center-point pitch angle in Degrees." bins="null" size="null" />
+        <field name="PA_Range" type="Single" units="null" fill="-1E+31" length="null" description="Pitch Angle Range as minimum value and maximum value for each PA bin." bins="null" size="null" />
+        <field name="Channel" type="SByte" units="null" fill="-128" length="null" description="Identifies the energy channel range for this product and is used to iterate through the other arrays and/or for labels" bins="null" size="null" />
+        <field name="Bin" type="SByte" units="null" fill="-128" length="null" description="Identifies the pitch angle bin range for this product and is used to iterate through the arrays and/or for labels" bins="null" size="null" />
+        <field name="Axis" type="SByte" units="null" fill="-128" length="null" description="Axis of the position (X, Y, Z)" bins="null" size="null" />
+        <field name="MinMaxRange" type="SByte" units="None" fill="-128" length="null" description="Loop variable for Minimum/Maximum range values." bins="null" size="null" />
       </product>
-      <product name="TOFxPHHHELT"
-        id="tofxphhhelt"
-        hapiId="rbspa_rbspice_tofxphhhelt"
-        title="TOFxPH Proton"
-        path="$data$\Level_3PAP\TOFxPHHHELT\"
-        description="rbspa rbspice high energy res low time res tofxph proton intensities/pressures sorted by pitch angles.">
-
+      <product name="TOFxEO" id="tofxeo" hapiId="rbspa_rbspice_tofxeo" title="RBSP A - RBSPICE TOFXENONH LEVEL_3" path="$data$\Level_3PAP\TOFxEO\">
+        <field name="Epoch" type="DateTime" units="ns" fill="-9223372036854775808" length="null" description="Ephemeris Time of the start  of the accumulation for this measurement." bins="null" size="null" />
+        <field name="UTC" type="String" units="seconds" fill="null" length="null" description="The time of the start of the measurement in as a UTC time string (CCYY-DOYTHH:MM:SS.hhh)" bins="null" size="null" />
+        <field name="DDOY" type="Double" units="seconds" fill="-1E+31" length="null" description="The decimal day of year of the time at MidET" bins="null" size="null" />
+        <field name="ET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the start of the spin group." bins="null" size="null" />
+        <field name="MidET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the centered at the mid-point of the spin group." bins="null" size="null" />
+        <field name="StopET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the end of the spin group." bins="null" size="null" />
+        <field name="Duration" type="Double" units="Seconds" fill="-1E+31" length="null" description="Duration of the spin group." bins="null" size="null" />
+        <field name="OrbitNumber" type="Int32" units="null" fill="-2147483648" length="null" description="Orbit Number at the time of the measurement." bins="null" size="null" />
+        <field name="Spin" type="UInt32" units="null" fill="4294967295" length="null" description="The spin number as identified by the spacecraft at the beginning of the measurement(cyclical value)" bins="null" size="null" />
+        <field name="FODU" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Directional Differential o Flux one record per spin binned by pitch angle in 17 bins (binsize$ degrees with 15 degree outer bins): Counts/(MeV-cm^2-s-sr)" bins="null" size="null" />
+        <field name="FODU_Weight" type="Int16" units="null" fill="-32768" length="null" description="Weighting factors used to calculate spin integration of differential flux indicating the number of observations made for each energy channel/bin combination per spin" bins="null" size="null" />
+        <field name="FODU_PerpPressure" type="Double" units="nPa" fill="-1E+31" length="null" description="Calculated o perpendicular partial pressure for energies: 125Kev-1260KeV.  Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FODU_ParaPressure" type="Double" units="nPa" fill="-1E+31" length="null" description="Calculated o parallel partial pressure for energies: 125Kev-1260KeV.  Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FODU_Density" type="Double" units="Particles/cm^3" fill="-1E+31" length="null" description="The Number Density (#/cm^3) calculated by integrating the distribution function over energy (125Kev-1260KeV) and pitch angle for the species. Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FODU_IntegralFlux" type="Double" units="Counts/s" fill="-1E+31" length="null" description="Pitch Angle Integrated and Energy Integrated total intensity of particles per second observed during the spin for energies: 125Kev-1260KeV. Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FODU_OmniFlux" type="Double" units="Counts/(MeV-s-cm^2)" fill="-1E+31" length="null" description="Omni Directional Total Flux per spin for energies: 125Kev-1260KeV (Counts/(MeV-s-cm^2))" bins="null" size="null" />
+        <field name="FODU_MinimFlux" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Observed minimum intensity in the spin for each energy channel measured (125Kev-1260KeV): Counts/(MeV-cm^2-s)" bins="null" size="null" />
+        <field name="FODU_MaximFlux" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Observed maximum intensity in the spin for each energy channel measured (125Kev-1260KeV): Counts/(MeV-cm^2-s)" bins="null" size="null" />
+        <field name="FODU_Error" type="Single" units="null" fill="-1E+31" length="null" description="The Poisson statistical counting percentage error of the measurement for each energy channel and bin calculated as 1/sqrt(Counts)*100." bins="null" size="null" />
+        <field name="FODU_Energy" type="Single" units="MeV" fill="-1E+31" length="null" description="Midpoint energy of each measurement channel in MeV. A value of -1 indicates that an energy definition for this channel is not applicable" bins="null" size="null" />
+        <field name="FODU_EnergyRange" type="Single" units="MeV" fill="-1E+31" length="null" description="Minimum and Maximum energy in MeV of the measurement channel. A value of -1 indicates that either an energy definition for this channel is not applicable or that the upper end of the channel is undefined - i.e. the channel becomes integral." bins="null" size="null" />
+        <field name="FODU_Quality" type="Int16" units="null" fill="-32768" length="null" description="Quality flag for the measurement for each pitch angle bin/timestep. &#xA;see PREBM standards for definition" bins="null" size="null" />
+        <field name="Position" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The position of the SC at MidET in the GEO Reference Frame." bins="null" size="null" />
+        <field name="Position_SM" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="Position of the spacecraft at MidET in the SM (Solar Magnetospheric) reference frame using the definition SPICE kernels available at production.&#xA;The position varies with time and contains the position for the X, Y, and Z axis of the SC in Earth Radii." bins="null" size="null" />
+        <field name="Position_GSM" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The position of the SC at MidET in the GSM Reference Frame." bins="null" size="null" />
+        <field name="Position_Quality" type="Int16" units="None" fill="-32768" length="null" description="The position quality flag, 0=good, 1=bad." bins="null" size="null" />
+        <field name="L" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="Dipole L value at MidET calculated using the SM Reference Frame and taken from the definitive SPICE SPK kernels that are available at the time. " bins="null" size="null" />
+        <field name="MLT" type="Single" units="Degrees" fill="-1E+31" length="null" description="The Magnetic Local Time of S/C at MidET in Centerted Dipole Coordinates derived from ECT MagEphem data." bins="null" size="null" />
+        <field name="L_Eq" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The McElqain L value at MidET calculated at the Equator (derived from ECT MagEphem data) using the OP77Q field model." bins="null" size="null" />
+        <field name="L_Star" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The Roeder's L* value at MidET (derived from ECT MagEphem data) for the average pitch angle using the OP77Q field model." bins="null" size="null" />
+        <field name="I" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The Integral invariant at MidET for the average pitch angle derived from ECT MagEphem data using the OP77Q field model." bins="null" size="null" />
+        <field name="PA_Midpoint" type="Single" units="Degrees" fill="-1E+31" length="null" description="Center-point pitch angle in Degrees." bins="null" size="null" />
+        <field name="PA_Range" type="Single" units="null" fill="-1E+31" length="null" description="Pitch Angle Range as minimum value and maximum value for each PA bin." bins="null" size="null" />
+        <field name="Channel" type="SByte" units="null" fill="-128" length="null" description="Identifies the energy channel range for this product and is used to iterate through the other arrays and/or for labels" bins="null" size="null" />
+        <field name="Bin" type="SByte" units="null" fill="-128" length="null" description="Identifies the pitch angle bin range for this product and is used to iterate through the arrays and/or for labels" bins="null" size="null" />
+        <field name="Axis" type="SByte" units="null" fill="-128" length="null" description="Axis of the position (X, Y, Z)" bins="null" size="null" />
+        <field name="MinMaxRange" type="SByte" units="None" fill="-128" length="null" description="Loop variable for Minimum/Maximum range values." bins="null" size="null" />
       </product>
-      <product name="TOFxPHOHELT"
-        id="tofxphohelt"
-        hapiId="rbspa_rbspice_tofxphohelt"
-        title="TOFxPH Oxygen"
-        path="$data$\Level_3PAP\TOFxPHOHELT\"
-        description="rbspa rbspice high energy res low time res tofxph oxygen intensities/pressures sorted by pitch angles.">
-
+      <product name="TOFxPHHHELT" id="tofxphhhelt" hapiId="rbspa_rbspice_tofxphhhelt" title="RBSP A - RBSPICE TOFXPHHHELT LEVEL_3" path="$data$\Level_3PAP\TOFxPHHHELT\">
+        <field name="Epoch" type="DateTime" units="ns" fill="-9223372036854775808" length="null" description="Ephemeris Time of the start  of the accumulation for this measurement." bins="null" size="null" />
+        <field name="UTC" type="String" units="seconds" fill="null" length="null" description="The time of the start of the measurement in as a UTC time string (CCYY-DOYTHH:MM:SS.hhh)" bins="null" size="null" />
+        <field name="DDOY" type="Double" units="seconds" fill="-1E+31" length="null" description="The decimal day of year of the time at MidET" bins="null" size="null" />
+        <field name="ET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the start of the spin group." bins="null" size="null" />
+        <field name="MidET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the centered at the mid-point of the spin group." bins="null" size="null" />
+        <field name="StopET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the end of the spin group." bins="null" size="null" />
+        <field name="Duration" type="Double" units="Seconds" fill="-1E+31" length="null" description="Duration of the spin group." bins="null" size="null" />
+        <field name="OrbitNumber" type="Int32" units="null" fill="-2147483648" length="null" description="Orbit Number at the time of the measurement." bins="null" size="null" />
+        <field name="Spin" type="UInt32" units="null" fill="4294967295" length="null" description="The spin number as identified by the spacecraft at the beginning of the measurement(cyclical value)" bins="null" size="null" />
+        <field name="FPDU" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Directional Differential protons Flux one record per spin binned by pitch angle in 17 bins (binsize$ degrees with 15 degree outer bins): Counts/(MeV-cm^2-s-sr)" bins="null" size="null" />
+        <field name="FPDU_Weight" type="Int16" units="null" fill="-32768" length="null" description="Weighting factors used to calculate spin integration of differential flux indicating the number of observations made for each energy channel/bin combination per spin" bins="null" size="null" />
+        <field name="FPDU_PerpPressure" type="Double" units="nPa" fill="-1E+31" length="null" description="Calculated protons perpendicular partial pressure for energies: 7Kev-47KeV.  Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FPDU_ParaPressure" type="Double" units="nPa" fill="-1E+31" length="null" description="Calculated protons parallel partial pressure for energies: 7Kev-47KeV.  Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FPDU_Density" type="Double" units="Particles/cm^3" fill="-1E+31" length="null" description="The Number Density (#/cm^3) calculated by integrating the distribution function over energy (7Kev-47KeV) and pitch angle for the species. Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FPDU_IntegralFlux" type="Double" units="Counts/s" fill="-1E+31" length="null" description="Pitch Angle Integrated and Energy Integrated total intensity of particles per second observed during the spin for energies: 7Kev-47KeV. Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FPDU_OmniFlux" type="Double" units="Counts/(MeV-s-cm^2)" fill="-1E+31" length="null" description="Omni Directional Total Flux per spin for energies: 7Kev-51KeV (Counts/(MeV-s-cm^2))" bins="null" size="null" />
+        <field name="FPDU_MinimFlux" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Observed minimum intensity in the spin for each energy channel measured (7Kev-51KeV): Counts/(MeV-cm^2-s)" bins="null" size="null" />
+        <field name="FPDU_MaximFlux" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Observed maximum intensity in the spin for each energy channel measured (7Kev-51KeV): Counts/(MeV-cm^2-s)" bins="null" size="null" />
+        <field name="FPDU_Error" type="Single" units="null" fill="-1E+31" length="null" description="The Poisson statistical counting percentage error of the measurement for each energy channel and bin calculated as 1/sqrt(Counts)*100." bins="null" size="null" />
+        <field name="FPDU_Energy" type="Single" units="MeV" fill="-1E+31" length="null" description="Midpoint energy of each measurement channel in MeV. A value of -1 indicates that an energy definition for this channel is not applicable" bins="null" size="null" />
+        <field name="FPDU_EnergyRange" type="Single" units="MeV" fill="-1E+31" length="null" description="Minimum and Maximum energy in MeV of the measurement channel. A value of -1 indicates that either an energy definition for this channel is not applicable or that the upper end of the channel is undefined - i.e. the channel becomes integral." bins="null" size="null" />
+        <field name="FPDU_Quality" type="Int16" units="null" fill="-32768" length="null" description="Quality flag for the measurement for each pitch angle bin/timestep. &#xA;see PREBM standards for definition" bins="null" size="null" />
+        <field name="Position" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The position of the SC at MidET in the GEO Reference Frame." bins="null" size="null" />
+        <field name="Position_SM" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="Position of the spacecraft at MidET in the SM (Solar Magnetospheric) reference frame using the definition SPICE kernels available at production.&#xA;The position varies with time and contains the position for the X, Y, and Z axis of the SC in Earth Radii." bins="null" size="null" />
+        <field name="Position_GSM" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The position of the SC at MidET in the GSM Reference Frame." bins="null" size="null" />
+        <field name="Position_Quality" type="Int16" units="None" fill="-32768" length="null" description="The position quality flag, 0=good, 1=bad." bins="null" size="null" />
+        <field name="L" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="Dipole L value at MidET calculated using the SM Reference Frame and taken from the definitive SPICE SPK kernels that are available at the time. " bins="null" size="null" />
+        <field name="MLT" type="Single" units="Degrees" fill="-1E+31" length="null" description="The Magnetic Local Time of S/C at MidET in Centerted Dipole Coordinates derived from ECT MagEphem data." bins="null" size="null" />
+        <field name="L_Eq" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The McElqain L value at MidET calculated at the Equator (derived from ECT MagEphem data) using the OP77Q field model." bins="null" size="null" />
+        <field name="L_Star" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The Roeder's L* value at MidET (derived from ECT MagEphem data) for the average pitch angle using the OP77Q field model." bins="null" size="null" />
+        <field name="I" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The Integral invariant at MidET for the average pitch angle derived from ECT MagEphem data using the OP77Q field model." bins="null" size="null" />
+        <field name="PA_Midpoint" type="Single" units="Degrees" fill="-1E+31" length="null" description="Center-point pitch angle in Degrees." bins="null" size="null" />
+        <field name="PA_Range" type="Single" units="null" fill="-1E+31" length="null" description="Pitch Angle Range as minimum value and maximum value for each PA bin." bins="null" size="null" />
+        <field name="Channel" type="SByte" units="null" fill="-128" length="null" description="Identifies the energy channel range for this product and is used to iterate through the other arrays and/or for labels" bins="null" size="null" />
+        <field name="Bin" type="SByte" units="null" fill="-128" length="null" description="Identifies the pitch angle bin range for this product and is used to iterate through the arrays and/or for labels" bins="null" size="null" />
+        <field name="Axis" type="SByte" units="null" fill="-128" length="null" description="Axis of the position (X, Y, Z)" bins="null" size="null" />
+        <field name="MinMaxRange" type="SByte" units="None" fill="-128" length="null" description="Loop variable for Minimum/Maximum range values." bins="null" size="null" />
+      </product>
+      <product name="TOFxPHHLEHT" id="tofxphhleht" hapiId="rbspa_rbspice_tofxphhleht" title="RBSP A - RBSPICE TOFXPHHLEHT LEVEL_3" path="$data$\Level_3PAP\TOFxPHHLEHT\">
+        <field name="Epoch" type="DateTime" units="ns" fill="-9223372036854775808" length="null" description="Ephemeris Time of the start  of the accumulation for this measurement." bins="null" size="null" />
+        <field name="UTC" type="String" units="seconds" fill="null" length="null" description="The time of the start of the measurement in as a UTC time string (CCYY-DOYTHH:MM:SS.hhh)" bins="null" size="null" />
+        <field name="DDOY" type="Double" units="seconds" fill="-1E+31" length="null" description="The decimal day of year of the time at MidET" bins="null" size="null" />
+        <field name="ET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the start of the spin group." bins="null" size="null" />
+        <field name="MidET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the centered at the mid-point of the spin group." bins="null" size="null" />
+        <field name="StopET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the end of the spin group." bins="null" size="null" />
+        <field name="Duration" type="Double" units="Seconds" fill="-1E+31" length="null" description="Duration of the spin group." bins="null" size="null" />
+        <field name="OrbitNumber" type="Int32" units="null" fill="-2147483648" length="null" description="Orbit Number at the time of the measurement." bins="null" size="null" />
+        <field name="Spin" type="UInt32" units="null" fill="4294967295" length="null" description="The spin number as identified by the spacecraft at the beginning of the measurement(cyclical value)" bins="null" size="null" />
+        <field name="FPDU" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Directional Differential protons Flux one record per spin binned by pitch angle in 17 bins (binsize$ degrees with 15 degree outer bins): Counts/(MeV-cm^2-s-sr)" bins="null" size="null" />
+        <field name="FPDU_Weight" type="Int16" units="null" fill="-32768" length="null" description="Weighting factors used to calculate spin integration of differential flux indicating the number of observations made for each energy channel/bin combination per spin" bins="null" size="null" />
+        <field name="FPDU_PerpPressure" type="Double" units="nPa" fill="-1E+31" length="null" description="Calculated protons perpendicular partial pressure for energies: 7Kev-46.5KeV.  Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FPDU_ParaPressure" type="Double" units="nPa" fill="-1E+31" length="null" description="Calculated protons parallel partial pressure for energies: 7Kev-46.5KeV.  Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FPDU_Density" type="Double" units="Particles/cm^3" fill="-1E+31" length="null" description="The Number Density (#/cm^3) calculated by integrating the distribution function over energy (7Kev-46.5KeV) and pitch angle for the species. Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FPDU_IntegralFlux" type="Double" units="Counts/s" fill="-1E+31" length="null" description="Pitch Angle Integrated and Energy Integrated total intensity of particles per second observed during the spin for energies: 7Kev-46.5KeV. Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FPDU_OmniFlux" type="Double" units="Counts/(MeV-s-cm^2)" fill="-1E+31" length="null" description="Omni Directional Total Flux per spin for energies: 7Kev-100KeV (Counts/(MeV-s-cm^2))" bins="null" size="null" />
+        <field name="FPDU_MinimFlux" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Observed minimum intensity in the spin for each energy channel measured (7Kev-100KeV): Counts/(MeV-cm^2-s)" bins="null" size="null" />
+        <field name="FPDU_MaximFlux" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Observed maximum intensity in the spin for each energy channel measured (7Kev-100KeV): Counts/(MeV-cm^2-s)" bins="null" size="null" />
+        <field name="FPDU_Error" type="Single" units="null" fill="-1E+31" length="null" description="The Poisson statistical counting percentage error of the measurement for each energy channel and bin calculated as 1/sqrt(Counts)*100." bins="null" size="null" />
+        <field name="FPDU_Energy" type="Single" units="MeV" fill="-1E+31" length="null" description="Midpoint energy of each measurement channel in MeV. A value of -1 indicates that an energy definition for this channel is not applicable" bins="null" size="null" />
+        <field name="FPDU_EnergyRange" type="Single" units="MeV" fill="-1E+31" length="null" description="Minimum and Maximum energy in MeV of the measurement channel. A value of -1 indicates that either an energy definition for this channel is not applicable or that the upper end of the channel is undefined - i.e. the channel becomes integral." bins="null" size="null" />
+        <field name="FPDU_Quality" type="Int16" units="null" fill="-32768" length="null" description="Quality flag for the measurement for each pitch angle bin/timestep. &#xA;see PREBM standards for definition" bins="null" size="null" />
+        <field name="Position" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The position of the SC at MidET in the GEO Reference Frame." bins="null" size="null" />
+        <field name="Position_SM" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="Position of the spacecraft at MidET in the SM (Solar Magnetospheric) reference frame using the definition SPICE kernels available at production.&#xA;The position varies with time and contains the position for the X, Y, and Z axis of the SC in Earth Radii." bins="null" size="null" />
+        <field name="Position_GSM" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The position of the SC at MidET in the GSM Reference Frame." bins="null" size="null" />
+        <field name="Position_Quality" type="Int16" units="None" fill="-32768" length="null" description="The position quality flag, 0=good, 1=bad." bins="null" size="null" />
+        <field name="L" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="Dipole L value at MidET calculated using the SM Reference Frame and taken from the definitive SPICE SPK kernels that are available at the time. " bins="null" size="null" />
+        <field name="MLT" type="Single" units="Degrees" fill="-1E+31" length="null" description="The Magnetic Local Time of S/C at MidET in Centerted Dipole Coordinates derived from ECT MagEphem data." bins="null" size="null" />
+        <field name="L_Eq" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The McElqain L value at MidET calculated at the Equator (derived from ECT MagEphem data) using the OP77Q field model." bins="null" size="null" />
+        <field name="L_Star" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The Roeder's L* value at MidET (derived from ECT MagEphem data) for the average pitch angle using the OP77Q field model." bins="null" size="null" />
+        <field name="I" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The Integral invariant at MidET for the average pitch angle derived from ECT MagEphem data using the OP77Q field model." bins="null" size="null" />
+        <field name="PA_Midpoint" type="Single" units="Degrees" fill="-1E+31" length="null" description="Center-point pitch angle in Degrees." bins="null" size="null" />
+        <field name="PA_Range" type="Single" units="null" fill="-1E+31" length="null" description="Pitch Angle Range as minimum value and maximum value for each PA bin." bins="null" size="null" />
+        <field name="Channel" type="SByte" units="null" fill="-128" length="null" description="Identifies the energy channel range for this product and is used to iterate through the other arrays and/or for labels" bins="null" size="null" />
+        <field name="Bin" type="SByte" units="null" fill="-128" length="null" description="Identifies the pitch angle bin range for this product and is used to iterate through the arrays and/or for labels" bins="null" size="null" />
+        <field name="Axis" type="SByte" units="null" fill="-128" length="null" description="Axis of the position (X, Y, Z)" bins="null" size="null" />
+        <field name="MinMaxRange" type="SByte" units="None" fill="-128" length="null" description="Loop variable for Minimum/Maximum range values." bins="null" size="null" />
+      </product>
+      <product name="TOFxPHOHELT" id="tofxphohelt" hapiId="rbspa_rbspice_tofxphohelt" title="RBSP A - RBSPICE TOFXPHHHELT LEVEL_3" path="$data$\Level_3PAP\TOFxPHOHELT\">
+        <field name="Epoch" type="DateTime" units="ns" fill="-9223372036854775808" length="null" description="Ephemeris Time of the start  of the accumulation for this measurement." bins="null" size="null" />
+        <field name="UTC" type="String" units="seconds" fill="null" length="null" description="The time of the start of the measurement in as a UTC time string (CCYY-DOYTHH:MM:SS.hhh)" bins="null" size="null" />
+        <field name="DDOY" type="Double" units="seconds" fill="-1E+31" length="null" description="The decimal day of year of the time at MidET" bins="null" size="null" />
+        <field name="ET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the start of the spin group." bins="null" size="null" />
+        <field name="MidET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the centered at the mid-point of the spin group." bins="null" size="null" />
+        <field name="StopET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the end of the spin group." bins="null" size="null" />
+        <field name="Duration" type="Double" units="Seconds" fill="-1E+31" length="null" description="Duration of the spin group." bins="null" size="null" />
+        <field name="OrbitNumber" type="Int32" units="null" fill="-2147483648" length="null" description="Orbit Number at the time of the measurement." bins="null" size="null" />
+        <field name="Spin" type="UInt32" units="null" fill="4294967295" length="null" description="The spin number as identified by the spacecraft at the beginning of the measurement(cyclical value)" bins="null" size="null" />
+        <field name="FODU" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Directional Differential o Flux one record per spin binned by pitch angle in 17 bins (binsize$ degrees with 15 degree outer bins): Counts/(MeV-cm^2-s-sr)" bins="null" size="null" />
+        <field name="FODU_Weight" type="Int16" units="null" fill="-32768" length="null" description="Weighting factors used to calculate spin integration of differential flux indicating the number of observations made for each energy channel/bin combination per spin" bins="null" size="null" />
+        <field name="FODU_PerpPressure" type="Double" units="nPa" fill="-1E+31" length="null" description="Calculated o perpendicular partial pressure for energies: 49Kev-177KeV.  Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FODU_ParaPressure" type="Double" units="nPa" fill="-1E+31" length="null" description="Calculated o parallel partial pressure for energies: 49Kev-177KeV.  Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FODU_Density" type="Double" units="Particles/cm^3" fill="-1E+31" length="null" description="The Number Density (#/cm^3) calculated by integrating the distribution function over energy (49Kev-177KeV) and pitch angle for the species. Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FODU_IntegralFlux" type="Double" units="Counts/s" fill="-1E+31" length="null" description="Pitch Angle Integrated and Energy Integrated total intensity of particles per second observed during the spin for energies: 49Kev-177KeV. Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FODU_OmniFlux" type="Double" units="Counts/(MeV-s-cm^2)" fill="-1E+31" length="null" description="Omni Directional Total Flux per spin for energies: 49Kev-177KeV (Counts/(MeV-s-cm^2))" bins="null" size="null" />
+        <field name="FODU_MinimFlux" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Observed minimum intensity in the spin for each energy channel measured (49Kev-177KeV): Counts/(MeV-cm^2-s)" bins="null" size="null" />
+        <field name="FODU_MaximFlux" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Observed maximum intensity in the spin for each energy channel measured (49Kev-177KeV): Counts/(MeV-cm^2-s)" bins="null" size="null" />
+        <field name="FODU_Error" type="Single" units="null" fill="-1E+31" length="null" description="The Poisson statistical counting percentage error of the measurement for each energy channel and bin calculated as 1/sqrt(Counts)*100." bins="null" size="null" />
+        <field name="FODU_Energy" type="Single" units="MeV" fill="-1E+31" length="null" description="Midpoint energy of each measurement channel in MeV. A value of -1 indicates that an energy definition for this channel is not applicable" bins="null" size="null" />
+        <field name="FODU_EnergyRange" type="Single" units="MeV" fill="-1E+31" length="null" description="Minimum and Maximum energy in MeV of the measurement channel. A value of -1 indicates that either an energy definition for this channel is not applicable or that the upper end of the channel is undefined - i.e. the channel becomes integral." bins="null" size="null" />
+        <field name="FODU_Quality" type="Int16" units="null" fill="-32768" length="null" description="Quality flag for the measurement for each pitch angle bin/timestep. &#xA;see PREBM standards for definition" bins="null" size="null" />
+        <field name="Position" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The position of the SC at MidET in the GEO Reference Frame." bins="null" size="null" />
+        <field name="Position_SM" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="Position of the spacecraft at MidET in the SM (Solar Magnetospheric) reference frame using the definition SPICE kernels available at production.&#xA;The position varies with time and contains the position for the X, Y, and Z axis of the SC in Earth Radii." bins="null" size="null" />
+        <field name="Position_GSM" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The position of the SC at MidET in the GSM Reference Frame." bins="null" size="null" />
+        <field name="Position_Quality" type="Int16" units="None" fill="-32768" length="null" description="The position quality flag, 0=good, 1=bad." bins="null" size="null" />
+        <field name="L" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="Dipole L value at MidET calculated using the SM Reference Frame and taken from the definitive SPICE SPK kernels that are available at the time. " bins="null" size="null" />
+        <field name="MLT" type="Single" units="Degrees" fill="-1E+31" length="null" description="The Magnetic Local Time of S/C at MidET in Centerted Dipole Coordinates derived from ECT MagEphem data." bins="null" size="null" />
+        <field name="L_Eq" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The McElqain L value at MidET calculated at the Equator (derived from ECT MagEphem data) using the OP77Q field model." bins="null" size="null" />
+        <field name="L_Star" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The Roeder's L* value at MidET (derived from ECT MagEphem data) for the average pitch angle using the OP77Q field model." bins="null" size="null" />
+        <field name="I" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The Integral invariant at MidET for the average pitch angle derived from ECT MagEphem data using the OP77Q field model." bins="null" size="null" />
+        <field name="PA_Midpoint" type="Single" units="Degrees" fill="-1E+31" length="null" description="Center-point pitch angle in Degrees." bins="null" size="null" />
+        <field name="PA_Range" type="Single" units="null" fill="-1E+31" length="null" description="Pitch Angle Range as minimum value and maximum value for each PA bin." bins="null" size="null" />
+        <field name="Channel" type="SByte" units="null" fill="-128" length="null" description="Identifies the energy channel range for this product and is used to iterate through the other arrays and/or for labels" bins="null" size="null" />
+        <field name="Bin" type="SByte" units="null" fill="-128" length="null" description="Identifies the pitch angle bin range for this product and is used to iterate through the arrays and/or for labels" bins="null" size="null" />
+        <field name="Axis" type="SByte" units="null" fill="-128" length="null" description="Axis of the position (X, Y, Z)" bins="null" size="null" />
+        <field name="MinMaxRange" type="SByte" units="None" fill="-128" length="null" description="Loop variable for Minimum/Maximum range values." bins="null" size="null" />
+      </product>
+      <product name="TOFxPHOLEHT" id="tofxpholeht" hapiId="rbspa_rbspice_tofxpholeht" title="RBSP A - RBSPICE TOFXPHHLEHT LEVEL_3" path="$data$\Level_3PAP\TOFxPHOLEHT\">
+        <field name="Epoch" type="DateTime" units="ns" fill="-9223372036854775808" length="null" description="Ephemeris Time of the start  of the accumulation for this measurement." bins="null" size="null" />
+        <field name="UTC" type="String" units="seconds" fill="null" length="null" description="The time of the start of the measurement in as a UTC time string (CCYY-DOYTHH:MM:SS.hhh)" bins="null" size="null" />
+        <field name="DDOY" type="Double" units="seconds" fill="-1E+31" length="null" description="The decimal day of year of the time at MidET" bins="null" size="null" />
+        <field name="ET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the start of the spin group." bins="null" size="null" />
+        <field name="MidET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the centered at the mid-point of the spin group." bins="null" size="null" />
+        <field name="StopET" type="Double" units="seconds" fill="-1E+31" length="null" description="The ephemeris time at the end of the spin group." bins="null" size="null" />
+        <field name="Duration" type="Double" units="Seconds" fill="-1E+31" length="null" description="Duration of the spin group." bins="null" size="null" />
+        <field name="OrbitNumber" type="Int32" units="null" fill="-2147483648" length="null" description="Orbit Number at the time of the measurement." bins="null" size="null" />
+        <field name="Spin" type="UInt32" units="null" fill="4294967295" length="null" description="The spin number as identified by the spacecraft at the beginning of the measurement(cyclical value)" bins="null" size="null" />
+        <field name="FODU" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Directional Differential o Flux one record per spin binned by pitch angle in 17 bins (binsize$ degrees with 15 degree outer bins): Counts/(MeV-cm^2-s-sr)" bins="null" size="null" />
+        <field name="FODU_Weight" type="Int16" units="null" fill="-32768" length="null" description="Weighting factors used to calculate spin integration of differential flux indicating the number of observations made for each energy channel/bin combination per spin" bins="null" size="null" />
+        <field name="FODU_PerpPressure" type="Double" units="nPa" fill="-1E+31" length="null" description="Calculated o perpendicular partial pressure for energies: 49Kev-161KeV.  Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FODU_ParaPressure" type="Double" units="nPa" fill="-1E+31" length="null" description="Calculated o parallel partial pressure for energies: 49Kev-161KeV.  Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FODU_Density" type="Double" units="Particles/cm^3" fill="-1E+31" length="null" description="The Number Density (#/cm^3) calculated by integrating the distribution function over energy (49Kev-161KeV) and pitch angle for the species. Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FODU_IntegralFlux" type="Double" units="Counts/s" fill="-1E+31" length="null" description="Pitch Angle Integrated and Energy Integrated total intensity of particles per second observed during the spin for energies: 49Kev-161KeV. Does not include noisy energy channels." bins="null" size="null" />
+        <field name="FODU_OmniFlux" type="Double" units="Counts/(MeV-s-cm^2)" fill="-1E+31" length="null" description="Omni Directional Total Flux per spin for energies: 49Kev-161KeV (Counts/(MeV-s-cm^2))" bins="null" size="null" />
+        <field name="FODU_MinimFlux" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Observed minimum intensity in the spin for each energy channel measured (49Kev-161KeV): Counts/(MeV-cm^2-s)" bins="null" size="null" />
+        <field name="FODU_MaximFlux" type="Double" units="Counts/(MeV-cm^2-s-sr)" fill="-1E+31" length="null" description="Observed maximum intensity in the spin for each energy channel measured (49Kev-161KeV): Counts/(MeV-cm^2-s)" bins="null" size="null" />
+        <field name="FODU_Error" type="Single" units="null" fill="-1E+31" length="null" description="The Poisson statistical counting percentage error of the measurement for each energy channel and bin calculated as 1/sqrt(Counts)*100." bins="null" size="null" />
+        <field name="FODU_Energy" type="Single" units="MeV" fill="-1E+31" length="null" description="Midpoint energy of each measurement channel in MeV. A value of -1 indicates that an energy definition for this channel is not applicable" bins="null" size="null" />
+        <field name="FODU_EnergyRange" type="Single" units="MeV" fill="-1E+31" length="null" description="Minimum and Maximum energy in MeV of the measurement channel. A value of -1 indicates that either an energy definition for this channel is not applicable or that the upper end of the channel is undefined - i.e. the channel becomes integral." bins="null" size="null" />
+        <field name="FODU_Quality" type="Int16" units="null" fill="-32768" length="null" description="Quality flag for the measurement for each pitch angle bin/timestep. &#xA;see PREBM standards for definition" bins="null" size="null" />
+        <field name="Position" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The position of the SC at MidET in the GEO Reference Frame." bins="null" size="null" />
+        <field name="Position_SM" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="Position of the spacecraft at MidET in the SM (Solar Magnetospheric) reference frame using the definition SPICE kernels available at production.&#xA;The position varies with time and contains the position for the X, Y, and Z axis of the SC in Earth Radii." bins="null" size="null" />
+        <field name="Position_GSM" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The position of the SC at MidET in the GSM Reference Frame." bins="null" size="null" />
+        <field name="Position_Quality" type="Int16" units="None" fill="-32768" length="null" description="The position quality flag, 0=good, 1=bad." bins="null" size="null" />
+        <field name="L" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="Dipole L value at MidET calculated using the SM Reference Frame and taken from the definitive SPICE SPK kernels that are available at the time. " bins="null" size="null" />
+        <field name="MLT" type="Single" units="Degrees" fill="-1E+31" length="null" description="The Magnetic Local Time of S/C at MidET in Centerted Dipole Coordinates derived from ECT MagEphem data." bins="null" size="null" />
+        <field name="L_Eq" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The McElqain L value at MidET calculated at the Equator (derived from ECT MagEphem data) using the OP77Q field model." bins="null" size="null" />
+        <field name="L_Star" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The Roeder's L* value at MidET (derived from ECT MagEphem data) for the average pitch angle using the OP77Q field model." bins="null" size="null" />
+        <field name="I" type="Single" units="EarthRadii" fill="-1E+31" length="null" description="The Integral invariant at MidET for the average pitch angle derived from ECT MagEphem data using the OP77Q field model." bins="null" size="null" />
+        <field name="PA_Midpoint" type="Single" units="Degrees" fill="-1E+31" length="null" description="Center-point pitch angle in Degrees." bins="null" size="null" />
+        <field name="PA_Range" type="Single" units="null" fill="-1E+31" length="null" description="Pitch Angle Range as minimum value and maximum value for each PA bin." bins="null" size="null" />
+        <field name="Channel" type="SByte" units="null" fill="-128" length="null" description="Identifies the energy channel range for this product and is used to iterate through the other arrays and/or for labels" bins="null" size="null" />
+        <field name="Bin" type="SByte" units="null" fill="-128" length="null" description="Identifies the pitch angle bin range for this product and is used to iterate through the arrays and/or for labels" bins="null" size="null" />
+        <field name="Axis" type="SByte" units="null" fill="-128" length="null" description="Axis of the position (X, Y, Z)" bins="null" size="null" />
+        <field name="MinMaxRange" type="SByte" units="None" fill="-128" length="null" description="Loop variable for Minimum/Maximum range values." bins="null" size="null" />
       </product>
     </instrument>
   </spacecraft>

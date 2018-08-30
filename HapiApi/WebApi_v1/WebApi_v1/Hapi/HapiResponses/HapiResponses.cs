@@ -137,18 +137,18 @@ namespace WebApi_v1.HAPI.Response
             if (Hapi.Properties == null)
                 throw new MissingFieldException(nameof(Hapi.Properties));
 
-            if (Hapi.Properties.TimeMin == null)
-                throw new MissingFieldException(nameof(Hapi.Properties.TimeMin));
+            if (Hapi.Properties.TimeRange.UserMin == null)
+                throw new MissingFieldException(nameof(Hapi.Properties.TimeRange.UserMin));
 
-            if (Hapi.Properties.TimeMax == null)
-                throw new MissingFieldException(nameof(Hapi.Properties.TimeMax));
+            if (Hapi.Properties.TimeRange.UserMax == null)
+                throw new MissingFieldException(nameof(Hapi.Properties.TimeRange.UserMax));
 
             if (Hapi.DataProduct == null)
                 throw new MissingFieldException(nameof(Hapi.DataProduct));
 
             HapiVersion = Hapi.Configuration.Version;
-            StartDate = Hapi.Properties.TimeMin.ToString();
-            StopDate = Hapi.Properties.TimeMax.ToString();
+            StartDate = Hapi.Properties.TimeRange.UserMin.ToString();
+            StopDate = Hapi.Properties.TimeRange.UserMax.ToString();
             Parameters = Hapi.Properties.Parameters;
             Format = Hapi.Properties.Format;
             Status = new Status();
@@ -191,8 +191,8 @@ namespace WebApi_v1.HAPI.Response
                 HapiVersion,
                 Status.Code,
                 Status.Message,
-                Hapi.Properties.TimeMin,
-                Hapi.Properties.TimeMax
+                Hapi.Properties.TimeRange.UserMin,
+                Hapi.Properties.TimeRange.UserMax
             );
 
             if (Hapi.Properties.Parameters != null)
@@ -251,6 +251,8 @@ namespace WebApi_v1.HAPI.Response
             string last;
             if (Hapi.DataProduct.Records.Count() > 0)
             {
+                // Grab the first record and the last field's name in that record to compare
+                // later whether a new line should be created.
                 last = Hapi.DataProduct.Records.ToList().First().ToList().Last().Key;
             }
             else
@@ -258,6 +260,7 @@ namespace WebApi_v1.HAPI.Response
                 return ("No records were found. If this is an error, make sure query is valid.");
             }
 
+            // For each record, iterate through the fields and append the value separated by commas
             foreach (Dictionary<string, string> rec in Hapi.DataProduct.Records)
             {
                 foreach (KeyValuePair<string, string> pair in rec)
@@ -290,8 +293,8 @@ namespace WebApi_v1.HAPI.Response
                     HapiVersion,
                     Status.Code,
                     Status.Message,
-                    Hapi.Properties.TimeMin,
-                    Hapi.Properties.TimeMax
+                    Hapi.Properties.TimeRange.UserMin,
+                    Hapi.Properties.TimeRange.UserMax
                 );
 
                 if (Hapi.Properties.Parameters != null)
@@ -389,10 +392,10 @@ namespace WebApi_v1.HAPI.Response
             HapiVersion = Hapi.Configuration.Version;
             Status = new Status(); // HACK: don't use a literal value for code
             Format = Hapi.Properties.Format;
-            StartDate = Hapi.Properties.TimeMin;
-            StopDate = Hapi.Properties.TimeMax;
             Parameters = Hapi.Catalog.GetProduct(Hapi.Properties.ID).GetFields();
-
+            Hapi.Properties.TimeRange.GetAvailableTimeRange(Hapi.Catalog.GetProduct(Hapi.Properties.ID).Path, out _, out _);
+            StartDate = Hapi.Properties.TimeRange.Min;
+            StopDate = Hapi.Properties.TimeRange.Max;
         }
 
         public override string GetResponse()
