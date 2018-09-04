@@ -13,7 +13,7 @@ namespace ConsoleApp1
 
 
     // THIS CLASS IS VERY SPECIFIC TO LEVEL_3PAP PRODUCTS!!
-    public class XmlCatalogProducer
+    public class HapiCatalogProducer
     {
         //private string _xmlCatalogPath = @"testXmlCatalog.xml";
         private string _xmlCatalogPath = @"C:\Users\blaine.harris\Documents\Github\FTECS\HapiApi\WebApi_v1\WebApi_v1\Hapi\HapiXml\HapiCatalog.xml";
@@ -145,7 +145,7 @@ namespace ConsoleApp1
 
             foreach (CDF_Variable var in cdf.Variables)
             {
-                Debug.WriteLine(String.Format("{0}", var.Name));
+                //Debug.WriteLine(String.Format("{0}", var.Name));
                 XmlElement field = xdoc.CreateElement("field");
 
                 cdf.HandleAllExceptions = true;
@@ -207,8 +207,8 @@ namespace ConsoleApp1
                 starttime = GetStartTime();
                 stoptime = GetStopTime();
 
-                Debug.WriteLine(starttime);
-                Debug.WriteLine(stoptime);
+                //Debug.WriteLine(starttime);
+                //Debug.WriteLine(stoptime);
             }
         }
     }

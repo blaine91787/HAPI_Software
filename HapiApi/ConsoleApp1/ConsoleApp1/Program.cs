@@ -17,7 +17,7 @@ namespace ConsoleApp1
         public static void Main()
         {
 
-            XmlCatalogProducer catProducer = new XmlCatalogProducer();
+            HapiCatalogProducer catProducer = new HapiCatalogProducer();
             catProducer.CreateCatalog();
             //string cdfFilePath = @"C:\HapiApi\data\Archive\RBSP\RBSPA\RBSPICE\Data\Level_3PAP\TOFxEH\2013\rbsp-a-rbspice_lev-3-PAP_TOFxEH_20130126_v1.1.2-00.cdf";
             //CDFReader cdfFile = new CDFReader(cdfFilePath);

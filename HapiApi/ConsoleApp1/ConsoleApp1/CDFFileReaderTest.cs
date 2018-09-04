@@ -81,33 +81,33 @@ namespace ConsoleApp1
 
                     Type valueType = var[rec].GetType();
 
-                    Debug.WriteLine(valueType.ToString());
+                    //Debug.WriteLine(valueType.ToString());
 
                     string valString = "";
                     if      (valueType.Equals(typeof(string)))      { valString = var[rec].ToString(); }
                     else if (valueType.Equals(typeof(string[])))    { OneDimCDFVariable(var[rec], valueType, out valString); }
-                    else if (valueType.Equals(typeof(string[,])))   { Debug.WriteLine("It's a String[,]"); }
+                    else if (valueType.Equals(typeof(string[,])))   { } //Debug.WriteLine("It's a String[,]"); }
                     else if (valueType.Equals(typeof(Double)))      { valString = var[rec].ToString(); }
                     else if (valueType.Equals(typeof(Double[])))    { OneDimCDFVariable(var[rec], valueType, out valString); }
                     else if (valueType.Equals(typeof(Double[,])))   { TwoDimCDFVariable(var[rec], valueType, out valString); }
                     else if (valueType.Equals(typeof(Int32)))       { valString = var[rec].ToString(); }
                     else if (valueType.Equals(typeof(Int32[])))     { OneDimCDFVariable(var[rec], valueType, out valString); }
-                    else if (valueType.Equals(typeof(Int32[,])))    { Debug.WriteLine("It's a Int32[,]"); }
+                    else if (valueType.Equals(typeof(Int32[,])))    { } //Debug.WriteLine("It's a Int32[,]"); }
                     else if (valueType.Equals(typeof(UInt32)))      { valString = var[rec].ToString(); }
                     else if (valueType.Equals(typeof(UInt32[])))    { OneDimCDFVariable(var[rec], valueType, out valString); }
-                    else if (valueType.Equals(typeof(UInt32[,])))   { Debug.WriteLine("It's a UInt32[,]"); }
+                    else if (valueType.Equals(typeof(UInt32[,])))   { } //Debug.WriteLine("It's a UInt32[,]"); }
                     else if (valueType.Equals(typeof(Single)))      { valString = var[rec].ToString(); }
                     else if (valueType.Equals(typeof(Single[])))    { OneDimCDFVariable(var[rec], valueType, out valString); }
-                    else if (valueType.Equals(typeof(Single[,])))   { Debug.WriteLine("It's a Single[,]"); }
+                    else if (valueType.Equals(typeof(Single[,])))   { } //Debug.WriteLine("It's a Single[,]"); }
                     else if (valueType.Equals(typeof(Int16)))       { valString = var[rec].ToString(); }
                     else if (valueType.Equals(typeof(Int16[])))     { OneDimCDFVariable(var[rec], valueType, out valString); }
-                    else if (valueType.Equals(typeof(Int16[,])))    { Debug.WriteLine("It's a Int16[,]"); }
+                    else if (valueType.Equals(typeof(Int16[,])))    { } //Debug.WriteLine("It's a Int16[,]"); }
                     else if (valueType.Equals(typeof(SByte)))       { valString = var[rec].ToString(); }
                     else if (valueType.Equals(typeof(SByte[])))     { OneDimCDFVariable(var[rec], valueType, out valString); }
-                    else if (valueType.Equals(typeof(SByte[,])))    { Debug.WriteLine("It's a SByte[,]"); }
+                    else if (valueType.Equals(typeof(SByte[,])))    { } //Debug.WriteLine("It's a SByte[,]"); }
                     else if (valueType.Equals(typeof(CDF_Time)))    { valString = var[rec].ToString(); }
                     else if (valueType.Equals(typeof(CDF_Time[])))  { OneDimCDFVariable(var[rec], valueType, out valString); }
-                    else if (valueType.Equals(typeof(CDF_Time[,]))) { Debug.WriteLine("It's a CDF_Time[,]"); }
+                    else if (valueType.Equals(typeof(CDF_Time[,]))) { } //Debug.WriteLine("It's a CDF_Time[,]"); }
                     else { throw new ArgumentOutOfRangeException(valueType.Name); }
 
 
@@ -124,13 +124,13 @@ namespace ConsoleApp1
 
             CDF_File cdfFile = new CDF_File(_cdfFilePath);
 
-            Debug.WriteLine("SHOWING CDF FILE ATTRIBUTES:\n");
+            //Debug.WriteLine("SHOWING CDF FILE ATTRIBUTES:\n");
             foreach(CDF_Attribute attr in cdfFile.Attributes)
             {
-                Debug.WriteLine(attr.Name + "    :    " + attr.GetValue(0,-1));
+                //Debug.WriteLine(attr.Name + "    :    " + attr.GetValue(0,-1));
             }
 
-            Debug.WriteLine("SHOWING CDF VARIABLE ATTRIBUTES:\n");
+            //Debug.WriteLine("SHOWING CDF VARIABLE ATTRIBUTES:\n");
             foreach (CDF_Variable var in cdfFile.Variables)
             {
                 foreach (CDF_Attribute attr in var.Attributes)
@@ -138,18 +138,18 @@ namespace ConsoleApp1
                     //Double value = 0.0;
                     //Single[,] s = new Single[,] { { Single.MinValue }, { Single.MinValue } };
                     //if (var.WindowsType == typeof(Single)) { s = (Single[,])var[0]; value = Convert.ToDouble(s[0, 0]); }
-                    //if (s[0, 0] == value) { Debug.WriteLine("MATCHESSSSSSSS"); }
+                    //if (s[0, 0] == value) { //Debug.WriteLine("MATCHESSSSSSSS"); }
 
-                    Debug.WriteLine(var.Name + "  :  " +
-                                    //value.ToString() + "   :   " +
-                                    //s[0, 0].ToString() + "  :  " +
-                                    var[0].ToString() + "  :  " +
-                                    var.WindowsType + "," + 
-                                    var.DataType + "," + 
-                                    var.VarType + " : " + 
-                                    var.Size +"    :    " + 
-                                    attr.Name + "   :   " + 
-                                    attr.GetValue(0,var));
+                    ////Debug.WriteLine(var.Name + "  :  " +
+                    //                //value.ToString() + "   :   " +
+                    //                //s[0, 0].ToString() + "  :  " +
+                    //                var[0].ToString() + "  :  " +
+                    //                var.WindowsType + "," + 
+                    //                var.DataType + "," + 
+                    //                var.VarType + " : " + 
+                    //                var.Size +"    :    " + 
+                    //                attr.Name + "   :   " + 
+                    //                attr.GetValue(0,var));
                 }
                 Debug.WriteLine("");
             }

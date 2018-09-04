@@ -103,7 +103,7 @@
     <Compile Include="CDFFileReaderTest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XmlCatalogProducer.cs" />
+    <Compile Include="HapiCatalogProducer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
