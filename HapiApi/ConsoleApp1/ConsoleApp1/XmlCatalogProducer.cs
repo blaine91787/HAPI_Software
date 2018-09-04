@@ -10,12 +10,15 @@ using System.Xml;
 
 namespace ConsoleApp1
 {
+
+
+    // THIS CLASS IS VERY SPECIFIC TO LEVEL_3PAP PRODUCTS!!
     public class XmlCatalogProducer
     {
         //private string _xmlCatalogPath = @"testXmlCatalog.xml";
         private string _xmlCatalogPath = @"C:\Users\blaine.harris\Documents\Github\FTECS\HapiApi\WebApi_v1\WebApi_v1\Hapi\HapiXml\HapiCatalog.xml";
         private string _productPath = @"\\ftecs.com\data\Archive\RBSP\RBSPA\RBSPICE\Data\Level_3PAP\"; //\TOFxEH\2013\rbsp-a-rbspice_lev-3-PAP_TOFxEH_20130126_v1.1.2-00.cdf";
-
+        private bool _clearProducts = true; // Only for testing. Set false otherwise. (Keeps the auxiliary product available and refreshes the level_3PAP products.
 
         public void CreateCatalog()
         {
@@ -24,20 +27,43 @@ namespace ConsoleApp1
             XmlNodeList instruments = xdoc.GetElementsByTagName("instrument");
             XmlNode instrument = instruments[instruments.Count - 1];
 
+            if (_clearProducts)
+                ClearProducts(xdoc);
+
             if (!Directory.Exists(_productPath))
                 throw new DirectoryNotFoundException();
 
             string[] paths = Directory.GetDirectories(_productPath);
+            List<string> filetypes = new List<string>();
+
 
             List<FileInfo> listoffiles = new List<FileInfo>();
+            Queue<TimeRangeFiles> timeFiles = new Queue<TimeRangeFiles>();
             foreach (string path in paths)
             {
                 string yearpath = Directory.GetDirectories(path).FirstOrDefault();
+
+                if (path == paths.First())
+                {
+                    if (yearpath != default(string) && Directory.GetFiles(yearpath, "*.cdf").Length != 0)
+                        filetypes.Add("cdf");
+                    if (yearpath != default(string) && Directory.GetFiles(yearpath, "*.csv.gz").Length != 0)
+                        filetypes.Add("csv.gz");
+                    if (yearpath != default(string) && Directory.GetFiles(yearpath, "*.csv").Length != 0)
+                        filetypes.Add("csv");
+                }
+
+                TimeRangeFiles trf = new TimeRangeFiles();
+                trf.StartFile = new FileInfo(Directory.GetFiles(Directory.GetDirectories(path).FirstOrDefault()).FirstOrDefault());
+                trf.StopFile = new FileInfo(Directory.GetFiles(Directory.GetDirectories(path).LastOrDefault()).LastOrDefault());
+                timeFiles.Enqueue(trf);
+
+
                 FileInfo fi = new FileInfo(Directory.GetFiles(yearpath).FirstOrDefault());
                 listoffiles.Add(fi);
             }
 
-            List<XmlElement> products = GetProducts(xdoc, listoffiles);
+            List<XmlElement> products = GetProducts(timeFiles, xdoc, listoffiles, filetypes.FirstOrDefault());
 
             foreach (XmlElement product in products)
                 instrument.AppendChild(product);
@@ -45,7 +71,7 @@ namespace ConsoleApp1
             xdoc.Save(_xmlCatalogPath);
         }
 
-        private List<XmlElement> GetProducts(XmlDocument xdoc, List<FileInfo> listoffiles)
+        private List<XmlElement> GetProducts(Queue<TimeRangeFiles> trfQueue, XmlDocument xdoc, List<FileInfo> listoffiles, string filetype)
         {
             List<XmlElement> list = new List<XmlElement>();
             foreach (FileInfo fi in listoffiles)
@@ -64,15 +90,22 @@ namespace ConsoleApp1
                 string hapiId = String.Format("{0}_{1}_{2}", sc, instr, id);
                 string prodpath = String.Format(@"$data$\{0}\{1}\", level, name);
                 string title = String.Empty;
+                string starttime = String.Empty;
+                string stoptime = String.Empty;
                 try { title = cdfFi.FindAttribute("LINK_TEXT").GetValue(0, -1).Value.ToString(); } catch { }
+                TimeRangeFiles trf = trfQueue.Dequeue();
+                trf.GetTimeRange(out starttime, out stoptime);
 
-                if (ProductExists(xdoc, hapiId))
+                if (ProductExists(xdoc, hapiId) )
                     continue;
 
                 XmlElement product = xdoc.CreateElement("product");
                 product.SetAttribute("name", name);
                 product.SetAttribute("id", name.ToLower());
                 product.SetAttribute("hapiId", hapiId);
+                product.SetAttribute("filetype", filetype);
+                product.SetAttribute("starttime", starttime);
+                product.SetAttribute("stoptime", stoptime);
                 product.SetAttribute("title", title);
                 product.SetAttribute("path", prodpath);
 
@@ -95,6 +128,16 @@ namespace ConsoleApp1
 
             return false;
         }
+        private void ClearProducts(XmlDocument xdoc)
+        {
+            XmlNodeList products = xdoc.GetElementsByTagName("product");
+            XmlNode prod = products.Item(products.Count - 1);
+            if(products.Count > 1)
+            {
+                prod.ParentNode.RemoveChild((XmlNode)prod);
+                ClearProducts(xdoc);
+            }
+        }
         private List<XmlElement> GetFields(XmlDocument xdoc,CDF_File cdf)
         {
 
@@ -105,7 +148,7 @@ namespace ConsoleApp1
                 Debug.WriteLine(String.Format("{0}", var.Name));
                 XmlElement field = xdoc.CreateElement("field");
 
-                cdf.HandleAllExceptions = false;
+                cdf.HandleAllExceptions = true;
 
                 string name, type, units, fill, length, description, bins, size;
                 name = type = units = fill = length = description = bins = size = String.Empty;
@@ -133,6 +176,40 @@ namespace ConsoleApp1
             }
 
             return list;
+        }
+
+        private class TimeRangeFiles
+        {
+            public FileInfo StartFile { get; set; }
+            public FileInfo StopFile { get; set; }
+
+            public string GetStartTime()
+            {
+                string file = Directory.GetFiles(StartFile.DirectoryName).FirstOrDefault();
+                CDFReader cdf = new CDFReader(file);
+                CDF_Variable utcVar = cdf.GetVariable("UTC");
+                return utcVar[0].ToString().Trim();
+            }
+
+            public string GetStopTime()
+            {
+                string file = Directory.GetFiles(StopFile.DirectoryName).LastOrDefault();
+                CDFReader cdf = new CDFReader(file);
+                CDF_Variable utcVar = cdf.GetVariable("UTC");
+                int utcVarLastIndex = utcVar.Records - 1;
+                return utcVar[utcVarLastIndex].ToString().Trim();
+            }
+
+            public void GetTimeRange(out string starttime, out string stoptime)
+            {
+                starttime = stoptime = String.Empty;
+
+                starttime = GetStartTime();
+                stoptime = GetStopTime();
+
+                Debug.WriteLine(starttime);
+                Debug.WriteLine(stoptime);
+            }
         }
     }
 }

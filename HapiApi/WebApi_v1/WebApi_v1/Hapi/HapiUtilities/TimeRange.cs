@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using WebApi_v1.HAPI.Catalog;
 
 namespace WebApi_v1.HAPI.Utilities
 {
@@ -46,7 +47,34 @@ namespace WebApi_v1.HAPI.Utilities
 
 
             min = this.Min = GetMinTime(path);
+
+            if (min == default(DateTime))
+                throw new InvalidOperationException("Error calculating min time.");
+
             max = this.Max = GetMaxTime(path);
+
+            if (max == default(DateTime))
+                throw new InvalidOperationException("Error calculating max time.");
+        }
+
+        public void GetAvailableTimeRange(Product product, out DateTime min, out DateTime max)
+        {
+            //if (!Directory.Exists(path))
+            //    throw new DirectoryNotFoundException(path);
+
+            min = max = default(DateTime);
+
+            Converters cons = new Converters();
+
+
+            min = this.Min = cons.ConvertUTCtoDate(product.StartTime);
+            max = this.Max = cons.ConvertUTCtoDate(product.StopTime);
+
+            if (min == default(DateTime))
+                throw new InvalidOperationException("Error calculating min time."); ;
+
+            if (max == default(DateTime))
+                throw new InvalidOperationException("Error calculating max time.");
         }
 
         private DateTime GetMinTime(string path)
@@ -74,6 +102,10 @@ namespace WebApi_v1.HAPI.Utilities
                     csv.Read();
                     minTime = cons.ConvertUTCtoDate(csv[0]);
                 };
+            }
+            else
+            {
+                throw new FileNotFoundException("Could not find file to calculate min time.", path);
             }
 
             return minTime;

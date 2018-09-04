@@ -106,8 +106,8 @@ namespace WebApi_v1.HAPI
                 Properties.ErrorCodes.Add(Status.HapiStatusCode.InternalServerError);
             }
 
-            if (DataProduct == null)
-                return false;
+            //if (DataProduct.Records == null)
+            //    throw new InvalidOperationException("DataProduct.Records should not come back null, something happened.");
 
             if (!DataProduct.VerifyTimeRange()) // Outside of SC data timerange
             {

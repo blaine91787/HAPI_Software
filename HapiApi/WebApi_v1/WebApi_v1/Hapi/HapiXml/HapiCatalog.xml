@@ -6,7 +6,7 @@
     <instrument name="emfisis">
     </instrument>
     <instrument name="rbspice" path="$data$\RBSPICE\Data\">
-      <product name="Auxil" id="auxil" hapiId="rbspa_rbspice_auxil" title="RBSPA RBSPICE Auxiliary Data" path="$data$\Level_0\Auxil\" description="RBSPICE Level 0 Auxiliary Data">
+      <product name="Auxil" id="auxil" hapiId="rbspa_rbspice_auxil" filetype=".gz" title="RBSPA RBSPICE Auxiliary Data" path="$data$\Level_0\Auxil\" description="RBSPICE Level 0 Auxiliary Data">
         <field name="UTC" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
         </field>
         <field name="SCLOCK_Full" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
@@ -66,7 +66,7 @@
         <field name="SpinDuration" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
         </field>
       </product>
-      <product name="ESRHELT" id="esrhelt" hapiId="rbspa_rbspice_esrhelt" title="RBSP A - RBSPICE ESRHELT LEVEL_3" path="$data$\Level_3PAP\ESRHELT\">
+      <product name="ESRHELT" id="esrhelt" hapiId="rbspa_rbspice_esrhelt" filetype="cdf" starttime="2012-318T22:07:41.875" stoptime="2018-196T23:59:30.837" title="RBSP A - RBSPICE ESRHELT LEVEL_3" path="$data$\Level_3PAP\ESRHELT\">
         <field name="Epoch" type="DateTime" units="ns" fill="-9223372036854775808" length="null" description="Ephemeris Time of the start  of the accumulation for this measurement." bins="null" size="null" />
         <field name="UTC" type="String" units="seconds" fill="null" length="null" description="The time of the start of the measurement in as a UTC time string (CCYY-DOYTHH:MM:SS.hhh)" bins="null" size="null" />
         <field name="DDOY" type="Double" units="seconds" fill="-1E+31" length="null" description="The decimal day of year of the time at MidET" bins="null" size="null" />
@@ -105,7 +105,7 @@
         <field name="Axis" type="SByte" units="null" fill="-128" length="null" description="Axis of the position (X, Y, Z)" bins="null" size="null" />
         <field name="MinMaxRange" type="SByte" units="None" fill="-128" length="null" description="Loop variable for Minimum/Maximum range values." bins="null" size="null" />
       </product>
-      <product name="ESRLEHT" id="esrleht" hapiId="rbspa_rbspice_esrleht" title="RBSP A - RBSPICE ESRLEHT LEVEL_3" path="$data$\Level_3PAP\ESRLEHT\">
+      <product name="ESRLEHT" id="esrleht" hapiId="rbspa_rbspice_esrleht" filetype="cdf" starttime="2012-318T22:06:52.199" stoptime="2014-276T09:13:44.353" title="RBSP A - RBSPICE ESRLEHT LEVEL_3" path="$data$\Level_3PAP\ESRLEHT\">
         <field name="Epoch" type="DateTime" units="ns" fill="-9223372036854775808" length="null" description="Ephemeris Time of the start  of the accumulation for this measurement." bins="null" size="null" />
         <field name="UTC" type="String" units="seconds" fill="null" length="null" description="The time of the start of the measurement in as a UTC time string (CCYY-DOYTHH:MM:SS.hhh)" bins="null" size="null" />
         <field name="DDOY" type="Double" units="seconds" fill="-1E+31" length="null" description="The decimal day of year of the time at MidET" bins="null" size="null" />
@@ -144,7 +144,7 @@
         <field name="Axis" type="SByte" units="null" fill="-128" length="null" description="Axis of the position (X, Y, Z)" bins="null" size="null" />
         <field name="MinMaxRange" type="SByte" units="None" fill="-128" length="null" description="Loop variable for Minimum/Maximum range values." bins="null" size="null" />
       </product>
-      <product name="TOFxEH" id="tofxeh" hapiId="rbspa_rbspice_tofxeh" title="Direct URL to Instrument Data Location for the file " path="$data$\Level_3PAP\TOFxEH\">
+      <product name="TOFxEH" id="tofxeh" hapiId="rbspa_rbspice_tofxeh" filetype="cdf" starttime="2013-026T10:04:21.840" stoptime="2018-196T23:59:46.965" title="Direct URL to Instrument Data Location for the file " path="$data$\Level_3PAP\TOFxEH\">
         <field name="Epoch" type="DateTime" units="ns" fill="-9223372036854775808" length="null" description="Ephemeris Time of the start  of the accumulation for this measurement." bins="null" size="null" />
         <field name="UTC" type="String" units="seconds" fill="null" length="null" description="The time of the start of the measurement in as a UTC time string (CCYY-DOYTHH:MM:SS.hhh)" bins="null" size="null" />
         <field name="DDOY" type="Double" units="seconds" fill="-1E+31" length="null" description="The decimal day of year of the time at MidET" bins="null" size="null" />
@@ -183,7 +183,7 @@
         <field name="Axis" type="SByte" units="null" fill="-128" length="null" description="Axis of the position (X, Y, Z)" bins="null" size="null" />
         <field name="MinMaxRange" type="SByte" units="None" fill="-128" length="null" description="Loop variable for Minimum/Maximum range values." bins="null" size="null" />
       </product>
-      <product name="TOFxEHe" id="tofxehe" hapiId="rbspa_rbspice_tofxehe" title="RBSP A - RBSPICE TOFXENONH LEVEL_3" path="$data$\Level_3PAP\TOFxEHe\">
+      <product name="TOFxEHe" id="tofxehe" hapiId="rbspa_rbspice_tofxehe" filetype="cdf" starttime="2013-026T10:04:21.614" stoptime="2018-196T23:59:46.965" title="RBSP A - RBSPICE TOFXENONH LEVEL_3" path="$data$\Level_3PAP\TOFxEHe\">
         <field name="Epoch" type="DateTime" units="ns" fill="-9223372036854775808" length="null" description="Ephemeris Time of the start  of the accumulation for this measurement." bins="null" size="null" />
         <field name="UTC" type="String" units="seconds" fill="null" length="null" description="The time of the start of the measurement in as a UTC time string (CCYY-DOYTHH:MM:SS.hhh)" bins="null" size="null" />
         <field name="DDOY" type="Double" units="seconds" fill="-1E+31" length="null" description="The decimal day of year of the time at MidET" bins="null" size="null" />
@@ -222,7 +222,7 @@
         <field name="Axis" type="SByte" units="null" fill="-128" length="null" description="Axis of the position (X, Y, Z)" bins="null" size="null" />
         <field name="MinMaxRange" type="SByte" units="None" fill="-128" length="null" description="Loop variable for Minimum/Maximum range values." bins="null" size="null" />
       </product>
-      <product name="TOFxEIon" id="tofxeion" hapiId="rbspa_rbspice_tofxeion" title="RBSP A - RBSPICE TOFXEION LEVEL_3" path="$data$\Level_3PAP\TOFxEIon\">
+      <product name="TOFxEIon" id="tofxeion" hapiId="rbspa_rbspice_tofxeion" filetype="cdf" starttime="2012-303T00:02:12.153" stoptime="2018-196T23:59:30.647" title="RBSP A - RBSPICE TOFXEION LEVEL_3" path="$data$\Level_3PAP\TOFxEIon\">
         <field name="Epoch" type="DateTime" units="ns" fill="-9223372036854775808" length="null" description="Ephemeris Time of the start  of the accumulation for this measurement." bins="null" size="null" />
         <field name="UTC" type="String" units="seconds" fill="null" length="null" description="The time of the start of the measurement in as a UTC time string (CCYY-DOYTHH:MM:SS.hhh)" bins="null" size="null" />
         <field name="DDOY" type="Double" units="seconds" fill="-1E+31" length="null" description="The decimal day of year of the time at MidET" bins="null" size="null" />
@@ -261,7 +261,7 @@
         <field name="Axis" type="SByte" units="null" fill="-128" length="null" description="Axis of the position (X, Y, Z)" bins="null" size="null" />
         <field name="MinMaxRange" type="SByte" units="None" fill="-128" length="null" description="Loop variable for Minimum/Maximum range values." bins="null" size="null" />
       </product>
-      <product name="TOFxEO" id="tofxeo" hapiId="rbspa_rbspice_tofxeo" title="RBSP A - RBSPICE TOFXENONH LEVEL_3" path="$data$\Level_3PAP\TOFxEO\">
+      <product name="TOFxEO" id="tofxeo" hapiId="rbspa_rbspice_tofxeo" filetype="cdf" starttime="2013-026T10:04:21.614" stoptime="2018-196T23:59:46.965" title="RBSP A - RBSPICE TOFXENONH LEVEL_3" path="$data$\Level_3PAP\TOFxEO\">
         <field name="Epoch" type="DateTime" units="ns" fill="-9223372036854775808" length="null" description="Ephemeris Time of the start  of the accumulation for this measurement." bins="null" size="null" />
         <field name="UTC" type="String" units="seconds" fill="null" length="null" description="The time of the start of the measurement in as a UTC time string (CCYY-DOYTHH:MM:SS.hhh)" bins="null" size="null" />
         <field name="DDOY" type="Double" units="seconds" fill="-1E+31" length="null" description="The decimal day of year of the time at MidET" bins="null" size="null" />
@@ -300,7 +300,7 @@
         <field name="Axis" type="SByte" units="null" fill="-128" length="null" description="Axis of the position (X, Y, Z)" bins="null" size="null" />
         <field name="MinMaxRange" type="SByte" units="None" fill="-128" length="null" description="Loop variable for Minimum/Maximum range values." bins="null" size="null" />
       </product>
-      <product name="TOFxPHHHELT" id="tofxphhhelt" hapiId="rbspa_rbspice_tofxphhhelt" title="RBSP A - RBSPICE TOFXPHHHELT LEVEL_3" path="$data$\Level_3PAP\TOFxPHHHELT\">
+      <product name="TOFxPHHHELT" id="tofxphhhelt" hapiId="rbspa_rbspice_tofxphhhelt" filetype="cdf" starttime="2012-303T00:02:12.153" stoptime="2018-196T23:59:30.647" title="RBSP A - RBSPICE TOFXPHHHELT LEVEL_3" path="$data$\Level_3PAP\TOFxPHHHELT\">
         <field name="Epoch" type="DateTime" units="ns" fill="-9223372036854775808" length="null" description="Ephemeris Time of the start  of the accumulation for this measurement." bins="null" size="null" />
         <field name="UTC" type="String" units="seconds" fill="null" length="null" description="The time of the start of the measurement in as a UTC time string (CCYY-DOYTHH:MM:SS.hhh)" bins="null" size="null" />
         <field name="DDOY" type="Double" units="seconds" fill="-1E+31" length="null" description="The decimal day of year of the time at MidET" bins="null" size="null" />
@@ -339,7 +339,7 @@
         <field name="Axis" type="SByte" units="null" fill="-128" length="null" description="Axis of the position (X, Y, Z)" bins="null" size="null" />
         <field name="MinMaxRange" type="SByte" units="None" fill="-128" length="null" description="Loop variable for Minimum/Maximum range values." bins="null" size="null" />
       </product>
-      <product name="TOFxPHHLEHT" id="tofxphhleht" hapiId="rbspa_rbspice_tofxphhleht" title="RBSP A - RBSPICE TOFXPHHLEHT LEVEL_3" path="$data$\Level_3PAP\TOFxPHHLEHT\">
+      <product name="TOFxPHHLEHT" id="tofxphhleht" hapiId="rbspa_rbspice_tofxphhleht" filetype="cdf" starttime="2013-026T10:04:21.840" stoptime="2014-275T20:59:13.962" title="RBSP A - RBSPICE TOFXPHHLEHT LEVEL_3" path="$data$\Level_3PAP\TOFxPHHLEHT\">
         <field name="Epoch" type="DateTime" units="ns" fill="-9223372036854775808" length="null" description="Ephemeris Time of the start  of the accumulation for this measurement." bins="null" size="null" />
         <field name="UTC" type="String" units="seconds" fill="null" length="null" description="The time of the start of the measurement in as a UTC time string (CCYY-DOYTHH:MM:SS.hhh)" bins="null" size="null" />
         <field name="DDOY" type="Double" units="seconds" fill="-1E+31" length="null" description="The decimal day of year of the time at MidET" bins="null" size="null" />
@@ -378,7 +378,7 @@
         <field name="Axis" type="SByte" units="null" fill="-128" length="null" description="Axis of the position (X, Y, Z)" bins="null" size="null" />
         <field name="MinMaxRange" type="SByte" units="None" fill="-128" length="null" description="Loop variable for Minimum/Maximum range values." bins="null" size="null" />
       </product>
-      <product name="TOFxPHOHELT" id="tofxphohelt" hapiId="rbspa_rbspice_tofxphohelt" title="RBSP A - RBSPICE TOFXPHHHELT LEVEL_3" path="$data$\Level_3PAP\TOFxPHOHELT\">
+      <product name="TOFxPHOHELT" id="tofxphohelt" hapiId="rbspa_rbspice_tofxphohelt" filetype="cdf" starttime="2012-303T00:02:12.153" stoptime="2018-196T23:59:30.647" title="RBSP A - RBSPICE TOFXPHHHELT LEVEL_3" path="$data$\Level_3PAP\TOFxPHOHELT\">
         <field name="Epoch" type="DateTime" units="ns" fill="-9223372036854775808" length="null" description="Ephemeris Time of the start  of the accumulation for this measurement." bins="null" size="null" />
         <field name="UTC" type="String" units="seconds" fill="null" length="null" description="The time of the start of the measurement in as a UTC time string (CCYY-DOYTHH:MM:SS.hhh)" bins="null" size="null" />
         <field name="DDOY" type="Double" units="seconds" fill="-1E+31" length="null" description="The decimal day of year of the time at MidET" bins="null" size="null" />
@@ -417,7 +417,7 @@
         <field name="Axis" type="SByte" units="null" fill="-128" length="null" description="Axis of the position (X, Y, Z)" bins="null" size="null" />
         <field name="MinMaxRange" type="SByte" units="None" fill="-128" length="null" description="Loop variable for Minimum/Maximum range values." bins="null" size="null" />
       </product>
-      <product name="TOFxPHOLEHT" id="tofxpholeht" hapiId="rbspa_rbspice_tofxpholeht" title="RBSP A - RBSPICE TOFXPHHLEHT LEVEL_3" path="$data$\Level_3PAP\TOFxPHOLEHT\">
+      <product name="TOFxPHOLEHT" id="tofxpholeht" hapiId="rbspa_rbspice_tofxpholeht" filetype="cdf" starttime="2013-026T10:04:21.840" stoptime="2014-275T20:59:13.962" title="RBSP A - RBSPICE TOFXPHHLEHT LEVEL_3" path="$data$\Level_3PAP\TOFxPHOLEHT\">
         <field name="Epoch" type="DateTime" units="ns" fill="-9223372036854775808" length="null" description="Ephemeris Time of the start  of the accumulation for this measurement." bins="null" size="null" />
         <field name="UTC" type="String" units="seconds" fill="null" length="null" description="The time of the start of the measurement in as a UTC time string (CCYY-DOYTHH:MM:SS.hhh)" bins="null" size="null" />
         <field name="DDOY" type="Double" units="seconds" fill="-1E+31" length="null" description="The decimal day of year of the time at MidET" bins="null" size="null" />

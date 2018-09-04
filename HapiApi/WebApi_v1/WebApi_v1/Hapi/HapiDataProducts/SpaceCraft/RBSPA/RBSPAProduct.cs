@@ -114,7 +114,10 @@ namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
 
             TimeRange tr = Hapi.Properties.TimeRange;
             // We now have the path to the level and record type the user requested.
-            tr.GetAvailableTimeRange(_basepath, out _, out _);
+            if (Hapi.Properties.ID == "rbspa_rbspice_auxil")
+                tr.GetAvailableTimeRange(Hapi.Catalog.GetProduct(Hapi.Properties.ID).Path, out _, out _);
+            else
+                tr.GetAvailableTimeRange(Hapi.Catalog.GetProduct(Hapi.Properties.ID), out _, out _);
 
             return tr.IsValid();
         }

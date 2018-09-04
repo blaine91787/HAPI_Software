@@ -76,16 +76,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CDFAPIs">
-      <HintPath>..\..\..\..\..\..\..\..\Csharp-CDF Distribution\CDF3.6.0\CDFAPIs.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Csharp-CDF Distribution\CDFDist\CDFAPIs.dll</HintPath>
     </Reference>
     <Reference Include="CDFConstants">
-      <HintPath>..\..\..\..\..\..\..\..\Csharp-CDF Distribution\CDF3.6.0\CDFConstants.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Csharp-CDF Distribution\CDFDist\CDFConstants.dll</HintPath>
     </Reference>
     <Reference Include="CDFException">
-      <HintPath>..\..\..\..\..\..\..\..\Csharp-CDF Distribution\CDF3.6.0\CDFException.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Csharp-CDF Distribution\CDFDist\CDFException.dll</HintPath>
     </Reference>
     <Reference Include="CDFUtils">
-      <HintPath>..\..\..\..\..\..\..\..\Csharp-CDF Distribution\CDF3.6.0\CDFUtils.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Csharp-CDF Distribution\CDFDist\CDFUtils.dll</HintPath>
     </Reference>
     <Reference Include="CS_CDF">
       <HintPath>..\..\..\..\..\NASA\NSSDC\CDF\CS_CDF\obj\x64\Release\CS_CDF.dll</HintPath>

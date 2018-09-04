@@ -23,7 +23,7 @@ namespace WebApi_v1.HAPI.DataProducts
                 throw new ArgumentNullException("HapiProperties is null.");
 
             if (hapi.Configuration == null)
-                throw new ArgumentNullException("HapiConfiguration is null");
+                throw new ArgumentNullException("HapiConfiguration is null.");
 
             HapiDataProduct product = null;
             switch (scName)

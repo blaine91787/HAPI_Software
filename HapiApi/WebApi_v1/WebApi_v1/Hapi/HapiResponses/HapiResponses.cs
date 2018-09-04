@@ -5,6 +5,7 @@ using System.Text;
 using System.Web;
 using WebApi_v1.HAPI.Configuration;
 using WebApi_v1.HAPI.Catalog;
+using WebApi_v1.HAPI.Utilities;
 
 namespace WebApi_v1.HAPI.Response
 {
@@ -393,7 +394,12 @@ namespace WebApi_v1.HAPI.Response
             Status = new Status(); // HACK: don't use a literal value for code
             Format = Hapi.Properties.Format;
             Parameters = Hapi.Catalog.GetProduct(Hapi.Properties.ID).GetFields();
-            Hapi.Properties.TimeRange.GetAvailableTimeRange(Hapi.Catalog.GetProduct(Hapi.Properties.ID).Path, out _, out _);
+
+            TimeRange tr = Hapi.Properties.TimeRange;
+            if (Hapi.Properties.ID == "rbspa_rbspice_auxil")
+                tr.GetAvailableTimeRange(Hapi.Catalog.GetProduct(Hapi.Properties.ID).Path, out _, out _);
+            else
+                tr.GetAvailableTimeRange(Hapi.Catalog.GetProduct(Hapi.Properties.ID), out _, out _);
             StartDate = Hapi.Properties.TimeRange.Min;
             StopDate = Hapi.Properties.TimeRange.Max;
         }

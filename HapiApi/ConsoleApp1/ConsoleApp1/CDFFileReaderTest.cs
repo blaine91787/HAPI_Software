@@ -16,6 +16,12 @@ namespace ConsoleApp1
 
         public CDFReader(string cdfFilePath)
         {
+            if (_cdfFile != null)
+                _cdfFile.Close();
+            _cdfFilePath = null;
+            _cdfFile = null;
+            Attributes = null;
+            Variables = null;
             if (Path.GetExtension(cdfFilePath) == ".cdf" && File.Exists(cdfFilePath))
             {
                 _cdfFilePath = cdfFilePath;
@@ -42,6 +48,22 @@ namespace ConsoleApp1
                 return null;
 
             return _cdfFile.Attributes;
+        }
+        public CDF_Variable GetVariable(string varName)
+        {
+            if (_cdfFile == null)
+                return null;
+
+            if (_cdfFile.Variables.Count == 0)
+                return default(CDF_Variable);
+
+            foreach(CDF_Variable var in Variables)
+            {
+                if (var.Name == varName)
+                    return var;
+            }
+
+            return null;
         }
         public void GetVariables()
         {
