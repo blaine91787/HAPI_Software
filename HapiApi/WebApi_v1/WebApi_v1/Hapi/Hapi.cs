@@ -90,7 +90,6 @@ namespace WebApi_v1.HAPI
                 content.SetStatusCode(Properties.ErrorCodes.First());
                 Response.Content = new StringContent(content.GetResponse());
             }
-
             return Response;
         }
 

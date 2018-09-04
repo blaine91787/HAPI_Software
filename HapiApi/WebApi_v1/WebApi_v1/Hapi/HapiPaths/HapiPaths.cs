@@ -9,7 +9,7 @@ namespace WebApi_v1.HAPI
 {
     public class HapiPaths
     {
-        private bool UseFtecsArchive = false;
+        private bool UseFtecsArchive = true;
         private bool UseGazelleArchive = false;
 
         public string UserPath { get; set; } = String.Empty;

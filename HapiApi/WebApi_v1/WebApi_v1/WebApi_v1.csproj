@@ -49,8 +49,23 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CDFAPIs">
+      <HintPath>..\..\..\..\..\..\..\..\Csharp-CDF Distribution\CDFDist\CDFAPIs.dll</HintPath>
+    </Reference>
+    <Reference Include="CDFConstants">
+      <HintPath>..\..\..\..\..\..\..\..\Csharp-CDF Distribution\CDFDist\CDFConstants.dll</HintPath>
+    </Reference>
+    <Reference Include="CDFException">
+      <HintPath>..\..\..\..\..\..\..\..\Csharp-CDF Distribution\CDFDist\CDFException.dll</HintPath>
+    </Reference>
+    <Reference Include="CDFUtils">
+      <HintPath>..\..\..\..\..\..\..\..\Csharp-CDF Distribution\CDFDist\CDFUtils.dll</HintPath>
+    </Reference>
     <Reference Include="CsvHelper, Version=7.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.7.1.1\lib\net45\CsvHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="CS_CDF">
+      <HintPath>..\..\..\..\..\NASA\NSSDC\CDF\CS_CDF\obj\x64\Release\CS_CDF.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AI.DependencyCollector, Version=2.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.6.4\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
@@ -188,11 +203,13 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Hapi\Hapi.cs" />
     <Compile Include="Hapi\HapiCatalog\Catalog.cs" />
+    <Compile Include="Hapi\HapiCatalog\CatalogProducer.cs" />
     <Compile Include="Hapi\HapiCatalog\Field.cs" />
     <Compile Include="Hapi\HapiCatalog\Instrument.cs" />
     <Compile Include="Hapi\HapiCatalog\Product.cs" />
     <Compile Include="Hapi\HapiCatalog\Spacecraft.cs" />
     <Compile Include="Hapi\HapiPaths\HapiPaths.cs" />
+    <Compile Include="Hapi\HapiUtilities\CDFReader.cs" />
     <Compile Include="Hapi\HapiUtilities\Converters.cs" />
     <Compile Include="Hapi\HapiUtilities\CSVHelperUtilities\Mappings.cs" />
     <Compile Include="Hapi\HapiUtilities\CSVHelperUtilities\TypeConverters.cs" />

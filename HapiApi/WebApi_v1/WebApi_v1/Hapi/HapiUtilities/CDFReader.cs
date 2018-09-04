@@ -1,11 +1,13 @@
-﻿using System.Diagnostics;
+﻿using SPDF.CDF.CSharp;
 using System;
-using SPDF.CDF.CSharp;
-using System.Text;
-using System.IO;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Web;
 
-namespace ConsoleApp1
+namespace WebApi_v1.HAPI.HapiUtilities
 {
     public class CDFReader
     {
@@ -57,7 +59,7 @@ namespace ConsoleApp1
             if (Doc.Variables.Count == 0)
                 return default(CDF_Variable);
 
-            foreach(CDF_Variable var in Variables)
+            foreach (CDF_Variable var in Variables)
             {
                 if (var.Name == varName)
                     return var;
@@ -84,29 +86,29 @@ namespace ConsoleApp1
                     //Debug.WriteLine(valueType.ToString());
 
                     string valString = "";
-                    if      (valueType.Equals(typeof(string)))      { valString = var[rec].ToString(); }
-                    else if (valueType.Equals(typeof(string[])))    { OneDimCDFVariable(var[rec], valueType, out valString); }
-                    else if (valueType.Equals(typeof(string[,])))   { Debug.WriteLine("It's a String[,]"); }
-                    else if (valueType.Equals(typeof(Double)))      { valString = var[rec].ToString(); }
-                    else if (valueType.Equals(typeof(Double[])))    { OneDimCDFVariable(var[rec], valueType, out valString); }
-                    else if (valueType.Equals(typeof(Double[,])))   { TwoDimCDFVariable(var[rec], valueType, out valString); }
-                    else if (valueType.Equals(typeof(Int32)))       { valString = var[rec].ToString(); }
-                    else if (valueType.Equals(typeof(Int32[])))     { OneDimCDFVariable(var[rec], valueType, out valString); }
-                    else if (valueType.Equals(typeof(Int32[,])))    { Debug.WriteLine("It's a Int32[,]"); }
-                    else if (valueType.Equals(typeof(UInt32)))      { valString = var[rec].ToString(); }
-                    else if (valueType.Equals(typeof(UInt32[])))    { OneDimCDFVariable(var[rec], valueType, out valString); }
-                    else if (valueType.Equals(typeof(UInt32[,])))   { Debug.WriteLine("It's a UInt32[,]"); }
-                    else if (valueType.Equals(typeof(Single)))      { valString = var[rec].ToString(); }
-                    else if (valueType.Equals(typeof(Single[])))    { OneDimCDFVariable(var[rec], valueType, out valString); }
-                    else if (valueType.Equals(typeof(Single[,])))   { Debug.WriteLine("It's a Single[,]"); }
-                    else if (valueType.Equals(typeof(Int16)))       { valString = var[rec].ToString(); }
-                    else if (valueType.Equals(typeof(Int16[])))     { OneDimCDFVariable(var[rec], valueType, out valString); }
-                    else if (valueType.Equals(typeof(Int16[,])))    { Debug.WriteLine("It's a Int16[,]"); }
-                    else if (valueType.Equals(typeof(SByte)))       { valString = var[rec].ToString(); }
-                    else if (valueType.Equals(typeof(SByte[])))     { OneDimCDFVariable(var[rec], valueType, out valString); }
-                    else if (valueType.Equals(typeof(SByte[,])))    { Debug.WriteLine("It's a SByte[,]"); }
-                    else if (valueType.Equals(typeof(CDF_Time)))    { valString = var[rec].ToString(); }
-                    else if (valueType.Equals(typeof(CDF_Time[])))  { OneDimCDFVariable(var[rec], valueType, out valString); }
+                    if (valueType.Equals(typeof(string))) { valString = var[rec].ToString(); }
+                    else if (valueType.Equals(typeof(string[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
+                    else if (valueType.Equals(typeof(string[,]))) { Debug.WriteLine("It's a String[,]"); }
+                    else if (valueType.Equals(typeof(Double))) { valString = var[rec].ToString(); }
+                    else if (valueType.Equals(typeof(Double[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
+                    else if (valueType.Equals(typeof(Double[,]))) { TwoDimCDFVariable(var[rec], valueType, out valString); }
+                    else if (valueType.Equals(typeof(Int32))) { valString = var[rec].ToString(); }
+                    else if (valueType.Equals(typeof(Int32[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
+                    else if (valueType.Equals(typeof(Int32[,]))) { Debug.WriteLine("It's a Int32[,]"); }
+                    else if (valueType.Equals(typeof(UInt32))) { valString = var[rec].ToString(); }
+                    else if (valueType.Equals(typeof(UInt32[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
+                    else if (valueType.Equals(typeof(UInt32[,]))) { Debug.WriteLine("It's a UInt32[,]"); }
+                    else if (valueType.Equals(typeof(Single))) { valString = var[rec].ToString(); }
+                    else if (valueType.Equals(typeof(Single[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
+                    else if (valueType.Equals(typeof(Single[,]))) { Debug.WriteLine("It's a Single[,]"); }
+                    else if (valueType.Equals(typeof(Int16))) { valString = var[rec].ToString(); }
+                    else if (valueType.Equals(typeof(Int16[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
+                    else if (valueType.Equals(typeof(Int16[,]))) { Debug.WriteLine("It's a Int16[,]"); }
+                    else if (valueType.Equals(typeof(SByte))) { valString = var[rec].ToString(); }
+                    else if (valueType.Equals(typeof(SByte[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
+                    else if (valueType.Equals(typeof(SByte[,]))) { Debug.WriteLine("It's a SByte[,]"); }
+                    else if (valueType.Equals(typeof(CDF_Time))) { valString = var[rec].ToString(); }
+                    else if (valueType.Equals(typeof(CDF_Time[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
                     else if (valueType.Equals(typeof(CDF_Time[,]))) { Debug.WriteLine("It's a CDF_Time[,]"); }
                     else { throw new ArgumentOutOfRangeException(valueType.Name); }
 
@@ -125,7 +127,7 @@ namespace ConsoleApp1
             CDF_File cdfFile = new CDF_File(DocPath);
 
             //Debug.WriteLine("SHOWING CDF FILE ATTRIBUTES:\n");
-            foreach(CDF_Attribute attr in cdfFile.Attributes)
+            foreach (CDF_Attribute attr in cdfFile.Attributes)
             {
                 //Debug.WriteLine(attr.Name + "    :    " + attr.GetValue(0,-1));
             }
@@ -177,7 +179,7 @@ namespace ConsoleApp1
         {
             StringBuilder sb = new StringBuilder();
 
-            if(type == typeof(CDF_Time[,]))
+            if (type == typeof(CDF_Time[,]))
             {
                 CDF_Time[,] valArr = (CDF_Time[,])varRec;
                 for (int i = 0; i < valArr.GetLength(0); i++)
@@ -188,7 +190,7 @@ namespace ConsoleApp1
                             sb.AppendFormat("{0}\n", valArr[i, j]);
             }
 
-            if(type == typeof(String[,]))
+            if (type == typeof(String[,]))
             {
                 String[,] valArr = (String[,])varRec;
                 for (int i = 0; i < valArr.GetLength(0); i++)
@@ -199,18 +201,18 @@ namespace ConsoleApp1
                             sb.AppendFormat("{0}\n", valArr[i, j]);
             }
 
-            if(type == typeof(Double[,]))
+            if (type == typeof(Double[,]))
             {
                 Double[,] valArr = (Double[,])varRec;
                 for (int i = 0; i < valArr.GetLength(0); i++)
                     for (int j = 0; j < valArr.GetLength(1); j++)
-                        if (j != valArr.GetLength(1)-1)
+                        if (j != valArr.GetLength(1) - 1)
                             sb.AppendFormat("{0}, ", valArr[i, j]);
                         else
-                            sb.AppendFormat("{0}\n", valArr[i,j]);
+                            sb.AppendFormat("{0}\n", valArr[i, j]);
             }
 
-            if(type == typeof(Int16[,]))
+            if (type == typeof(Int16[,]))
             {
                 Int16[,] valArr = (Int16[,])varRec;
                 for (int i = 0; i < valArr.GetLength(0); i++)
@@ -221,7 +223,7 @@ namespace ConsoleApp1
                             sb.AppendFormat("{0}\n", valArr[i, j]);
             }
 
-            if(type == typeof(UInt16[,]))
+            if (type == typeof(UInt16[,]))
             {
                 UInt16[,] valArr = (UInt16[,])varRec;
                 for (int i = 0; i < valArr.GetLength(0); i++)
@@ -232,7 +234,7 @@ namespace ConsoleApp1
                             sb.AppendFormat("{0}\n", valArr[i, j]);
             }
 
-            if(type == typeof(Int32[,]))
+            if (type == typeof(Int32[,]))
             {
                 Int32[,] valArr = (Int32[,])varRec;
                 for (int i = 0; i < valArr.GetLength(0); i++)
@@ -243,7 +245,7 @@ namespace ConsoleApp1
                             sb.AppendFormat("{0}\n", valArr[i, j]);
             }
 
-            if(type == typeof(UInt32[,]))
+            if (type == typeof(UInt32[,]))
             {
                 UInt32[,] valArr = (UInt32[,])varRec;
                 for (int i = 0; i < valArr.GetLength(0); i++)
@@ -254,7 +256,7 @@ namespace ConsoleApp1
                             sb.AppendFormat("{0}\n", valArr[i, j]);
             }
 
-            if(type == typeof(Single[,]))
+            if (type == typeof(Single[,]))
             {
                 Single[,] valArr = (Single[,])varRec;
                 for (int i = 0; i < valArr.GetLength(0); i++)
@@ -265,7 +267,7 @@ namespace ConsoleApp1
                             sb.AppendFormat("{0}\n", valArr[i, j]);
             }
 
-            if(type == typeof(SByte[,]))
+            if (type == typeof(SByte[,]))
             {
                 SByte[,] valArr = (SByte[,])varRec;
                 for (int i = 0; i < valArr.GetLength(0); i++)

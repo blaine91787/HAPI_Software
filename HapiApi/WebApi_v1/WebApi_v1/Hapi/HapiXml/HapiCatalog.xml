@@ -1,70 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<catalog>
+<catalog lastupdate="2018-09-04">
   <spacecraft name="rbspa" path="$data$\RBSP\RBSPA\">
-    <instrument name="ect">
-    </instrument>
-    <instrument name="emfisis">
-    </instrument>
+    <instrument name="ect" />
+    <instrument name="emfisis" />
     <instrument name="rbspice" path="$data$\RBSPICE\Data\">
       <product name="Auxil" id="auxil" hapiId="rbspa_rbspice_auxil" filetype=".gz" title="RBSPA RBSPICE Auxiliary Data" path="$data$\Level_0\Auxil\" description="RBSPICE Level 0 Auxiliary Data">
-        <field name="UTC" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="SCLOCK_Full" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="ET" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="OrbitNumber" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="Seconds" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="Subseconds" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="Spin" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="SpinTime" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="SpinPeriod" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="SpinPhase" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="MagPhase" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="Mag0Second1" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="Mag0Subsecond1" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="Mag0Second2" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="Mag0Subsecond2" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="IntegrationSectors" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="IntegrationMultiplier1" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="IntegrationMultiplier2" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="IntegrationSpins" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="MagPhaseValid" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="MagDataValid" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="SpinDataValid" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="ElectronPixel" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="IonEnergyPixel" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="IonSpeciesPixel" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="Subsector1" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="Subsector2" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="Subsector3" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
-        <field name="SpinDuration" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false">
-        </field>
+        <field name="UTC" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="SCLOCK_Full" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="ET" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="OrbitNumber" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="Seconds" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="Subseconds" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="Spin" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="SpinTime" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="SpinPeriod" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="SpinPhase" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="MagPhase" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="Mag0Second1" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="Mag0Subsecond1" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="Mag0Second2" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="Mag0Subsecond2" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="IntegrationSectors" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="IntegrationMultiplier1" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="IntegrationMultiplier2" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="IntegrationSpins" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="MagPhaseValid" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="MagDataValid" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="SpinDataValid" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="ElectronPixel" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="IonEnergyPixel" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="IonSpeciesPixel" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="Subsector1" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="Subsector2" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="Subsector3" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
+        <field name="SpinDuration" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
       </product>
       <product name="ESRHELT" id="esrhelt" hapiId="rbspa_rbspice_esrhelt" filetype="cdf" starttime="2012-318T22:07:41.875" stoptime="2018-196T23:59:30.837" title="RBSP A - RBSPICE ESRHELT LEVEL_3" path="$data$\Level_3PAP\ESRHELT\">
         <field name="Epoch" type="DateTime" units="ns" fill="-9223372036854775808" length="null" description="Ephemeris Time of the start  of the accumulation for this measurement." bins="null" size="null" />

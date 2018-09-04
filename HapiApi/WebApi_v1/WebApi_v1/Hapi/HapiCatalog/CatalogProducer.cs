@@ -1,21 +1,16 @@
 ﻿using SPDF.CDF.CSharp;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 using System.Xml;
+using WebApi_v1.HAPI.HapiUtilities;
 
-namespace ConsoleApp1
+namespace WebApi_v1.HAPI.Catalog
 {
-
-
-    // THIS CLASS IS VERY SPECIFIC TO LEVEL_3PAP PRODUCTS!!
-    public class HapiCatalogProducer
-    {
-        //private string _xmlCatalogPath = @"testXmlCatalog.xml";
+    public class CatalogProducer
+    {        //private string _xmlCatalogPath = @"testXmlCatalog.xml";
         private string _xmlCatalogPath = @"C:\Users\blaine.harris\Documents\Github\FTECS\HapiApi\WebApi_v1\WebApi_v1\Hapi\HapiXml\HapiCatalog.xml";
         private string _productPath = @"\\ftecs.com\data\Archive\RBSP\RBSPA\RBSPICE\Data\Level_3PAP\"; //\TOFxEH\2013\rbsp-a-rbspice_lev-3-PAP_TOFxEH_20130126_v1.1.2-00.cdf";
         private bool _clearProducts = true; // Only for testing. Set false otherwise. (Keeps the auxiliary product available and refreshes the level_3PAP products.
@@ -24,20 +19,29 @@ namespace ConsoleApp1
         {
             XmlDocument xdoc = new XmlDocument();
             xdoc.Load(_xmlCatalogPath);
-            XmlNodeList catalogNode = xdoc.GetElementsByTagName("catalog");
+
+            // Check if the catalog has been updated today, if so then return because it's already up to date.
+            XmlNodeList catalogNodes = xdoc.GetElementsByTagName("catalog");
+            XmlElement catalogNode = (XmlElement)catalogNodes[0];
+            DateTime currentDate = DateTime.UtcNow.Date;
+            DateTime lastUpdateDate = default(DateTime);
+            DateTime.TryParse(catalogNode.Attributes["lastupdate"].Value, out lastUpdateDate);
+            if (!(lastUpdateDate < currentDate))
+                return;
+
+            // Update the catalog's lastupdated date and populate with the new information
+            catalogNode.SetAttribute("lastupdate", currentDate.ToString("yyyy-MM-dd"));
             XmlNodeList instruments = xdoc.GetElementsByTagName("instrument");
             XmlNode instrument = instruments[instruments.Count - 1];
 
             if (_clearProducts)
-                ClearProducts(xdoc);
+                ClearProducts(xdoc); // TODO: Once the auxiliary product is removed, update this to remove products and repopulate (or just update the dates to save on performance)
 
             if (!Directory.Exists(_productPath))
                 throw new DirectoryNotFoundException();
 
             string[] paths = Directory.GetDirectories(_productPath);
             List<string> filetypes = new List<string>();
-
-
             List<FileInfo> listoffiles = new List<FileInfo>();
             Queue<TimeRangeFiles> timeFiles = new Queue<TimeRangeFiles>();
             foreach (string path in paths)
@@ -77,9 +81,7 @@ namespace ConsoleApp1
             List<XmlElement> list = new List<XmlElement>();
             foreach (FileInfo fi in listoffiles)
             {
-
                 CDFReader cdf = new CDFReader(fi.FullName);
-
 
                 string[] splitPath = fi.DirectoryName.Split('\\');
                 string level = splitPath[9];
@@ -96,7 +98,7 @@ namespace ConsoleApp1
                 TimeRangeFiles trf = trfQueue.Dequeue();
                 trf.GetTimeRange(out starttime, out stoptime);
 
-                if (ProductExists(xdoc, hapiId) )
+                if (ProductExists(xdoc, hapiId))
                     continue;
 
                 XmlElement product = xdoc.CreateElement("product");
@@ -118,6 +120,7 @@ namespace ConsoleApp1
             }
             return list;
         }
+
         private bool ProductExists(XmlDocument xdoc, string hapiId)
         {
             XmlNodeList products = xdoc.GetElementsByTagName("product");
@@ -128,17 +131,19 @@ namespace ConsoleApp1
 
             return false;
         }
+
         private void ClearProducts(XmlDocument xdoc)
         {
             XmlNodeList products = xdoc.GetElementsByTagName("product");
             XmlNode prod = products.Item(products.Count - 1);
-            if(products.Count > 1)
+            if (products.Count > 1)
             {
                 prod.ParentNode.RemoveChild((XmlNode)prod);
                 ClearProducts(xdoc);
             }
         }
-        private List<XmlElement> GetFields(XmlDocument xdoc,CDF_File cdf)
+
+        private List<XmlElement> GetFields(XmlDocument xdoc, CDF_File cdf)
         {
 
             List<XmlElement> list = new List<XmlElement>();
@@ -203,12 +208,8 @@ namespace ConsoleApp1
             public void GetTimeRange(out string starttime, out string stoptime)
             {
                 starttime = stoptime = String.Empty;
-
                 starttime = GetStartTime();
                 stoptime = GetStopTime();
-
-                //Debug.WriteLine(starttime);
-                //Debug.WriteLine(stoptime);
             }
         }
     }
