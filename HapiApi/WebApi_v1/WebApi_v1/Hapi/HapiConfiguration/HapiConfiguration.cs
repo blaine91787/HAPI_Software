@@ -16,18 +16,13 @@ namespace WebApi_v1.HAPI.Configuration
     {
         #region Private Properties
 
-        private string _basepath = String.Empty;
-        private string _dataArchivePath = String.Empty;
-        private string _version = String.Empty;
         private string[] _capabilities = null;
 
         #endregion Private Properties
 
         #region Public Properties
 
-        public string Basepath { get { return _basepath; } }
-        public string DataArchivePath { get { return _dataArchivePath; } }
-        public string Version { get { return _version; } }
+        public string Version { get; private set; }
         public string[] Capabilities { get { return _capabilities; } }
         public string[] Formats { get { return _capabilities; } }
         public HapiPaths Paths { get; private set; }
@@ -39,11 +34,11 @@ namespace WebApi_v1.HAPI.Configuration
         public void Initialize()
         {
             Paths = new HapiPaths();
-            Paths.ResolveUserPath();
-            _basepath = Paths.DataPath;
+            Paths.ResolvePaths();
+            Version = Hapi.Registry.Version;
 
             HapiXmlReader hxr = new HapiXmlReader();
-            hxr.LoadHapiSpecs(Paths.ConfigurationXmlPath, out _version, out _capabilities, out _, out _dataArchivePath, out _);
+            hxr.LoadHapiSpecs(Paths.ConfigurationXmlPath, out _, out _capabilities, out _, out _, out _);
         }
 
 

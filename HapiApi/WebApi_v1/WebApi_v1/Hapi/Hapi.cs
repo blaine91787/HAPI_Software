@@ -10,6 +10,7 @@ using WebApi_v1.HAPI.Properties;
 using WebApi_v1.HAPI.DataProducts;
 using System.Net;
 using System.Diagnostics;
+using WebApi_v1.HAPI.Registry;
 
 namespace WebApi_v1.HAPI
 {
@@ -22,6 +23,7 @@ namespace WebApi_v1.HAPI
     /// </remarks>
     public class Hapi
     {
+        public static HapiRegistry Registry = new HapiRegistry();
         public HapiConfiguration Configuration { get; set; }
         public HapiCatalog Catalog { get; set; }
         public HttpResponseMessage Response { get; set; }

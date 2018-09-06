@@ -35,7 +35,7 @@
         <field name="Subsector3" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
         <field name="SpinDuration" type="null" units="null" fill="null" length="null" description="null" bins="false" size="false" />
       </product>
-      <product name="ESRHELT" id="esrhelt" hapiId="rbspa_rbspice_esrhelt" filetype="cdf" starttime="2012-318T22:07:41.875" stoptime="2018-196T23:59:30.837" title="RBSP A - RBSPICE ESRHELT LEVEL_3" path="$data$\Level_3PAP\ESRHELT\">
+      <product name="ESRHELT" id="esrhelt" hapiId="rbspa_rbspice_esrhelt" filetype="cdf" starttime="2012-318T22:07:41.875" stoptime="2018-201T23:59:27.229" title="RBSP A - RBSPICE ESRHELT LEVEL_3" path="$data$\Level_3PAP\ESRHELT\">
         <field name="Epoch" type="DateTime" units="ns" fill="-9223372036854775808" length="null" description="Ephemeris Time of the start  of the accumulation for this measurement." bins="null" size="null" />
         <field name="UTC" type="String" units="seconds" fill="null" length="null" description="The time of the start of the measurement in as a UTC time string (CCYY-DOYTHH:MM:SS.hhh)" bins="null" size="null" />
         <field name="DDOY" type="Double" units="seconds" fill="-1E+31" length="null" description="The decimal day of year of the time at MidET" bins="null" size="null" />
