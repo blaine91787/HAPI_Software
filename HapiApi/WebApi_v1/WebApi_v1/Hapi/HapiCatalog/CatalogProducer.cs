@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Xml;
+using WebApi_v1.HAPI.Registry;
 using WebApi_v1.HAPI.HapiUtilities;
 
 namespace WebApi_v1.HAPI.Catalog
@@ -17,20 +18,25 @@ namespace WebApi_v1.HAPI.Catalog
 
         public void CreateCatalog()
         {
+
+            // Check if the catalog has been updated today, if so then return because it's already up to date.;
+
+            HapiRegistry hr = new HapiRegistry();
+            DateTime currentDateTime = DateTime.Now.Date;
+            DateTime lastUpdate = default(DateTime);
+            
+            DateTime.TryParse(hr.Catalog.LastUpdate, out lastUpdate);
+
+            if (!(lastUpdate < currentDateTime))
+                return;
+
+            hr.Catalog.SetLastUpdate(currentDateTime);
+
             XmlDocument xdoc = new XmlDocument();
             xdoc.Load(_xmlCatalogPath);
 
-            // Check if the catalog has been updated today, if so then return because it's already up to date.
-            XmlNodeList catalogNodes = xdoc.GetElementsByTagName("catalog");
-            XmlElement catalogNode = (XmlElement)catalogNodes[0];
-            DateTime currentDate = DateTime.UtcNow.Date;
-            DateTime lastUpdateDate = default(DateTime);
-            DateTime.TryParse(catalogNode.Attributes["lastupdate"].Value, out lastUpdateDate);
-            if (!(lastUpdateDate < currentDate))
-                return;
 
             // Update the catalog's lastupdated date and populate with the new information
-            catalogNode.SetAttribute("lastupdate", currentDate.ToString("yyyy-MM-dd"));
             XmlNodeList instruments = xdoc.GetElementsByTagName("instrument");
             XmlNode instrument = instruments[instruments.Count - 1];
 

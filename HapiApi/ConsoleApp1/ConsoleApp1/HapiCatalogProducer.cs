@@ -206,9 +206,6 @@ namespace ConsoleApp1
 
                 starttime = GetStartTime();
                 stoptime = GetStopTime();
-
-                //Debug.WriteLine(starttime);
-                //Debug.WriteLine(stoptime);
             }
         }
     }

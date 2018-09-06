@@ -209,6 +209,7 @@
     <Compile Include="Hapi\HapiCatalog\Product.cs" />
     <Compile Include="Hapi\HapiCatalog\Spacecraft.cs" />
     <Compile Include="Hapi\HapiPaths\HapiPaths.cs" />
+    <Compile Include="Hapi\HapiRegistry\HapiRegistry.cs" />
     <Compile Include="Hapi\HapiUtilities\CDFReader.cs" />
     <Compile Include="Hapi\HapiUtilities\Converters.cs" />
     <Compile Include="Hapi\HapiUtilities\CSVHelperUtilities\Mappings.cs" />

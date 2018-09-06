@@ -9,19 +9,46 @@ using ConsoleApp1;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using SPDF.CDF.CSharp;
+using System.Net.Http;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ConsoleApp1
 {
     public class Program
     {
+        static HttpClient client = new HttpClient();
+
+        static async Task RunAsync()
+        {
+            client.BaseAddress = new Uri("http://localhost:50112/api/hapi/");
+            var parameters = new Dictionary<string, string>
+            {
+                { "id", "rbspa_rbspice_tofxeh" }
+            };
+
+            var encodedContent = new FormUrlEncodedContent(parameters);
+
+
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+            HttpResponseMessage response = await client.GetAsync("info?id=rbspa_rbspice_tofxeh");
+            
+            //Console.WriteLine(response.Content.ToString());
+
+            string result = await response.Content.ReadAsStringAsync();
+            JObject catalog = JObject.Parse(result);
+            //IEnumerable<JToken> list = catalog["catalog"].ToList();
+            //foreach (var lis in list)
+            //    Console.WriteLine(lis.ToString());
+
+            Console.WriteLine(catalog.ToString());
+        }
+
         public static void Main()
         {
-
-            //HapiCatalogProducer catProducer = new HapiCatalogProducer();
-            //catProducer.CreateCatalog();
-            string cdfFilePath = @"C:\HapiApi\data\Archive\RBSP\RBSPA\RBSPICE\Data\Level_3PAP\TOFxEH\2013\rbsp-a-rbspice_lev-3-PAP_TOFxEH_20130126_v1.1.2-00.cdf";
-            CDFReader cdfFile = new CDFReader(cdfFilePath);
-            cdfFile.GetVariables();
+            RunAsync().GetAwaiter().GetResult();
             Console.ReadKey();
         }
 
