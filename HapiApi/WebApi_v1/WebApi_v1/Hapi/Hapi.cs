@@ -13,6 +13,13 @@ using System.Diagnostics;
 
 namespace WebApi_v1.HAPI
 {
+    /// <summary>
+    /// The main Hapi class.
+    /// Everything begins from here. 
+    /// </summary>
+    /// <remarks>
+    /// Order: Configure, set Hapi.Properties from request query, and create response.
+    /// </remarks>
     public class Hapi
     {
         public HapiConfiguration Configuration { get; set; }
@@ -29,16 +36,22 @@ namespace WebApi_v1.HAPI
             Properties = null;
             DataProduct = null;
         }
-
         public Hapi(HttpRequestMessage request)
         {
             Configure(request);
         }
-        
+        /// <summary>
+        /// Configuration is populated with Hapi spec info and relevant paths.
+        /// Catalog is populated with available spacecraft/instruments/products.
+        /// Properties are assigned based on the user query. Anything pulled from query is saved in Hapi.Properties.
+        /// </summary>
+        /// <param name="request">
+        /// A System.Net.Http Request created by the API
+        /// </param>
         public void Configure(HttpRequestMessage request)
         {
             Configuration = new HapiConfiguration();
-            Configuration.ParseRequest(request);
+            Configuration.Initialize();
 
             Catalog = new HapiCatalog();
             Catalog.Create(Configuration.Paths);
@@ -46,7 +59,13 @@ namespace WebApi_v1.HAPI
             Properties = new HapiProperties();
             Properties.Assign(request, Configuration, Catalog);
         }
-
+        /// <summary>
+        /// Based on Properties.RequestType.
+        /// A Response will be created using the Content abstract class factory, then added to the Hapi.Response property, and returned to the user
+        /// </summary>
+        /// <returns>
+        /// The response message created by Hapi
+        /// </returns>
         public HttpResponseMessage GetResponse()
         {
             if (Properties == null)
@@ -92,14 +111,21 @@ namespace WebApi_v1.HAPI
             }
             return Response;
         }
-
+        /// <summary>
+        /// Uses the HapiDataProduct abstract class factory to create dataproduct based on SC name.
+        /// If there are errors with the time range requested vs what's available error responses are recorded.
+        /// If the TimeRange is valid but there's no data for the requested time range, error codes recorded.
+        /// </summary>
+        /// <returns>
+        /// True if there are no errors in creating the dataproduct, false otherwise.
+        /// </returns>
         private bool GetDataProduct()
         {
             try
             {
                 DataProduct = HapiDataProduct.Create(Properties.SC, this);
             }
-            catch (Exception e)
+            catch (Exception e) // A few things can cause errors here, check HapiDataProduct.Create() for exceptions
             {
                 Debug.WriteLine(e.Message);
                 Properties.ErrorCodes.Add(Status.HapiStatusCode.InternalServerError);
@@ -115,9 +141,11 @@ namespace WebApi_v1.HAPI
                 DateTime availMin = Properties.TimeRange.Min;
                 DateTime availMax = Properties.TimeRange.Max;
 
-                if (min == max || min > max)
+                // Request start time >= Request end time
+                if (min >= max)
                     Properties.ErrorCodes.Add(Status.HapiStatusCode.StartTimeEqualToOrAfterStopTime);
 
+                // Request start time <= available min OR request end time >= available max
                 if (min <= availMin || max >= availMax)
                     Properties.ErrorCodes.Add(Status.HapiStatusCode.TimeOutsideValidRange);
                 return false;
