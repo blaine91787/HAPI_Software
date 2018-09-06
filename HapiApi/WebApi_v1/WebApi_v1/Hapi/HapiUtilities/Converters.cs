@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace WebApi_v1.DataProducts.Utilities
+namespace WebApi_v1.HAPI.Utilities
 {
     public class Converters
     {
@@ -14,6 +13,10 @@ namespace WebApi_v1.DataProducts.Utilities
             char[] seps = new char[] { '-', 't', ':', '.', 'z' };
             string[] parts = utc.ToLower().Split(seps, StringSplitOptions.RemoveEmptyEntries);
             Regex r;
+
+            if (parts.Length > 0 && parts[0].Length == 4)
+                if (parts[1].Length == 3)
+                    return ConvertUTCtoDate(utc);
 
             Int32 yr = 0;
             Int32 month = 0;
@@ -104,7 +107,7 @@ namespace WebApi_v1.DataProducts.Utilities
 
         public DateTime ConvertUTCtoDate(String utc)
         {
-            String[] seps = new String[4] { "-", ":", "T", "." };
+            String[] seps = new String[7] { "-", ":", "T", "t", "Z", "z", "." };
             String[] parts = utc.Split(seps, StringSplitOptions.None);
 
             if (parts.Length == 0) return new DateTime();
@@ -293,81 +296,5 @@ namespace WebApi_v1.DataProducts.Utilities
         }
 
         #endregion DateTime Conversions
-
-        #region Property Conversions
-
-        public void ConvertParameterToProperty(string parameter, PropertyInfo prop, IRecord obj)
-        {
-            TypeCode tc = Type.GetTypeCode(prop.PropertyType);//Convert.GetTypeCode(prop.PropertyType);
-
-            switch (tc)
-            {
-                case TypeCode.DateTime:
-                    prop.SetValue(obj, ConvertUTCtoDate(parameter), null);
-                    return;
-
-                case TypeCode.String:
-                    prop.SetValue(obj, parameter, null);
-                    return;
-
-                case TypeCode.Int64:
-                    prop.SetValue(obj, Convert.ToInt64(parameter), null);
-                    return;
-
-                case TypeCode.Int32:
-                    prop.SetValue(obj, Convert.ToInt32(parameter), null);
-                    return;
-
-                case TypeCode.Int16:
-                    prop.SetValue(obj, Convert.ToInt16(parameter), null);
-                    return;
-
-                case TypeCode.Byte:
-                    prop.SetValue(obj, (byte)(Convert.ToInt16(parameter)), null);
-                    return;
-
-                case TypeCode.Boolean:
-                    prop.SetValue(obj, Convert.ToBoolean(parameter), null);
-                    return;
-            }
-        }
-
-        public void ConvertPropertyToDefault(PropertyInfo prop, IRecord obj)
-        {
-            TypeCode tc = Type.GetTypeCode(prop.PropertyType);//Convert.GetTypeCode(prop.PropertyType);
-
-            switch (tc)
-            {
-                case TypeCode.DateTime:
-                    prop.SetValue(obj, default(DateTime), null);
-                    return;
-
-                case TypeCode.String:
-                    prop.SetValue(obj, default(string), null);
-                    return;
-
-                case TypeCode.Int64:
-                    prop.SetValue(obj, default(Int64), null);
-                    return;
-
-                case TypeCode.Int32:
-                    prop.SetValue(obj, default(Int32), null);
-                    return;
-
-                case TypeCode.Int16:
-                    prop.SetValue(obj, default(Int16), null);
-                    return;
-
-                case TypeCode.Byte:
-                    prop.SetValue(obj, default(byte), null);
-                    return;
-
-                case TypeCode.Boolean:
-                    prop.SetValue(obj, default(bool), null);
-                    return;
-            }
-        }
-
-        #endregion Property Conversions
     }
 }

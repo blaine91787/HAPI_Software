@@ -1,9 +1,7 @@
-﻿using System;
-using System.Diagnostics;
-using System.Net;
+﻿using System.Diagnostics;
 using System.Net.Http;
 using System.Web.Http;
-using WebApi_v1.DataProducts;
+using WebApi_v1.HAPI;
 
 namespace WebApi_v1.Controllers
 {
@@ -13,55 +11,32 @@ namespace WebApi_v1.Controllers
         [HttpGet]
         public HttpResponseMessage GetInfo()
         {
-            HapiConfiguration hapi = new HapiConfiguration();
-            hapi.Configure(Request);
-            hapi.CreateResponse();
-
-            return hapi.Response;
+            Hapi hapi = new Hapi(Request);
+            return hapi.GetResponse();
         }
 
         [Route("api/Hapi/Data")]
         [HttpGet]
         public HttpResponseMessage GetData()
         {
-            HapiConfiguration hapi = new HapiConfiguration();
-            if (!hapi.Configure(Request))
-            {
-                foreach (Exception e in hapi.Errors)
-                    Debug.WriteLine(e.Message);
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
-            }
-
-            if (!hapi.CreateResponse())
-            {
-                foreach (Exception e in hapi.Errors)
-                    Debug.WriteLine(e.Message);
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
-            }
-
-            return hapi.Response;
+            Hapi hapi = new Hapi(Request);
+            return hapi.GetResponse(); 
         }
 
         [Route("api/Hapi/Catalog")]
         [HttpGet]
         public HttpResponseMessage GetCatalog()
         {
-            HapiConfiguration hapi = new HapiConfiguration();
-            hapi.Configure(Request);
-
-            hapi.CreateResponse();
-
-            return hapi.Response;
+            Hapi hapi = new Hapi(Request);
+            return hapi.GetResponse();
         }
 
         [Route("api/Hapi/Capabilities")]
         [HttpGet]
         public HttpResponseMessage GetCapabilities()
         {
-            HapiConfiguration hapi = new HapiConfiguration();
-            hapi.Configure(Request);
-            hapi.CreateResponse();
-            return hapi.Response;
+            Hapi hapi = new Hapi(Request);
+            return hapi.GetResponse();
         }
     }
 }

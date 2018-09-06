@@ -49,8 +49,23 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CDFAPIs">
+      <HintPath>..\..\..\..\..\..\..\..\Csharp-CDF Distribution\CDFDist\CDFAPIs.dll</HintPath>
+    </Reference>
+    <Reference Include="CDFConstants">
+      <HintPath>..\..\..\..\..\..\..\..\Csharp-CDF Distribution\CDFDist\CDFConstants.dll</HintPath>
+    </Reference>
+    <Reference Include="CDFException">
+      <HintPath>..\..\..\..\..\..\..\..\Csharp-CDF Distribution\CDFDist\CDFException.dll</HintPath>
+    </Reference>
+    <Reference Include="CDFUtils">
+      <HintPath>..\..\..\..\..\..\..\..\Csharp-CDF Distribution\CDFDist\CDFUtils.dll</HintPath>
+    </Reference>
     <Reference Include="CsvHelper, Version=7.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.7.1.1\lib\net45\CsvHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="CS_CDF">
+      <HintPath>..\..\..\..\..\NASA\NSSDC\CDF\CS_CDF\obj\x64\Release\CS_CDF.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AI.DependencyCollector, Version=2.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.6.4\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
@@ -186,26 +201,31 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HapiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\PeopleController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
-    <Compile Include="DataProducts\HapiConfiguration.cs" />
-    <Compile Include="DataProducts\Utilities\CSVHelperUtilities\Mappings.cs" />
-    <Compile Include="DataProducts\Utilities\CSVHelperUtilities\TypeConverters.cs" />
-    <Compile Include="DataProducts\Record.cs" />
-    <Compile Include="DataProducts\HapiInfo.cs" />
-    <Compile Include="DataProducts\IProperties.cs" />
-    <Compile Include="DataProducts\IRecord.cs" />
-    <Compile Include="DataProducts\IProduct.cs" />
-    <Compile Include="DataProducts\SpaceCraft\RBSpiceA\Products\Auxiliary.cs" />
-    <Compile Include="DataProducts\Product.cs" />
-    <Compile Include="DataProducts\SpaceCraft\RBSpiceA\RBSpiceAProduct.cs" />
-    <Compile Include="DataProducts\Utilities\Converters.cs" />
-    <Compile Include="DataProducts\Utilities\TimeRange.cs" />
+    <Compile Include="Hapi\Hapi.cs" />
+    <Compile Include="Hapi\HapiCatalog\Catalog.cs" />
+    <Compile Include="Hapi\HapiCatalog\CatalogProducer.cs" />
+    <Compile Include="Hapi\HapiCatalog\Field.cs" />
+    <Compile Include="Hapi\HapiCatalog\Instrument.cs" />
+    <Compile Include="Hapi\HapiCatalog\Product.cs" />
+    <Compile Include="Hapi\HapiCatalog\Spacecraft.cs" />
+    <Compile Include="Hapi\HapiPaths\HapiPaths.cs" />
+    <Compile Include="Hapi\HapiRegistry\HapiRegistry.cs" />
+    <Compile Include="Hapi\HapiUtilities\CDFReader.cs" />
+    <Compile Include="Hapi\HapiUtilities\Converters.cs" />
+    <Compile Include="Hapi\HapiUtilities\CSVHelperUtilities\Mappings.cs" />
+    <Compile Include="Hapi\HapiUtilities\CSVHelperUtilities\TypeConverters.cs" />
+    <Compile Include="Hapi\HapiUtilities\TimeRange.cs" />
+    <Compile Include="Hapi\HapiUtilities\HapiXmlReader.cs" />
+    <Compile Include="Hapi\HapiConfiguration\HapiConfiguration.cs" />
+    <Compile Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\AuxiliaryProduct\AuxiliaryRecords.cs" />
+    <Compile Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\AuxiliaryProduct\Auxiliary.cs" />
+    <Compile Include="Hapi\HapiDataProducts\DataProduct.cs" />
+    <Compile Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSPAProduct.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Person.cs" />
-    <Compile Include="Models\SpacecraftInfo.cs" />
+    <Compile Include="Hapi\HapiProperties\HapiProperties.cs" />
+    <Compile Include="Hapi\HapiResponses\HapiResponses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -240,6 +260,9 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\AuxiliaryProduct\RBSpiceA_Auxil_Product.xml" />
+    <Content Include="Hapi\HapiXml\HapiCatalog.xml" />
+    <Content Include="Hapi\HapiXml\HapiConfiguration.xml" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />

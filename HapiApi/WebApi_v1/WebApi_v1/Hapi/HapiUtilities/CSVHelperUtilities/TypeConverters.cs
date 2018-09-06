@@ -3,7 +3,7 @@ using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
 using System;
 
-namespace WebApi_v1.DataProducts.Utilities.CSVHelperUtilities
+namespace WebApi_v1.HAPI.Utilities.CSVHelperUtilities
 {
     public class TypeConverters
     {

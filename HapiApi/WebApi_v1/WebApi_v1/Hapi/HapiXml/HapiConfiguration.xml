@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<HapiConfiguration>
+  <Version>2.0</Version>
+  <Capabilities>csv,json</Capabilities>
+  <Endpoints>data,info,capabilities,catalog</Endpoints>
+  <DataArchivePath>\\ftecs.com\data\Archive\</DataArchivePath>
+  <CatalogPath>\WebApi_v1\HapiXml\HapiCatalog.xml</CatalogPath>
+</HapiConfiguration>
