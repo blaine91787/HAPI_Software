@@ -13,6 +13,9 @@ namespace WebApi_v1.HAPI.Catalog
         public string Title { get; set; }
         public string Path { get; set; }
         public string Description { get; set; }
+        public string FileType { get; set; }
+        public string StartTime { get; set; }
+        public string StopTime { get; set; }
         public Dictionary<string, Field> Fields { get; set; }
 
 
@@ -55,6 +58,15 @@ namespace WebApi_v1.HAPI.Catalog
                         break;
                     case ("description"):
                         Description = attr.Value;
+                        break;
+                    case ("filetype"):
+                        FileType = attr.Value;
+                        break;
+                    case ("starttime"):
+                        StartTime = attr.Value;
+                        break;
+                    case ("stoptime"):
+                        StopTime = attr.Value;
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(attr.Name, "Not a valid field attribute.");

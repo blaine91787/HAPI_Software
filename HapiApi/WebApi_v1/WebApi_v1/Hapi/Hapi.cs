@@ -90,7 +90,6 @@ namespace WebApi_v1.HAPI
                 content.SetStatusCode(Properties.ErrorCodes.First());
                 Response.Content = new StringContent(content.GetResponse());
             }
-
             return Response;
         }
 
@@ -106,15 +105,21 @@ namespace WebApi_v1.HAPI
                 Properties.ErrorCodes.Add(Status.HapiStatusCode.InternalServerError);
             }
 
-            if (DataProduct == null)
-            {
-
-                return false;
-            }
+            //if (DataProduct.Records == null)
+            //    throw new InvalidOperationException("DataProduct.Records should not come back null, something happened.");
 
             if (!DataProduct.VerifyTimeRange()) // Outside of SC data timerange
             {
-                Properties.ErrorCodes.Add(Status.HapiStatusCode.TimeOutsideValidRange);
+                DateTime min = Properties.TimeRange.UserMin;
+                DateTime max = Properties.TimeRange.UserMax;
+                DateTime availMin = Properties.TimeRange.Min;
+                DateTime availMax = Properties.TimeRange.Max;
+
+                if (min == max || min > max)
+                    Properties.ErrorCodes.Add(Status.HapiStatusCode.StartTimeEqualToOrAfterStopTime);
+
+                if (min <= availMin || max >= availMax)
+                    Properties.ErrorCodes.Add(Status.HapiStatusCode.TimeOutsideValidRange);
                 return false;
             }
             else if (!DataProduct.GetProduct()) // Data doesn't exist

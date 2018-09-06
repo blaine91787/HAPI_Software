@@ -19,14 +19,6 @@ namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="hapi"></param>
-        public RBSPAProduct()
-        {
-
-        }
-        /// <summary>
-        /// 
-        /// </summary>
         public override void Configure(Hapi hapi)
         {
             this.Hapi = hapi;
@@ -43,7 +35,7 @@ namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
             }
             catch (Exception e)
             {
-                throw e;
+                throw new InvalidOperationException("Unable to get product id's path.", e);
             }
 
             if(!Directory.Exists(_basepath))
@@ -57,8 +49,8 @@ namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
         public override void GetPaths()
         {
             Paths = new List<string>();
-            DateTime mintime = Hapi.Properties.TimeMin;
-            DateTime maxtime = Hapi.Properties.TimeMax;
+            DateTime mintime = Hapi.Properties.TimeRange.UserMin;
+            DateTime maxtime = Hapi.Properties.TimeRange.UserMax;
             DateTime mindate = mintime.Date;
             DateTime maxdate = maxtime.Date;
             string filepath = String.Empty;
@@ -67,8 +59,6 @@ namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
 
             while (mintime <= maxtime)
             {
-
-                
                 switch (Hapi.Properties.Product)
                 {
                     case ("auxil"):
@@ -84,7 +74,7 @@ namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
                 }
 
                 filepath = String.Format(_basepath + @"{0}\{1}", year, filename);
-                //filepath.Replace(@"\\", @"\");
+
                 if(File.Exists(filepath))
                     Paths.Add(filepath);
 
@@ -119,16 +109,15 @@ namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
         /// <returns></returns>
         public override bool VerifyTimeRange()
         {
-            TimeRange tr = new TimeRange
-            {
-                UserMin = Hapi.Properties.TimeMin,
-                UserMax = Hapi.Properties.TimeMax
-            };
+            if (Hapi.Properties.TimeRange == null)
+                throw new ArgumentNullException(nameof(Hapi.Properties.TimeRange));
 
-
+            TimeRange tr = Hapi.Properties.TimeRange;
             // We now have the path to the level and record type the user requested.
-            tr.Min = GetMinTime(_basepath);
-            tr.Max = GetMaxTime(_basepath);
+            if (Hapi.Properties.ID == "rbspa_rbspice_auxil")
+                tr.GetAvailableTimeRange(Hapi.Catalog.GetProduct(Hapi.Properties.ID).Path, out _, out _);
+            else
+                tr.GetAvailableTimeRange(Hapi.Catalog.GetProduct(Hapi.Properties.ID), out _, out _);
 
             return tr.IsValid();
         }

@@ -40,7 +40,6 @@ namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA.RBSpice.Auxiliary
         }
     }
 
-
     public class Auxiliary
     {
         public DateTime UTC { get; set; }

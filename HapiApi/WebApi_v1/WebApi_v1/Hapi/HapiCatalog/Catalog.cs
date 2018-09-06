@@ -15,6 +15,8 @@ namespace WebApi_v1.HAPI.Catalog
         {
             
             string catalogXmlPath = paths.CatalogXmlPath;
+            CatalogProducer catProducer = new CatalogProducer();
+            catProducer.CreateCatalog();
             XmlReaderSettings readerSettings = new XmlReaderSettings();
             readerSettings.IgnoreComments = true;
 
