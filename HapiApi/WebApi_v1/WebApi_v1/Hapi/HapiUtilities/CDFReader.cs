@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 
-namespace WebApi_v1.HAPI.HapiUtilities
+namespace WebApi_v1.HAPI.Utilities
 {
     public class CDFReader
     {
@@ -15,6 +15,7 @@ namespace WebApi_v1.HAPI.HapiUtilities
         public CDF_File Doc { get; set; }
         public List<CDF_Attribute> Attributes { get; set; }
         public List<CDF_Variable> Variables { get; set; }
+
 
         public CDFReader(string cdfFilePath)
         {
@@ -36,6 +37,88 @@ namespace WebApi_v1.HAPI.HapiUtilities
                 throw new FileNotFoundException("");
             }
         }
+
+
+
+        public List<CDF_Variable> GetListOfVariables(string[] variableNames)
+        {
+            List<CDF_Variable> temp = new List<CDF_Variable>();
+
+            foreach (CDF_Variable var in Variables)
+            {
+                if (variableNames.Count() == 0)
+                {
+                    temp.Add(var);
+                }
+                else if (variableNames.Contains(var.Name.Trim().ToLower()))
+                {
+                    temp.Add(var);
+                }
+                //if(Array..Contains(var.Name.Trim().ToLower()))
+                //    {
+
+                //}
+                //temp.Add(GetVariable(varName));
+            }
+
+            return temp;
+        }
+
+        private void InitHapiRecords(DateTime start, DateTime stop, string[] parameters, out List<int> indeces, out string[] headers)
+        {
+            List<int> indecesTemp = new List<int>();
+            List<string> headersTemp = new List<string>();
+            CDF_Variable utcVar = Doc.GetVariable("UTC");
+
+            Converters con = new Converters();
+            for (int i = 0; i < utcVar.Records; i++)
+            {
+                DateTime utc = con.ConvertUTCtoDate(utcVar[i].ToString());
+                if (utc >= start && utc < stop)
+                    indecesTemp.Add(i);
+            }
+
+            List<CDF_Variable> vars = GetListOfVariables(parameters);
+
+            foreach (CDF_Variable var in vars)
+            {
+                headersTemp.Add(var.Name);
+            }
+
+            indeces = indecesTemp;
+            headers = headersTemp.ToArray();
+        }
+
+        public IEnumerable<Dictionary<string,string>> GetCDFHapiRecords(DateTime start, DateTime stop, string[] parameters)
+        {
+            List<Dictionary<string, string>> records = new List<Dictionary<string, string>>();
+            List<int> indeces;
+            string[] header;
+            //List<string> product;
+            InitHapiRecords(start, stop, parameters, out indeces, out header);
+
+            List<CDF_Variable> varList = GetListOfVariables(parameters);
+            for (int i = 0; i < indeces.ToArray().Length; i++)
+            {
+                Dictionary<string, string> temp = new Dictionary<string, string>();
+                foreach (CDF_Variable var in varList)
+                {
+                    string str = GetVariableString(var, indeces[i]);
+                    temp.Add(var.Name, str);
+                }
+                records.Add(temp);
+            }
+            return records;
+        }
+
+
+
+
+
+
+
+
+
 
         public List<CDF_Variable> GetVariableList()
         {
@@ -66,6 +149,53 @@ namespace WebApi_v1.HAPI.HapiUtilities
             }
 
             return null;
+        }
+
+        public string GetVariableString(CDF_Variable var, int rec)
+        {
+            // If it's nonvarying there's only one record, so just set rec to 0
+            if(var.Variance == CDF_Variances.NOVARY)
+            {
+                rec = 0;
+            }
+            if (var[rec] == null)
+            {
+                return var.GetPRBEMFillValue().ToString();
+            }
+
+            Type valueType = var[rec].GetType();
+
+            //Debug.WriteLine(valueType.ToString());
+
+            string valString = "";
+            if (valueType.Equals(typeof(string))) { valString = var[rec].ToString(); }
+            else if (valueType.Equals(typeof(string[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
+            else if (valueType.Equals(typeof(string[,]))) { TwoDimCDFVariable(var[rec], valueType, out valString); }
+            else if (valueType.Equals(typeof(Double))) { valString = var[rec].ToString(); }
+            else if (valueType.Equals(typeof(Double[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
+            else if (valueType.Equals(typeof(Double[,]))) { TwoDimCDFVariable(var[rec], valueType, out valString); }
+            else if (valueType.Equals(typeof(Int32))) { valString = var[rec].ToString(); }
+            else if (valueType.Equals(typeof(Int32[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
+            else if (valueType.Equals(typeof(Int32[,]))) { TwoDimCDFVariable(var[rec], valueType, out valString); }
+            else if (valueType.Equals(typeof(UInt32))) { valString = var[rec].ToString(); }
+            else if (valueType.Equals(typeof(UInt32[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
+            else if (valueType.Equals(typeof(UInt32[,]))) { TwoDimCDFVariable(var[rec], valueType, out valString); }
+            else if (valueType.Equals(typeof(Single))) { valString = var[rec].ToString(); }
+            else if (valueType.Equals(typeof(Single[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
+            else if (valueType.Equals(typeof(Single[,]))) { TwoDimCDFVariable(var[rec], valueType, out valString); }
+            else if (valueType.Equals(typeof(Int16))) { valString = var[rec].ToString(); }
+            else if (valueType.Equals(typeof(Int16[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
+            else if (valueType.Equals(typeof(Int16[,]))) { TwoDimCDFVariable(var[rec], valueType, out valString); }
+            else if (valueType.Equals(typeof(SByte))) { valString = var[rec].ToString(); }
+            else if (valueType.Equals(typeof(SByte[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
+            else if (valueType.Equals(typeof(SByte[,]))) { TwoDimCDFVariable(var[rec], valueType, out valString); }
+            else if (valueType.Equals(typeof(CDF_Time))) { valString = var[rec].ToString(); }
+            else if (valueType.Equals(typeof(CDF_Time[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
+            else if (valueType.Equals(typeof(CDF_Time[,]))) { TwoDimCDFVariable(var[rec], valueType, out valString); }
+            else { throw new ArgumentOutOfRangeException(valueType.Name); }
+
+
+            return valString.Trim();
         }
         public void GetVariables()
         {
@@ -162,15 +292,15 @@ namespace WebApi_v1.HAPI.HapiUtilities
 
             switch (type.Name)
             {
-                case ("CDF_Time[]"): foreach (CDF_Time val in (CDF_Time[])varRec) { sb.AppendFormat("{0}, ", val); } break;
-                case ("String[]"): foreach (String val in (String[])varRec) { sb.AppendFormat("{0}, ", val); } break;
-                case ("Double[]"): foreach (Double val in (Double[])varRec) { sb.AppendFormat("{0}, ", val); } break;
-                case ("Int16[]"): foreach (Int16 val in (Double[])varRec) { sb.AppendFormat("{0}, ", val); } break;
-                case ("UInt16[]"): foreach (UInt16 val in (Double[])varRec) { sb.AppendFormat("{0}, ", val); } break;
-                case ("Int32[]"): foreach (Int32 val in (Int32[])varRec) { sb.AppendFormat("{0}, ", val); } break;
-                case ("UInt32[]"): foreach (UInt32 val in (UInt32[])varRec) { sb.AppendFormat("{0}, ", val); } break;
-                case ("Single[]"): foreach (Single val in (Single[])varRec) { sb.AppendFormat("{0}, ", val); } break;
-                case ("SByte[]"): foreach (SByte val in (SByte[])varRec) { sb.AppendFormat("{0}, ", val); } break;
+                case ("CDF_Time[]"): foreach (CDF_Time val in (CDF_Time[])varRec) { sb.AppendFormat("{0},", val); } break;
+                case ("String[]"): foreach (String val in (String[])varRec) { sb.AppendFormat("{0},", val); } break;
+                case ("Double[]"): foreach (Double val in (Double[])varRec) { sb.AppendFormat("{0},", val); } break;
+                case ("Int16[]"): foreach (Int16 val in (Double[])varRec) { sb.AppendFormat("{0},", val); } break;
+                case ("UInt16[]"): foreach (UInt16 val in (Double[])varRec) { sb.AppendFormat("{0},", val); } break;
+                case ("Int32[]"): foreach (Int32 val in (Int32[])varRec) { sb.AppendFormat("{0},", val); } break;
+                case ("UInt32[]"): foreach (UInt32 val in (UInt32[])varRec) { sb.AppendFormat("{0},", val); } break;
+                case ("Single[]"): foreach (Single val in (Single[])varRec) { sb.AppendFormat("{0},", val); } break;
+                case ("SByte[]"): foreach (SByte val in (SByte[])varRec) { sb.AppendFormat("{0},", val); } break;
             }
 
             valString = sb.ToString();
@@ -184,10 +314,7 @@ namespace WebApi_v1.HAPI.HapiUtilities
                 CDF_Time[,] valArr = (CDF_Time[,])varRec;
                 for (int i = 0; i < valArr.GetLength(0); i++)
                     for (int j = 0; j < valArr.GetLength(1); j++)
-                        if (j != valArr.GetLength(1) - 1)
-                            sb.AppendFormat("{0}, ", valArr[i, j]);
-                        else
-                            sb.AppendFormat("{0}\n", valArr[i, j]);
+                        sb.AppendFormat("{0},", valArr[i, j]);
             }
 
             if (type == typeof(String[,]))
@@ -195,10 +322,7 @@ namespace WebApi_v1.HAPI.HapiUtilities
                 String[,] valArr = (String[,])varRec;
                 for (int i = 0; i < valArr.GetLength(0); i++)
                     for (int j = 0; j < valArr.GetLength(1); j++)
-                        if (j != valArr.GetLength(1) - 1)
-                            sb.AppendFormat("{0}, ", valArr[i, j]);
-                        else
-                            sb.AppendFormat("{0}\n", valArr[i, j]);
+                        sb.AppendFormat("{0},", valArr[i, j]);
             }
 
             if (type == typeof(Double[,]))
@@ -206,10 +330,7 @@ namespace WebApi_v1.HAPI.HapiUtilities
                 Double[,] valArr = (Double[,])varRec;
                 for (int i = 0; i < valArr.GetLength(0); i++)
                     for (int j = 0; j < valArr.GetLength(1); j++)
-                        if (j != valArr.GetLength(1) - 1)
-                            sb.AppendFormat("{0}, ", valArr[i, j]);
-                        else
-                            sb.AppendFormat("{0}\n", valArr[i, j]);
+                        sb.AppendFormat("{0},", valArr[i, j]);
             }
 
             if (type == typeof(Int16[,]))
@@ -217,10 +338,7 @@ namespace WebApi_v1.HAPI.HapiUtilities
                 Int16[,] valArr = (Int16[,])varRec;
                 for (int i = 0; i < valArr.GetLength(0); i++)
                     for (int j = 0; j < valArr.GetLength(1); j++)
-                        if (j != valArr.GetLength(1) - 1)
-                            sb.AppendFormat("{0}, ", valArr[i, j]);
-                        else
-                            sb.AppendFormat("{0}\n", valArr[i, j]);
+                        sb.AppendFormat("{0},", valArr[i, j]);
             }
 
             if (type == typeof(UInt16[,]))
@@ -228,10 +346,7 @@ namespace WebApi_v1.HAPI.HapiUtilities
                 UInt16[,] valArr = (UInt16[,])varRec;
                 for (int i = 0; i < valArr.GetLength(0); i++)
                     for (int j = 0; j < valArr.GetLength(1); j++)
-                        if (j != valArr.GetLength(1) - 1)
-                            sb.AppendFormat("{0}, ", valArr[i, j]);
-                        else
-                            sb.AppendFormat("{0}\n", valArr[i, j]);
+                        sb.AppendFormat("{0},", valArr[i, j]);
             }
 
             if (type == typeof(Int32[,]))
@@ -239,10 +354,7 @@ namespace WebApi_v1.HAPI.HapiUtilities
                 Int32[,] valArr = (Int32[,])varRec;
                 for (int i = 0; i < valArr.GetLength(0); i++)
                     for (int j = 0; j < valArr.GetLength(1); j++)
-                        if (j != valArr.GetLength(1) - 1)
-                            sb.AppendFormat("{0}, ", valArr[i, j]);
-                        else
-                            sb.AppendFormat("{0}\n", valArr[i, j]);
+                        sb.AppendFormat("{0},", valArr[i, j]);
             }
 
             if (type == typeof(UInt32[,]))
@@ -250,10 +362,7 @@ namespace WebApi_v1.HAPI.HapiUtilities
                 UInt32[,] valArr = (UInt32[,])varRec;
                 for (int i = 0; i < valArr.GetLength(0); i++)
                     for (int j = 0; j < valArr.GetLength(1); j++)
-                        if (j != valArr.GetLength(1) - 1)
-                            sb.AppendFormat("{0}, ", valArr[i, j]);
-                        else
-                            sb.AppendFormat("{0}\n", valArr[i, j]);
+                        sb.AppendFormat("{0},", valArr[i, j]);
             }
 
             if (type == typeof(Single[,]))
@@ -261,10 +370,7 @@ namespace WebApi_v1.HAPI.HapiUtilities
                 Single[,] valArr = (Single[,])varRec;
                 for (int i = 0; i < valArr.GetLength(0); i++)
                     for (int j = 0; j < valArr.GetLength(1); j++)
-                        if (j != valArr.GetLength(1) - 1)
-                            sb.AppendFormat("{0}, ", valArr[i, j]);
-                        else
-                            sb.AppendFormat("{0}\n", valArr[i, j]);
+                        sb.AppendFormat("{0},", valArr[i, j]);
             }
 
             if (type == typeof(SByte[,]))
@@ -272,10 +378,7 @@ namespace WebApi_v1.HAPI.HapiUtilities
                 SByte[,] valArr = (SByte[,])varRec;
                 for (int i = 0; i < valArr.GetLength(0); i++)
                     for (int j = 0; j < valArr.GetLength(1); j++)
-                        if (j != valArr.GetLength(1) - 1)
-                            sb.AppendFormat("{0}, ", valArr[i, j]);
-                        else
-                            sb.AppendFormat("{0}\n", valArr[i, j]);
+                        sb.AppendFormat("{0},", valArr[i, j]);
             }
 
             valString = sb.ToString();

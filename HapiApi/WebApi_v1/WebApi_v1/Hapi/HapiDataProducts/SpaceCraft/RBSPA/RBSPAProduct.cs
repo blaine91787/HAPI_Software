@@ -9,6 +9,8 @@ using WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA.RBSpice.Auxiliary;
 using WebApi_v1.HAPI.Configuration;
 using WebApi_v1.HAPI.Utilities;
 using WebApi_v1.HAPI.Properties;
+using System.Text;
+using WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA.RBSpice.TOFxEH;
 
 namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
 {
@@ -43,12 +45,40 @@ namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
 
             GetPaths();
         }
+        public bool InTimeRange(FileInfo fi, DateTime mintime, DateTime maxtime)
+        {
+            string[] fileNameChunks = fi.Name.Split('_');
+
+            char[] dateArr = default(char[]);
+            foreach (string chunk in fileNameChunks)
+            {
+                if (Int32.TryParse(chunk, out int x))
+                {
+                    if (x >= 20000000 && x < 30000000)
+                        dateArr = chunk.ToCharArray();
+                }
+            }
+            StringBuilder sb = new StringBuilder();
+            for(int i = 0; i<dateArr.Length; i++)
+            {
+                if(i==4 || i==6 || i==8)
+                {
+                    sb.Append('-');
+                }
+                sb.Append(dateArr[i]);
+            }
+
+            DateTime dt = default(DateTime);
+            DateTime.TryParse(sb.ToString(), out dt);
+
+
+            return (dt >= mintime && dt < maxtime) ? true : false;
+        }
         /// <summary>
         /// 
         /// </summary>
         public override void GetPaths()
         {
-            Paths = new List<string>();
             DateTime mintime = Hapi.Properties.TimeRange.UserMin;
             DateTime maxtime = Hapi.Properties.TimeRange.UserMax;
             DateTime mindate = mintime.Date;
@@ -56,31 +86,88 @@ namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
             string filepath = String.Empty;
             string year = String.Empty;
             string filename = String.Empty;
+            string filetype = Hapi.Catalog.GetProduct(Hapi.Properties.ID).FileType;
+            if (filetype == "cdf")
+                filetype = "*.cdf";
+            else if (filetype == "csv.gz" || filetype == ".gz")
+                filetype = "*csv.gz";
 
-            while (mintime <= maxtime)
+            List<FileInfo> filePathList = new List<FileInfo>();
+            foreach (string dir in Directory.GetDirectories(_basepath))
             {
-                switch (Hapi.Properties.Product)
+                foreach (string path in Directory.GetFiles(dir, filetype))
                 {
-                    case ("auxil"):
-                        year = mindate.ToString("yyyy");
-                        filename = String.Format(
-                            "rbsp-a-rbspice_lev-0_Auxil_{0}_v1.1.1-00.csv.gz",
-                            mindate.ToString("yyyyMMdd")
-                        );
-                        break;
+                    if (!File.Exists(path))
+                        continue;
+                    FileInfo fi = new FileInfo(path);
+                    if ((InTimeRange(fi, mintime, maxtime)))
+                        filePathList.Add(fi);
 
-                    default:
-                        break;
                 }
-
-                filepath = String.Format(_basepath + @"{0}\{1}", year, filename);
-
-                if(File.Exists(filepath))
-                    Paths.Add(filepath);
-
-                mintime = mintime.AddDays(1.0);
-                mindate = mintime.Date;
             }
+
+            Files = filePathList;
+            //}
+
+            //while (mintime <= maxtime)
+            //{
+            //    switch (Hapi.Properties.Product)
+            //    {
+            //        case ("auxil"):
+            //            filename = String.Format(
+            //                "rbsp-a-rbspice_lev-0_Auxil_{0}_v1.1.1-00.csv.gz",
+            //                mindate.ToString("yyyyMMdd")
+            //            );
+            //            break;
+            //        case ("tofxeh"):
+            //            filename = String.Format(
+            //                "rbsp-a-rbspice_lev-3-PAP_Auxil_{0}_v1.1.1-00.csv.gz",
+            //                mindate.ToString("yyyyMMdd")
+            //            );
+            //            break;
+            //        //case ("auxil"):
+            //        //    filename = String.Format(
+            //        //        "rbsp-a-rbspice_lev-0_Auxil_{0}_v1.1.1-00.csv.gz",
+            //        //        mindate.ToString("yyyyMMdd")
+            //        //    );
+            //        //    break;
+            //        //case ("auxil"):
+            //        //    filename = String.Format(
+            //        //        "rbsp-a-rbspice_lev-0_Auxil_{0}_v1.1.1-00.csv.gz",
+            //        //        mindate.ToString("yyyyMMdd")
+            //        //    );
+            //        //    break;
+            //        //case ("auxil"):
+            //        //    filename = String.Format(
+            //        //        "rbsp-a-rbspice_lev-0_Auxil_{0}_v1.1.1-00.csv.gz",
+            //        //        mindate.ToString("yyyyMMdd")
+            //        //    );
+            //        //    break;
+            //        //case ("auxil"):
+            //        //    filename = String.Format(
+            //        //        "rbsp-a-rbspice_lev-0_Auxil_{0}_v1.1.1-00.csv.gz",
+            //        //        mindate.ToString("yyyyMMdd")
+            //        //    );
+            //        //    break;
+            //        //case ("auxil"):
+            //        //    filename = String.Format(
+            //        //        "rbsp-a-rbspice_lev-0_Auxil_{0}_v1.1.1-00.csv.gz",
+            //        //        mindate.ToString("yyyyMMdd")
+            //        //    );
+            //        //    break;
+            //        default:
+            //            break;
+            //    }
+
+            //    year = mindate.ToString("yyyy");
+            //    filepath = String.Format(_basepath + @"{0}\{1}", year, filename);
+
+            //    if(File.Exists(filepath))
+            //        Paths.Add(filepath);
+
+            //    mintime = mintime.AddDays(1.0);
+            //    mindate = mintime.Date;
+            //}
         }
         /// <summary>
         /// 
@@ -89,8 +176,19 @@ namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
         /// <returns></returns>
         public override bool GetProduct()
         {
-            AuxiliaryRecords aux = new AuxiliaryRecords(Hapi);
-            Records = aux.GetRecords(Paths);
+            switch(Hapi.Properties.Product)
+            {
+                case ("auxil"):
+                    AuxiliaryRecords aux = new AuxiliaryRecords(Hapi);
+                    Records = aux.GetRecords(Files);
+                    break;
+                case ("tofxeh"):
+                    TofxehRecords eh = new TofxehRecords(Hapi);
+                    Records = eh.GetRecords(Files);
+                    break;
+
+            }
+
             return Records.Count() != 0 ? true : false;
         }
         /// <summary>

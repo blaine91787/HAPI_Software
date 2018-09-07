@@ -102,6 +102,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WebApi_v1">
+      <HintPath>..\..\WebApi_v1\WebApi_v1\obj\x64\Debug\WebApi_v1.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CDFFileReaderTest.cs" />

@@ -266,7 +266,7 @@ namespace WebApi_v1.HAPI.Response
             {
                 foreach (KeyValuePair<string, string> pair in rec)
                 {
-                    sb.Append(pair.Value);
+                    sb.Append(pair.Value.TrimEnd(','));
                     if (!string.Equals(pair.Key, last, StringComparison.OrdinalIgnoreCase))
                         sb.Append(",");
                     else
@@ -362,7 +362,7 @@ namespace WebApi_v1.HAPI.Response
 
                 foreach (KeyValuePair<string, string> pair in rec)
                 {
-                    sb.Append(pair.Value);
+                    sb.Append(pair.Value.TrimEnd(','));
                     if (pair.Key != last)
                         sb.Append(",");
                 }
@@ -393,7 +393,7 @@ namespace WebApi_v1.HAPI.Response
             HapiVersion = Hapi.Configuration.Version;
             Status = new Status(); // HACK: don't use a literal value for code
             Format = Hapi.Properties.Format;
-            Parameters = Hapi.Catalog.GetProduct(Hapi.Properties.ID).GetFields();
+            Parameters = Hapi.Catalog.GetProduct(Hapi.Properties.ID).GetFields();// TODO: Exception here when the id is entered incorrectly (e.g. rbspicea_rbspice_tofxeh)
 
             TimeRange tr = Hapi.Properties.TimeRange;
             if (Hapi.Properties.ID == "rbspa_rbspice_auxil")

@@ -22,14 +22,14 @@ namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA.RBSpice.Auxiliary
         }
 
 
-        public IEnumerable<Dictionary<string,string>> GetRecords(IEnumerable<string> paths)
+        public IEnumerable<Dictionary<string,string>> GetRecords(IEnumerable<FileInfo> files)
         {
             Data = new List<Dictionary<string, string>>();
-            foreach (string path in paths)
+            foreach (FileInfo fi in files)
             {
-                if (File.Exists(path))
+                if (File.Exists(fi.FullName))
                 {
-                    FileInfo fileToDecompress = new FileInfo(path); ;
+                    FileInfo fileToDecompress = fi;
 
                     using (FileStream originalFileStream = fileToDecompress.OpenRead())
                     using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))

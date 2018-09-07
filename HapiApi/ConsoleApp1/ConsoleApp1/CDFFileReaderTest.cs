@@ -4,6 +4,7 @@ using SPDF.CDF.CSharp;
 using System.Text;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApp1
 {
@@ -35,20 +36,26 @@ namespace ConsoleApp1
             }
         }
 
-        public List<CDF_Variable> GetVariableList()
+        public List<CDF_Variable> GetListOfVariables(string[] variableNames)
         {
-            if (Doc == null)
-                return null;
+            List<CDF_Variable> temp = new List<CDF_Variable>();
 
-            return Doc.Variables;
-        }
-        public List<CDF_Attribute> GetCDFAttributes()
-        {
-            if (Doc == null)
-                return null;
+            foreach(CDF_Variable var in Variables)
+            {
+                if(variableNames.Contains(var.Name.Trim().ToLower()))
+                {
+                    temp.Add(var);
+                }
+                //if(Array..Contains(var.Name.Trim().ToLower()))
+                //    {
 
-            return Doc.Attributes;
+                //}
+                //temp.Add(GetVariable(varName));
+            }
+
+            return temp;
         }
+
         public CDF_Variable GetVariable(string varName)
         {
             if (Doc == null)
@@ -65,6 +72,54 @@ namespace ConsoleApp1
 
             return null;
         }
+
+
+        public string GetVariableString(CDF_Variable var, int rec)
+        {
+            if (var[rec] == null) { Console.WriteLine("THE NULL VARIABLE IS : " + var.Name); }
+
+            Type valueType = var[rec].GetType();
+
+            //Debug.WriteLine(valueType.ToString());
+
+            string valString = "";
+            if (valueType.Equals(typeof(string))) { valString = var[rec].ToString(); }
+            else if (valueType.Equals(typeof(string[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
+            else if (valueType.Equals(typeof(string[,]))) { Debug.WriteLine("It's a String[,]"); }
+            else if (valueType.Equals(typeof(Double))) { valString = var[rec].ToString(); }
+            else if (valueType.Equals(typeof(Double[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
+            else if (valueType.Equals(typeof(Double[,]))) { TwoDimCDFVariable(var[rec], valueType, out valString); }
+            else if (valueType.Equals(typeof(Int32))) { valString = var[rec].ToString(); }
+            else if (valueType.Equals(typeof(Int32[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
+            else if (valueType.Equals(typeof(Int32[,]))) { Debug.WriteLine("It's a Int32[,]"); }
+            else if (valueType.Equals(typeof(UInt32))) { valString = var[rec].ToString(); }
+            else if (valueType.Equals(typeof(UInt32[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
+            else if (valueType.Equals(typeof(UInt32[,]))) { Debug.WriteLine("It's a UInt32[,]"); }
+            else if (valueType.Equals(typeof(Single))) { valString = var[rec].ToString(); }
+            else if (valueType.Equals(typeof(Single[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
+            else if (valueType.Equals(typeof(Single[,]))) { Debug.WriteLine("It's a Single[,]"); }
+            else if (valueType.Equals(typeof(Int16))) { valString = var[rec].ToString(); }
+            else if (valueType.Equals(typeof(Int16[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
+            else if (valueType.Equals(typeof(Int16[,]))) { Debug.WriteLine("It's a Int16[,]"); }
+            else if (valueType.Equals(typeof(SByte))) { valString = var[rec].ToString(); }
+            else if (valueType.Equals(typeof(SByte[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
+            else if (valueType.Equals(typeof(SByte[,]))) { Debug.WriteLine("It's a SByte[,]"); }
+            else if (valueType.Equals(typeof(CDF_Time))) { valString = var[rec].ToString(); }
+            else if (valueType.Equals(typeof(CDF_Time[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
+            else if (valueType.Equals(typeof(CDF_Time[,]))) { Debug.WriteLine("It's a CDF_Time[,]"); }
+            else { throw new ArgumentOutOfRangeException(valueType.Name); }
+
+
+            return valString.Trim();
+        }
+
+
+
+
+
+
+
+
         public void GetVariables()
         {
             if (Path.GetExtension(DocPath) != ".cdf" || !File.Exists(DocPath))

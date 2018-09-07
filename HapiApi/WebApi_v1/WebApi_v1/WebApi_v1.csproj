@@ -208,6 +208,7 @@
     <Compile Include="Hapi\HapiCatalog\Instrument.cs" />
     <Compile Include="Hapi\HapiCatalog\Product.cs" />
     <Compile Include="Hapi\HapiCatalog\Spacecraft.cs" />
+    <Compile Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\TOFxEH\TofxehRecords.cs" />
     <Compile Include="Hapi\HapiPaths\HapiPaths.cs" />
     <Compile Include="Hapi\HapiRegistry\HapiRegistry.cs" />
     <Compile Include="Hapi\HapiUtilities\CDFReader.cs" />
@@ -217,8 +218,8 @@
     <Compile Include="Hapi\HapiUtilities\TimeRange.cs" />
     <Compile Include="Hapi\HapiUtilities\HapiXmlReader.cs" />
     <Compile Include="Hapi\HapiConfiguration\HapiConfiguration.cs" />
-    <Compile Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\AuxiliaryProduct\AuxiliaryRecords.cs" />
-    <Compile Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\AuxiliaryProduct\Auxiliary.cs" />
+    <Compile Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\Auxiliary\AuxiliaryRecords.cs" />
+    <Compile Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\Auxiliary\Auxiliary.cs" />
     <Compile Include="Hapi\HapiDataProducts\DataProduct.cs" />
     <Compile Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSPAProduct.cs" />
     <Compile Include="Global.asax.cs">
@@ -260,7 +261,7 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
-    <Content Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\AuxiliaryProduct\RBSpiceA_Auxil_Product.xml" />
+    <Content Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\Auxiliary\RBSpiceA_Auxil_Product.xml" />
     <Content Include="Hapi\HapiXml\HapiCatalog.xml" />
     <Content Include="Hapi\HapiXml\HapiConfiguration.xml" />
     <Content Include="Scripts\bootstrap.bundle.js" />
@@ -325,6 +326,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\ESRHELT\" />
+    <Folder Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\ESRLEHT\" />
+    <Folder Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\TOFxEHe\" />
+    <Folder Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\TOFxEIon\" />
+    <Folder Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\TOFxEO\" />
+    <Folder Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\TOFxPHHHELT\" />
+    <Folder Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\TOFxPHHLEHT\" />
+    <Folder Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\TOFxPHOHELT\" />
+    <Folder Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\TOFxPHOLEHT\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

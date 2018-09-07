@@ -11,7 +11,6 @@ namespace WebApi_v1.HAPI.DataProducts
     public abstract class HapiDataProduct
     {
         public Hapi Hapi { get; set; }
-        public List<string> Paths { get; set; }
         public List<FileInfo> Files { get; set; }
 
         public string[] Header { get; set; }
