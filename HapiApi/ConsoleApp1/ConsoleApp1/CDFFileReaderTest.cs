@@ -5,15 +5,18 @@ using System.Text;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using CDF;
 
 namespace ConsoleApp1
 {
-    public class CDFReader
+    //[System.AttributeUsage(System.AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
+    public class CDFReader// : Attribute
     {
         private string DocPath;
         public CDF_File Doc { get; set; }
         public List<CDF_Attribute> Attributes { get; set; }
         public List<CDF_Variable> Variables { get; set; }
+
 
         public CDFReader(string cdfFilePath)
         {
@@ -26,14 +29,32 @@ namespace ConsoleApp1
             if (Path.GetExtension(cdfFilePath) == ".cdf" && File.Exists(cdfFilePath))
             {
                 DocPath = cdfFilePath;
-                Doc = new CDF_File(DocPath);
-                Attributes = Doc.Attributes;
-                Variables = Doc.Variables;
+                //try
+                //{
+                FileInfo fi = new FileInfo(cdfFilePath);
+                Doc = new CDF_File(cdfFilePath);
+                    //Doc = new CDF_File(DocPath);
+                //}
+                //catch (Exception e)
+                //{
+                //    throw e;
+                //}
+                //if (Doc.Attributes.Count == 0 || Doc.Variables.Count == 0)
+                    //throw new Exception("Can't access cdf variables.");
+                //Attributes = Doc.Attributes;
+                //Variables = Doc.Variables;
             }
             else
             {
                 throw new FileNotFoundException("");
             }
+        }
+
+
+
+        public void Close()
+        {
+            unsafe { CDFAPIs.CDFclose((void*)Doc.ID); };
         }
 
         public List<CDF_Variable> GetListOfVariables(string[] variableNames)

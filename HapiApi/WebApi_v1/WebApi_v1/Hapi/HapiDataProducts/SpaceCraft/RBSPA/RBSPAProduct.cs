@@ -72,7 +72,7 @@ namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
             DateTime.TryParse(sb.ToString(), out dt);
 
 
-            return (dt >= mintime && dt < maxtime) ? true : false;
+            return ((dt.Date >= mintime.Date && dt < maxtime.Date) || (dt.Date == mintime.Date && dt.Date == maxtime.Date)) ? true : false; //TODO: dt is supposed to be min inclusive and max exclusive
         }
         /// <summary>
         /// 
@@ -189,7 +189,7 @@ namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
 
             }
 
-            return Records.Count() != 0 ? true : false;
+            return Records.Count() != 0 ? true : false; // TODO: Value can't be null when there's no data. BUG
         }
         /// <summary>
         /// 

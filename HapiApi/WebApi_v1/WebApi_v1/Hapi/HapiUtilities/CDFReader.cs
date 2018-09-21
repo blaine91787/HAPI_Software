@@ -29,6 +29,10 @@ namespace WebApi_v1.HAPI.Utilities
             {
                 DocPath = cdfFilePath;
                 Doc = new CDF_File(DocPath);
+
+                if (Doc.Attributes.Count == 0 || Doc.Variables.Count == 0)
+                    throw new Exception("Error reading the CDF file. Possible issue with DLLs.");
+
                 Attributes = Doc.Attributes;
                 Variables = Doc.Variables;
             }
@@ -36,6 +40,11 @@ namespace WebApi_v1.HAPI.Utilities
             {
                 throw new FileNotFoundException("");
             }
+        }
+
+        public void Close()
+        {
+            Doc.Close();
         }
 
 
@@ -195,7 +204,7 @@ namespace WebApi_v1.HAPI.Utilities
             else { throw new ArgumentOutOfRangeException(valueType.Name); }
 
 
-            return valString.Trim();
+            return valString.Trim(new char[] { ',', ' ' });
         }
         public void GetVariables()
         {
@@ -241,7 +250,7 @@ namespace WebApi_v1.HAPI.Utilities
                     else if (valueType.Equals(typeof(CDF_Time[]))) { OneDimCDFVariable(var[rec], valueType, out valString); }
                     else if (valueType.Equals(typeof(CDF_Time[,]))) { Debug.WriteLine("It's a CDF_Time[,]"); }
                     else { throw new ArgumentOutOfRangeException(valueType.Name); }
-
+                    Type type = typeof(Double[,]);
 
                     Console.WriteLine(valString);
                 }
@@ -288,100 +297,72 @@ namespace WebApi_v1.HAPI.Utilities
         }
         private void OneDimCDFVariable(Object varRec, Type type, out string valString)
         {
-            StringBuilder sb = new StringBuilder();
-
-            switch (type.Name)
+            if (!(type == typeof(String[])
+               || type == typeof(Double[])
+               || type == typeof(Int32[])
+               || type == typeof(UInt32[])
+               || type == typeof(Single[])
+               || type == typeof(Int16[])
+               || type == typeof(SByte[])
+               || type == typeof(CDF_Time[])))
             {
-                case ("CDF_Time[]"): foreach (CDF_Time val in (CDF_Time[])varRec) { sb.AppendFormat("{0},", val); } break;
-                case ("String[]"): foreach (String val in (String[])varRec) { sb.AppendFormat("{0},", val); } break;
-                case ("Double[]"): foreach (Double val in (Double[])varRec) { sb.AppendFormat("{0},", val); } break;
-                case ("Int16[]"): foreach (Int16 val in (Double[])varRec) { sb.AppendFormat("{0},", val); } break;
-                case ("UInt16[]"): foreach (UInt16 val in (Double[])varRec) { sb.AppendFormat("{0},", val); } break;
-                case ("Int32[]"): foreach (Int32 val in (Int32[])varRec) { sb.AppendFormat("{0},", val); } break;
-                case ("UInt32[]"): foreach (UInt32 val in (UInt32[])varRec) { sb.AppendFormat("{0},", val); } break;
-                case ("Single[]"): foreach (Single val in (Single[])varRec) { sb.AppendFormat("{0},", val); } break;
-                case ("SByte[]"): foreach (SByte val in (SByte[])varRec) { sb.AppendFormat("{0},", val); } break;
+                throw new ArgumentOutOfRangeException("type", type, "Not a valid one dimensional variable.");
             }
 
-            valString = sb.ToString();
+            StringBuilder sb = new StringBuilder();
+
+            // Using dynamic variable because it can be any of the above types. The process is the same.
+            dynamic valArr = varRec;
+            string temp;
+            sb.Append("[");
+            foreach(var val in valArr)
+            {
+                sb.AppendFormat("{0},", val.ToString().Trim());
+            }
+            temp = sb.ToString().TrimEnd(',');
+            sb.Clear();
+            sb.Append(temp);
+            sb.Append("]");
+            valString = sb.ToString().Trim(new char[] { ',', ' ' });
         }
         private void TwoDimCDFVariable(Object varRec, Type type, out string valString)
         {
+            if (!(type == typeof(String[,]) 
+               || type == typeof(Double[,]) 
+               || type == typeof(Int32[,]) 
+               || type == typeof(UInt32[,]) 
+               || type == typeof(Single[,]) 
+               || type == typeof(Int16[,]) 
+               || type == typeof(SByte[,]) 
+               || type == typeof(CDF_Time[,])))
+            {
+                throw new ArgumentOutOfRangeException("type", type, "Not a valid two dimensional variable.");
+            }
+
             StringBuilder sb = new StringBuilder();
 
-            if (type == typeof(CDF_Time[,]))
+            // Using dynamic variable because it can be any of the above types. The process is the same.
+            dynamic valArr = varRec;
+            string temp;
+            sb.Append("[");
+            for (int i = 0; i < valArr.GetLength(0); i++)
             {
-                CDF_Time[,] valArr = (CDF_Time[,])varRec;
-                for (int i = 0; i < valArr.GetLength(0); i++)
-                    for (int j = 0; j < valArr.GetLength(1); j++)
-                        sb.AppendFormat("{0},", valArr[i, j]);
+                sb.Append("[");
+                for (int j = 0; j < valArr.GetLength(1); j++)
+                {
+                    sb.AppendFormat("{0},", valArr[i, j]);
+                }
+                temp = sb.ToString().TrimEnd(',');
+                sb.Clear();
+                sb.Append(temp);
+                sb.Append("],");
             }
+            temp = sb.ToString().TrimEnd(',');
+            sb.Clear();
+            sb.Append(temp);
+            sb.Append("]");
 
-            if (type == typeof(String[,]))
-            {
-                String[,] valArr = (String[,])varRec;
-                for (int i = 0; i < valArr.GetLength(0); i++)
-                    for (int j = 0; j < valArr.GetLength(1); j++)
-                        sb.AppendFormat("{0},", valArr[i, j]);
-            }
-
-            if (type == typeof(Double[,]))
-            {
-                Double[,] valArr = (Double[,])varRec;
-                for (int i = 0; i < valArr.GetLength(0); i++)
-                    for (int j = 0; j < valArr.GetLength(1); j++)
-                        sb.AppendFormat("{0},", valArr[i, j]);
-            }
-
-            if (type == typeof(Int16[,]))
-            {
-                Int16[,] valArr = (Int16[,])varRec;
-                for (int i = 0; i < valArr.GetLength(0); i++)
-                    for (int j = 0; j < valArr.GetLength(1); j++)
-                        sb.AppendFormat("{0},", valArr[i, j]);
-            }
-
-            if (type == typeof(UInt16[,]))
-            {
-                UInt16[,] valArr = (UInt16[,])varRec;
-                for (int i = 0; i < valArr.GetLength(0); i++)
-                    for (int j = 0; j < valArr.GetLength(1); j++)
-                        sb.AppendFormat("{0},", valArr[i, j]);
-            }
-
-            if (type == typeof(Int32[,]))
-            {
-                Int32[,] valArr = (Int32[,])varRec;
-                for (int i = 0; i < valArr.GetLength(0); i++)
-                    for (int j = 0; j < valArr.GetLength(1); j++)
-                        sb.AppendFormat("{0},", valArr[i, j]);
-            }
-
-            if (type == typeof(UInt32[,]))
-            {
-                UInt32[,] valArr = (UInt32[,])varRec;
-                for (int i = 0; i < valArr.GetLength(0); i++)
-                    for (int j = 0; j < valArr.GetLength(1); j++)
-                        sb.AppendFormat("{0},", valArr[i, j]);
-            }
-
-            if (type == typeof(Single[,]))
-            {
-                Single[,] valArr = (Single[,])varRec;
-                for (int i = 0; i < valArr.GetLength(0); i++)
-                    for (int j = 0; j < valArr.GetLength(1); j++)
-                        sb.AppendFormat("{0},", valArr[i, j]);
-            }
-
-            if (type == typeof(SByte[,]))
-            {
-                SByte[,] valArr = (SByte[,])varRec;
-                for (int i = 0; i < valArr.GetLength(0); i++)
-                    for (int j = 0; j < valArr.GetLength(1); j++)
-                        sb.AppendFormat("{0},", valArr[i, j]);
-            }
-
-            valString = sb.ToString();
+            valString = sb.ToString().Trim(new char[] { ',', ' ' });
         }
     }
 }

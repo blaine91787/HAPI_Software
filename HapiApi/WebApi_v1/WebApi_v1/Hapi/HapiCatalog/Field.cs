@@ -18,6 +18,8 @@ namespace WebApi_v1.HAPI
         public string Bins { get; set; }
         public string Size { get; set; }
 
+
+
         public void GetField(XmlElement fieldElement)
         {
             if (fieldElement == null)
@@ -31,28 +33,28 @@ namespace WebApi_v1.HAPI
                 switch (attr.Name)
                 {
                     case ("name"):
-                        Name = attr.Value;
+                        Name = attr.Value.ToLower();
                         break;
                     case ("type"):
-                        Type = attr.Value;
+                        Type = attr.Value.ToLower();
                         break;
                     case ("units"):
-                        Units = attr.Value;
+                        Units = attr.Value.ToLower();
                         break;
                     case ("fill"):
-                        Fill = attr.Value;
+                        Fill = attr.Value.ToLower();
                         break;
                     case ("length"):
-                        Length = attr.Value;
+                        Length = attr.Value.ToLower();
                         break;
                     case ("description"):
-                        Description = attr.Value;
+                        Description = attr.Value.ToLower();
                         break;
                     case ("bins"):
-                        Bins = attr.Value;
+                        Bins = attr.Value.ToLower();
                         break;
                     case ("size"):
-                        Size = attr.Value;
+                        Size = attr.Value.ToLower();
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(attr.Name, "Not a valid field attribute.");

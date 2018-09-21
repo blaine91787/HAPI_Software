@@ -11,6 +11,7 @@ using WebApi_v1.HAPI.DataProducts;
 using System.Net;
 using System.Diagnostics;
 using WebApi_v1.HAPI.Registry;
+using System.Text;
 
 namespace WebApi_v1.HAPI
 {
@@ -102,14 +103,17 @@ namespace WebApi_v1.HAPI
             {
                 Response = Properties.Request.CreateResponse(HttpStatusCode.OK);
                 content.SetStatusCode(Status.HapiStatusCode.OK);
-                Response.Content = new StringContent(content.GetResponse());
+                if (Properties.Format == "json")
+                    Response.Content = new StringContent(content.GetResponse(), Encoding.UTF8, "application/json");
+                else if (Properties.Format == "csv")
+                    Response.Content = new StringContent(content.GetResponse(), Encoding.UTF8, "text/csv");
             }
             else
             {
                 content = Content.Create(this, "error");
                 Response = Properties.Request.CreateResponse(HttpStatusCode.BadRequest);
                 content.SetStatusCode(Properties.ErrorCodes.First());
-                Response.Content = new StringContent(content.GetResponse());
+                Response.Content = new StringContent(content.GetResponse(), Encoding.UTF8, "application/json");
             }
             return Response;
         }
