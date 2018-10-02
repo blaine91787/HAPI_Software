@@ -31,16 +31,20 @@ namespace WebApi_v1.HAPI.Response
         public static Content Create(Hapi hapi, string type)
         {
             if (type == "data")
-                return new Data(hapi);
+                try { return new Data(hapi); }
+                catch (Exception e) { if (false) { throw e; } else { } }
 
             if (type == "info")
-                return new Info(hapi);
+                try { return new Info(hapi); }
+                catch (Exception e) { if (false) { throw e; } else { } }
 
             if (type == "catalog")
-                return new Catalog(hapi);
+                try { return new Catalog(hapi); }
+                catch (Exception e) { if (false) { throw e; } else { } }
 
             if (type == "capabilities")
-                return new Capabilities(hapi);
+                try { return new Capabilities(hapi); }
+                catch (Exception e) { if (false) { throw e; } else { } }
 
             if (type == "error")
                 return new Error(hapi);
@@ -644,7 +648,20 @@ namespace WebApi_v1.HAPI.Response
             HapiVersion = Hapi.Configuration.Version;
             Status = new Status(); // HACK: don't use a literal value for code
             Format = Hapi.Properties.Format;
-            Parameters = Hapi.Catalog.GetProduct(Hapi.Properties.ID).GetFields();// TODO: Exception here when the id is entered incorrectly (e.g. rbspicea_rbspice_tofxeh)
+
+            Product product = default(Product);
+
+            try
+            {
+                product = Hapi.Catalog.GetProduct(Hapi.Properties.ID);// TODO: Exception here when the id is entered incorrectly (e.g. rbspicea_rbspice_tofxeh)
+            }
+            catch (Exception exc)
+            {
+                Hapi.Properties.ErrorCodes.Add(Status.HapiStatusCode.UnknownDatasetID);
+                throw exc;
+            }
+
+            Parameters = product.GetFields();
 
             TimeRange tr = Hapi.Properties.TimeRange;
             if (Hapi.Properties.ID == "rbspa_rbspice_auxil")

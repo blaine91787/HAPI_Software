@@ -83,7 +83,6 @@ namespace WebApi_v1.HAPI
                     break;
 
                 case ("catalog"):
-                    ;
                     content = Content.Create(this, "catalog");
                     break;
 

@@ -1,4 +1,5 @@
-﻿using SPDF.CDF.CSharp;
+﻿using CDF;
+using SPDF.CDF.CSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -28,17 +29,16 @@ namespace WebApi_v1.HAPI.Utilities
             if (Path.GetExtension(cdfFilePath) == ".cdf" && File.Exists(cdfFilePath))
             {
                 DocPath = cdfFilePath;
-                Doc = new CDF_File(DocPath);
-
-                if (Doc.Attributes.Count == 0 || Doc.Variables.Count == 0)
-                    throw new Exception("Error reading the CDF file. Possible issue with DLLs.");
-
+                try { Doc = new CDF_File(DocPath, showExceptions: true); }
+                catch (Exception exc) { throw exc; }
                 Attributes = Doc.Attributes;
                 Variables = Doc.Variables;
+
+                //if (Doc.Attributes.Count == 0 || Doc.Variables.Count == 0)
             }
             else
             {
-                throw new FileNotFoundException("");
+                throw new FileNotFoundException(""); // TODO: Handle Exception
             }
         }
 
