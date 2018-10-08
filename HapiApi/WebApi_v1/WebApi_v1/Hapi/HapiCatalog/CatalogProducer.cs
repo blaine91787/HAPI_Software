@@ -71,8 +71,8 @@ namespace WebApi_v1.HAPI.Catalog
                 string lastYearDirectory = Directory.GetDirectories(path).LastOrDefault();
                 FileInfo startFI = default(FileInfo);
                 FileInfo stopFI = default(FileInfo);
-                GetStartFile(firstYearDirectory, ref startFI);
-                GetStopFile(lastYearDirectory, ref stopFI);
+                GetStartFile(firstYearDirectory, ref startFI, out _);
+                GetStopFile(lastYearDirectory, ref stopFI, out _);
                 trf.StartFile = startFI;
                 trf.StopFile = stopFI;
                 timeFiles.Enqueue(trf);
@@ -91,25 +91,27 @@ namespace WebApi_v1.HAPI.Catalog
             hr.Catalog.SetLastUpdate(currentDateTime);
         }
 
-        private void GetStartFile(string path, ref FileInfo fi)
+        private void GetStartFile(string path, ref FileInfo fi, out CDFReader cdf)
         {
             IEnumerable<string> filePaths = Directory.GetFiles(path);
+            CDFReader tempcdf = default(CDFReader);
             foreach (string filePath in filePaths)
             {
                 fi = new FileInfo(filePath);
-                try { CDFReader cdf = new CDFReader(fi.FullName); return; }
-                catch (Exception exc) { Debug.WriteLine("{0}", exc.Message); } // TODO: Handle Exception
+                try { tempcdf = new CDFReader(fi.FullName); cdf = tempcdf; return; }
+                catch (Exception exc) { Debug.WriteLine("{0}", exc.Message); continue; } // TODO: Handle Exception
             }
             throw new Exception("Critical Error: Start file was not found. ");
         }
 
-        private void GetStopFile(string path, ref FileInfo fi)
+        private void GetStopFile(string path, ref FileInfo fi, out CDFReader cdf)
         {
             IEnumerable<string> filePaths = Directory.GetFiles(path).Reverse();
+            CDFReader tempcdf = default(CDFReader);
             foreach (string filePath in filePaths)
             {
                 fi = new FileInfo(filePath);
-                try { CDFReader cdf = new CDFReader(fi.FullName); return; }
+                try { tempcdf = new CDFReader(fi.FullName); cdf = tempcdf; return; }
                 catch (Exception exc) { Debug.WriteLine("{0}", exc.Message); } // TODO: Handle Exception
             }
             throw new Exception("Critical Error: Stop file was not found. ");
@@ -121,10 +123,11 @@ namespace WebApi_v1.HAPI.Catalog
             foreach (FileInfo tempFile in listoffiles)
             {
                 FileInfo fi = default(FileInfo);
-                try { GetStartFile(tempFile.Directory.FullName, ref fi); }
+                CDFReader cdf = default(CDFReader);
+
+                try { GetStartFile(tempFile.Directory.FullName, ref fi, out cdf); }
                 catch (Exception exc) { Debug.WriteLine("{0}", exc.Message); } // TODO: Handle Exception
 
-                CDFReader cdf = new CDFReader(fi.FullName);
 
                 string[] splitPath = fi.DirectoryName.Split('\\');
                 string level = splitPath[9];
