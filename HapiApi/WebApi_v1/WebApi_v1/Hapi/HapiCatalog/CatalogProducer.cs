@@ -1,12 +1,13 @@
-﻿using SPDF.CDF.CSharp;
+﻿using CDF;
+using SPDF.CDF.CSharp;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Xml;
 using WebApi_v1.HAPI.Registry;
-using WebApi_v1.HAPI.HapiUtilities;
+using WebApi_v1.HAPI.Utilities;
 
 namespace WebApi_v1.HAPI.Catalog
 {
@@ -30,7 +31,7 @@ namespace WebApi_v1.HAPI.Catalog
             if (!(lastUpdate < currentDateTime))
                 return;
 
-            hr.Catalog.SetLastUpdate(currentDateTime);
+
 
             XmlDocument xdoc = new XmlDocument();
             xdoc.Load(_xmlCatalogPath);
@@ -65,8 +66,14 @@ namespace WebApi_v1.HAPI.Catalog
                 }
 
                 TimeRangeFiles trf = new TimeRangeFiles();
-                trf.StartFile = new FileInfo(Directory.GetFiles(Directory.GetDirectories(path).FirstOrDefault()).FirstOrDefault());
-                trf.StopFile = new FileInfo(Directory.GetFiles(Directory.GetDirectories(path).LastOrDefault()).LastOrDefault());
+                string firstYearDirectory = Directory.GetDirectories(path).FirstOrDefault();
+                string lastYearDirectory = Directory.GetDirectories(path).LastOrDefault();
+                FileInfo startFI = default(FileInfo);
+                FileInfo stopFI = default(FileInfo);
+                GetStartFile(firstYearDirectory, ref startFI, out _);
+                GetStopFile(lastYearDirectory, ref stopFI, out _);
+                trf.StartFile = startFI;
+                trf.StopFile = stopFI;
                 timeFiles.Enqueue(trf);
 
 
@@ -80,14 +87,46 @@ namespace WebApi_v1.HAPI.Catalog
                 instrument.AppendChild(product);
 
             xdoc.Save(_xmlCatalogPath);
+            hr.Catalog.SetLastUpdate(currentDateTime);
+        }
+
+        private void GetStartFile(string path, ref FileInfo fi, out CDFReader cdf)
+        {
+            IEnumerable<string> filePaths = Directory.GetFiles(path);
+            CDFReader tempcdf = default(CDFReader);
+            foreach (string filePath in filePaths)
+            {
+                fi = new FileInfo(filePath);
+                try { tempcdf = new CDFReader(fi.FullName); cdf = tempcdf; return; }
+                catch (Exception exc) { Debug.WriteLine("{0}", exc.Message); continue; } // TODO: Handle Exception
+            }
+            throw new Exception("Critical Error: Start file was not found. ");
+        }
+
+        private void GetStopFile(string path, ref FileInfo fi, out CDFReader cdf)
+        {
+            IEnumerable<string> filePaths = Directory.GetFiles(path).Reverse();
+            CDFReader tempcdf = default(CDFReader);
+            foreach (string filePath in filePaths)
+            {
+                fi = new FileInfo(filePath);
+                try { tempcdf = new CDFReader(fi.FullName); cdf = tempcdf; return; }
+                catch (Exception exc) { Debug.WriteLine("{0}", exc.Message); } // TODO: Handle Exception
+            }
+            throw new Exception("Critical Error: Stop file was not found. ");
         }
 
         private List<XmlElement> GetProducts(Queue<TimeRangeFiles> trfQueue, XmlDocument xdoc, List<FileInfo> listoffiles, string filetype)
         {
             List<XmlElement> list = new List<XmlElement>();
-            foreach (FileInfo fi in listoffiles)
+            foreach (FileInfo tempFile in listoffiles)
             {
-                CDFReader cdf = new CDFReader(fi.FullName);
+                FileInfo fi = default(FileInfo);
+                CDFReader cdf = default(CDFReader);
+
+                try { GetStartFile(tempFile.Directory.FullName, ref fi, out cdf); }
+                catch (Exception exc) { Debug.WriteLine("{0}", exc.Message); } // TODO: Handle Exception
+
 
                 string[] splitPath = fi.DirectoryName.Split('\\');
                 string level = splitPath[9];
@@ -196,19 +235,50 @@ namespace WebApi_v1.HAPI.Catalog
 
             public string GetStartTime()
             {
-                string file = Directory.GetFiles(StartFile.DirectoryName).FirstOrDefault();
-                CDFReader cdf = new CDFReader(file);
-                CDF_Variable utcVar = cdf.GetVariable("UTC");
-                return utcVar[0].ToString().Trim();
+                string startTime = String.Empty;
+                IEnumerable<string> files = Directory.GetFiles(StartFile.DirectoryName);
+                foreach (string file in files)
+                {
+                    CDFReader cdf = default(CDFReader);
+                    try
+                    {
+                        cdf = new CDFReader(file);
+                        CDF_Variable utcVar = cdf.GetVariable("UTC");
+                        startTime = utcVar[0].ToString().Trim();
+                    }
+                    catch (Exception exc) { Debug.WriteLine(exc.Message); continue; }
+
+                    break;
+                }
+                return startTime;
             }
 
             public string GetStopTime()
             {
-                string file = Directory.GetFiles(StopFile.DirectoryName).LastOrDefault();
-                CDFReader cdf = new CDFReader(file);
-                CDF_Variable utcVar = cdf.GetVariable("UTC");
-                int utcVarLastIndex = utcVar.Records - 1;
-                return utcVar[utcVarLastIndex].ToString().Trim();
+                string stopTime = String.Empty;
+                IEnumerable<string> files = Directory.GetFiles(StopFile.DirectoryName).Reverse();
+                foreach (string file in files)
+                {
+                    CDFReader cdf = default(CDFReader);
+                    CDF_Variable utcVar = default(CDF_Variable);
+                    int utcVarLastIndex = -1;
+                    try
+                    {
+                        cdf = new CDFReader(file);
+                        utcVar = cdf.GetVariable("UTC");
+                        utcVarLastIndex = utcVar.Records - 1;
+                        stopTime = utcVar[utcVarLastIndex].ToString().Trim();
+                    }
+                    catch (Exception exc)
+                    {
+                        Debug.WriteLine(exc.Message);
+                        continue;
+                    }
+
+                    break;
+                }
+
+                return stopTime;
             }
 
             public void GetTimeRange(out string starttime, out string stoptime)

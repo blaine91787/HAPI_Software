@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using WebApi_v1.HAPI.Configuration;
 using WebApi_v1.HAPI.Utilities;
 using WebApi_v1.HAPI.Response;
 using WebApi_v1.HAPI.Catalog;
 using System.Net.Http;
-using System.Text.RegularExpressions;
 
 namespace WebApi_v1.HAPI.Properties
 {

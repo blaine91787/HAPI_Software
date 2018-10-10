@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using WebApi_v1.HAPI.Configuration;
 using WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA;
-using WebApi_v1.HAPI.Properties;
 
 namespace WebApi_v1.HAPI.DataProducts
 {
     public abstract class HapiDataProduct
     {
         public Hapi Hapi { get; set; }
-        public List<string> Paths { get; set; }
         public List<FileInfo> Files { get; set; }
 
         public string[] Header { get; set; }
