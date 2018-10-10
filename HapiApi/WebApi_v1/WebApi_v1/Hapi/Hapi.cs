@@ -12,6 +12,7 @@ using System.Net;
 using System.Diagnostics;
 using WebApi_v1.HAPI.Registry;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace WebApi_v1.HAPI
 {
@@ -146,19 +147,31 @@ namespace WebApi_v1.HAPI
                 DateTime availMin = Properties.TimeRange.Min;
                 DateTime availMax = Properties.TimeRange.Max;
 
-                // Request start time >= Request end time
+                // Requested start time >= Requested end time
                 if (min >= max)
                     Properties.ErrorCodes.Add(Status.HapiStatusCode.StartTimeEqualToOrAfterStopTime);
 
-                // Request start time <= available min OR request end time >= available max
+                // Requested start time <= available min OR requested end time >= available max
                 if (min <= availMin || max >= availMax)
                     Properties.ErrorCodes.Add(Status.HapiStatusCode.TimeOutsideValidRange);
                 return false;
             }
-            else if (!DataProduct.GetProduct()) // Data doesn't exist
+            else // Data doesn't exist
             {
-                Properties.ErrorCodes.Add(Status.HapiStatusCode.OKNoDataForTimeRange);
-                return false;
+                try
+                {
+                    if(!DataProduct.GetProduct())
+                    {
+                        Properties.ErrorCodes.Add(Status.HapiStatusCode.OKNoDataForTimeRange);
+                        return false;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Properties.ErrorCodes.Add(Status.HapiStatusCode.InternalServerError);
+                    Debug.WriteLine(e.Message);
+                    return false;
+                }
             }
 
             return true;

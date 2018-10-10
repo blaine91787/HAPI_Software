@@ -206,32 +206,42 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HapiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Hapi\Hapi.cs" />
-    <Compile Include="Hapi\HapiCatalog\Catalog.cs" />
-    <Compile Include="Hapi\HapiCatalog\CatalogProducer.cs" />
-    <Compile Include="Hapi\HapiCatalog\Field.cs" />
-    <Compile Include="Hapi\HapiCatalog\Instrument.cs" />
-    <Compile Include="Hapi\HapiCatalog\Product.cs" />
-    <Compile Include="Hapi\HapiCatalog\Spacecraft.cs" />
-    <Compile Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\TOFxEH\TofxehRecords.cs" />
-    <Compile Include="Hapi\HapiPaths\HapiPaths.cs" />
-    <Compile Include="Hapi\HapiRegistry\HapiRegistry.cs" />
-    <Compile Include="Hapi\HapiUtilities\CDFReader.cs" />
-    <Compile Include="Hapi\HapiUtilities\Converters.cs" />
-    <Compile Include="Hapi\HapiUtilities\CSVHelperUtilities\Mappings.cs" />
-    <Compile Include="Hapi\HapiUtilities\CSVHelperUtilities\TypeConverters.cs" />
-    <Compile Include="Hapi\HapiUtilities\TimeRange.cs" />
-    <Compile Include="Hapi\HapiUtilities\HapiXmlReader.cs" />
-    <Compile Include="Hapi\HapiConfiguration\HapiConfiguration.cs" />
-    <Compile Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\Auxiliary\AuxiliaryRecords.cs" />
-    <Compile Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\Auxiliary\Auxiliary.cs" />
-    <Compile Include="Hapi\HapiDataProducts\DataProduct.cs" />
-    <Compile Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSPAProduct.cs" />
+    <Compile Include="HAPI\Hapi.cs" />
+    <Compile Include="HAPI\HapiCatalog\Catalog.cs" />
+    <Compile Include="HAPI\HapiCatalog\CatalogProducer.cs" />
+    <Compile Include="HAPI\HapiCatalog\Field.cs" />
+    <Compile Include="HAPI\HapiCatalog\Instrument.cs" />
+    <Compile Include="HAPI\HapiCatalog\Product.cs" />
+    <Compile Include="HAPI\HapiCatalog\Spacecraft.cs" />
+    <Compile Include="HAPI\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\ESRHELT\EsrheltRecords.cs" />
+    <Compile Include="HAPI\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\ESRLEHT\EsrlehtRecords.cs" />
+    <Compile Include="HAPI\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\ProductRecords.cs" />
+    <Compile Include="HAPI\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\TOFxEHe\TofxeheRecords.cs" />
+    <Compile Include="HAPI\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\TOFxEH\TofxehRecords.cs" />
+    <Compile Include="HAPI\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\TOFxEIon\TofxeionRecords.cs" />
+    <Compile Include="HAPI\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\TOFxEO\TofxeoRecords.cs" />
+    <Compile Include="HAPI\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\TOFxPHHHELT\TofxphhheltRecords.cs" />
+    <Compile Include="HAPI\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\TOFxPHHLEHT\TofxphhlehtRecords.cs" />
+    <Compile Include="HAPI\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\TOFxPHOHELT\TofxphoheltRecords.cs" />
+    <Compile Include="HAPI\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\TOFxPHOLEHT\TofxpholehtRecords.cs" />
+    <Compile Include="HAPI\HapiPaths\HapiPaths.cs" />
+    <Compile Include="HAPI\HapiRegistry\HapiRegistry.cs" />
+    <Compile Include="HAPI\HapiUtilities\CDFReader.cs" />
+    <Compile Include="HAPI\HapiUtilities\Converters.cs" />
+    <Compile Include="HAPI\HapiUtilities\CSVHelperUtilities\Mappings.cs" />
+    <Compile Include="HAPI\HapiUtilities\CSVHelperUtilities\TypeConverters.cs" />
+    <Compile Include="HAPI\HapiUtilities\TimeRange.cs" />
+    <Compile Include="HAPI\HapiUtilities\HapiXmlReader.cs" />
+    <Compile Include="HAPI\HapiConfiguration\HapiConfiguration.cs" />
+    <Compile Include="HAPI\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\Auxiliary\AuxiliaryRecords.cs" />
+    <Compile Include="HAPI\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\Auxiliary\Auxiliary.cs" />
+    <Compile Include="HAPI\HapiDataProducts\DataProduct.cs" />
+    <Compile Include="HAPI\HapiDataProducts\SpaceCraft\RBSPA\RBSPAProduct.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Hapi\HapiProperties\HapiProperties.cs" />
-    <Compile Include="Hapi\HapiResponses\HapiResponses.cs" />
+    <Compile Include="HAPI\HapiProperties\HapiProperties.cs" />
+    <Compile Include="HAPI\HapiUtilities\HapiResponses\HapiResponses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -266,9 +276,9 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
-    <Content Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\Auxiliary\RBSpiceA_Auxil_Product.xml" />
-    <Content Include="Hapi\HapiXml\HapiCatalog.xml" />
-    <Content Include="Hapi\HapiXml\HapiConfiguration.xml" />
+    <Content Include="HAPI\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\Auxiliary\RBSpiceA_Auxil_Product.xml" />
+    <Content Include="HAPI\HapiXml\HapiCatalog.xml" />
+    <Content Include="HAPI\HapiXml\HapiConfiguration.xml" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -331,15 +341,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\ESRHELT\" />
-    <Folder Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\ESRLEHT\" />
-    <Folder Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\TOFxEHe\" />
-    <Folder Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\TOFxEIon\" />
-    <Folder Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\TOFxEO\" />
-    <Folder Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\TOFxPHHHELT\" />
-    <Folder Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\TOFxPHHLEHT\" />
-    <Folder Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\TOFxPHOHELT\" />
-    <Folder Include="Hapi\HapiDataProducts\SpaceCraft\RBSPA\RBSpice\Products\TOFxPHOLEHT\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -440,38 +440,10 @@ namespace WebApi_v1.HAPI.Response
         {
             if (Hapi.Properties.Format == "csv")
                 return ToCSV();
-            Response = new ResponseBody();
-
-            Response.HAPI = Hapi.Configuration.Version;
-            Response.Status = new Status();
-            Response.Status.Code = Status.Code;
-            Response.Format = Hapi.Properties.Format;
-            Response.StartDate = Hapi.Properties.TimeRange.UserMin.ToString();
-            Response.StopDate = Hapi.Properties.TimeRange.UserMax.ToString();
-
-            Response.Parameters = new List<Object>();
-            Dictionary<string, Field> catParams = Hapi.Catalog.GetProduct(Hapi.Properties.ID).Fields;
-            if (Hapi.Properties.Parameters.Count != 0 && catParams != null)
-            {
-                foreach (string param in Hapi.Properties.Parameters)
-                {
-                    if (catParams.ContainsKey(param))
-                    {
-                        Response.Parameters.Add(catParams[param]);
-                    }
-                }
-            }
+            else if (Hapi.Properties.Format == "json")
+                return ToJSON();
             else
-            {
-                foreach (var kvpair in catParams)
-                {
-                    Response.Parameters.Add(kvpair.Value);
-                }
-            }
-
-            Response.Data = Hapi.DataProduct.Records.ToList();
-
-            return JsonConvert.SerializeObject(Response);
+                return String.Empty;
         }
         private string GetHeader()
         {
@@ -506,6 +478,43 @@ namespace WebApi_v1.HAPI.Response
 
             return JsonConvert.SerializeObject(Response);
         }
+
+        private string ToJSON()
+        {
+            Response = new ResponseBody();
+
+            Response.HAPI = Hapi.Configuration.Version;
+            Response.Status = new Status();
+            Response.Status.Code = Status.Code;
+            Response.Format = Hapi.Properties.Format;
+            Response.StartDate = Hapi.Properties.TimeRange.UserMin.ToString();
+            Response.StopDate = Hapi.Properties.TimeRange.UserMax.ToString();
+
+            Response.Parameters = new List<Object>();
+            Dictionary<string, Field> catParams = Hapi.Catalog.GetProduct(Hapi.Properties.ID).Fields;
+            if (Hapi.Properties.Parameters.Count != 0 && catParams != null)
+            {
+                foreach (string param in Hapi.Properties.Parameters)
+                {
+                    if (catParams.ContainsKey(param))
+                    {
+                        Response.Parameters.Add(catParams[param]);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var kvpair in catParams)
+                {
+                    Response.Parameters.Add(kvpair.Value);
+                }
+            }
+
+            Response.Data = Hapi.DataProduct.Records.ToList();
+
+            return JsonConvert.SerializeObject(Response);
+        }
+
         private string ToCSV()
         {
             StringBuilder sb = new StringBuilder();

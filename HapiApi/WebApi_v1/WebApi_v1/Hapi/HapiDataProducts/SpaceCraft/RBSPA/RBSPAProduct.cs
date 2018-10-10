@@ -10,7 +10,9 @@ using WebApi_v1.HAPI.Configuration;
 using WebApi_v1.HAPI.Utilities;
 using WebApi_v1.HAPI.Properties;
 using System.Text;
-using WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA.RBSpice.TOFxEH;
+using WebApi_v1.HAPI.HapiDataProducts.SpaceCraft.RBSPA.RBSpice.Products.TOFxEH;
+using WebApi_v1.HAPI.HapiDataProducts.SpaceCraft.RBSPA.RBSpice.Products.ESRHELT;
+using WebApi_v1.HAPI.HapiDataProducts.SpaceCraft.RBSPA.RBSpice.Products;
 
 namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
 {
@@ -176,20 +178,14 @@ namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
         /// <returns></returns>
         public override bool GetProduct()
         {
-            switch(Hapi.Properties.Product)
-            {
-                case ("auxil"):
-                    AuxiliaryRecords aux = new AuxiliaryRecords(Hapi);
-                    Records = aux.GetRecords(Files);
-                    break;
-                case ("tofxeh"):
-                    TofxehRecords eh = new TofxehRecords(Hapi);
-                    Records = eh.GetRecords(Files);
-                    break;
 
-            }
+            ProductRecords pr = ProductRecords.Create(Hapi, Hapi.Properties.Product);
+            Records = pr.GetRecords(Files);
 
-            return Records.Count() != 0 ? true : false; // TODO: Value can't be null when there's no data. BUG
+            if (Records == null)
+                throw new Exception("Records came back null. Likely caused by an unimplemented product that exists in the catalog.");
+            
+            return Records.Count() != 0 ? true : false;
         }
         /// <summary>
         /// 
