@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using win32 = Microsoft.Win32;
 
 namespace WebApi_v1.HAPI.Registry

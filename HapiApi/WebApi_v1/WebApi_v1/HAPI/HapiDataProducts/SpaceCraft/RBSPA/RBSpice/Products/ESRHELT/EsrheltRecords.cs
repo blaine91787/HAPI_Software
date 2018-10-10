@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Web;
-using WebApi_v1.HAPI.Utilities;
-
+﻿
 namespace WebApi_v1.HAPI.HapiDataProducts.SpaceCraft.RBSPA.RBSpice.Products.ESRHELT
 {
     public class Esrhelt
@@ -54,27 +48,5 @@ namespace WebApi_v1.HAPI.HapiDataProducts.SpaceCraft.RBSPA.RBSpice.Products.ESRH
             if (hapi != null)
                 Hapi = hapi;
         }
-
-        //public IEnumerable<Dictionary<string, string>> GetRecords(IEnumerable<FileInfo> files)
-        //{
-        //    Data = new List<Dictionary<string, string>>();
-        //    if (files.Count() == 0)
-        //        return Data;
-
-        //    string fiExt = files.FirstOrDefault().Extension; // TODO: Change this from using FirstOrDefault to using the xml catalog extension type
-        //    if (fiExt == ".cdf")
-        //    {
-        //        foreach (FileInfo fi in files)
-        //        {
-        //            CDFReader cdf = new CDFReader(fi.FullName);
-        //            string[] parameters = Hapi.Properties.Parameters.ToArray();
-        //            DateTime minTime = Hapi.Properties.TimeRange.UserMin;
-        //            DateTime maxTime = Hapi.Properties.TimeRange.UserMax;
-        //            Data.AddRange(cdf.GetCDFHapiRecords(minTime, maxTime, parameters));
-        //            cdf.Close();
-        //        }
-        //    }
-        //    return Data;
-        //}
     }
 }

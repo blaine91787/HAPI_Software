@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Web;
 using WebApi_v1.HAPI.Configuration;
 using WebApi_v1.HAPI.Response;
 using WebApi_v1.HAPI.Catalog;
@@ -12,7 +10,6 @@ using System.Net;
 using System.Diagnostics;
 using WebApi_v1.HAPI.Registry;
 using System.Text;
-using System.Runtime.InteropServices;
 
 namespace WebApi_v1.HAPI
 {
@@ -136,9 +133,6 @@ namespace WebApi_v1.HAPI
                 Debug.WriteLine(e.Message);
                 Properties.ErrorCodes.Add(Status.HapiStatusCode.InternalServerError);
             }
-
-            //if (DataProduct.Records == null)
-            //    throw new InvalidOperationException("DataProduct.Records should not come back null, something happened.");
 
             if (!DataProduct.VerifyTimeRange()) // Outside of SC data timerange
             {

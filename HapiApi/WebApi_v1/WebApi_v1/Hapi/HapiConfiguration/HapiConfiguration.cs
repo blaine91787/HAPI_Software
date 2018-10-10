@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using WebApi_v1.HAPI.DataProducts;
-using WebApi_v1.HAPI.Utilities;
-using WebApi_v1.HAPI.Response;
-using WebApi_v1.HAPI.Catalog;
-using WebApi_v1.HAPI.Properties;
+﻿using WebApi_v1.HAPI.Utilities;
 
 namespace WebApi_v1.HAPI.Configuration
 {

@@ -1,17 +1,11 @@
 ﻿using CsvHelper;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA.RBSpice.Auxiliary;
-using WebApi_v1.HAPI.Configuration;
 using WebApi_v1.HAPI.Utilities;
-using WebApi_v1.HAPI.Properties;
 using System.Text;
-using WebApi_v1.HAPI.HapiDataProducts.SpaceCraft.RBSPA.RBSpice.Products.TOFxEH;
-using WebApi_v1.HAPI.HapiDataProducts.SpaceCraft.RBSPA.RBSpice.Products.ESRHELT;
 using WebApi_v1.HAPI.HapiDataProducts.SpaceCraft.RBSPA.RBSpice.Products;
 
 namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
@@ -178,9 +172,12 @@ namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA
         /// <returns></returns>
         public override bool GetProduct()
         {
-
-            ProductRecords pr = ProductRecords.Create(Hapi, Hapi.Properties.Product);
-            Records = pr.GetRecords(Files);
+            try
+            {
+                ProductRecords pr = ProductRecords.Create(Hapi, Hapi.Properties.Product);
+                Records = pr.GetRecords(Files);
+            }
+            catch { }
 
             if (Records == null)
                 throw new Exception("Records came back null. Likely caused by an unimplemented product that exists in the catalog.");

@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Web;
 
 namespace WebApi_v1.HAPI.Utilities
 {

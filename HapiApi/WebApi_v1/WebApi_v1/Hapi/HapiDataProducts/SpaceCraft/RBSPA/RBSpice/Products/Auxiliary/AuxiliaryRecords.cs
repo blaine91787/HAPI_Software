@@ -5,7 +5,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using WebApi_v1.HAPI.Utilities;
-using WebApi_v1.HAPI.Configuration;
 using WebApi_v1.HAPI.Utilities.CSVHelperUtilities;
 
 namespace WebApi_v1.HAPI.DataProducts.SpaceCraft.RBSPA.RBSpice.Auxiliary

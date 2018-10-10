@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Web;
-using WebApi_v1.HAPI.Registry;
-using WebApi_v1.HAPI.Utilities;
 
 namespace WebApi_v1.HAPI
 {

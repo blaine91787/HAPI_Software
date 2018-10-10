@@ -2,13 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Web;
-using WebApi_v1.HAPI.Configuration;
 using WebApi_v1.HAPI.Catalog;
 using WebApi_v1.HAPI.Utilities;
 using Newtonsoft.Json;
-using System.Data;
-using Newtonsoft.Json.Linq;
 
 namespace WebApi_v1.HAPI.Response
 {
